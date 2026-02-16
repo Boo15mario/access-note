@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class NotesScreenView : UserControl
+public partial class NotesScreenView : UserControl
 {
     public NotesScreenView()
     {

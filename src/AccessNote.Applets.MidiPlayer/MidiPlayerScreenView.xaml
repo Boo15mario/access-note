@@ -1,5 +1,5 @@
 <UserControl x:Class="AccessNote.MidiPlayerScreenView"
-             x:ClassModifier="internal"
+             x:ClassModifier="public"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Border Padding="12"

@@ -16,7 +16,7 @@ public interface ISettingsStorage
     void SaveSettings(AppSettings settings);
 }
 
-internal interface ICalendarEventStorage
+public interface ICalendarEventStorage
 {
     IReadOnlyList<CalendarEvent> GetEventsForDate(DateTime date);
 

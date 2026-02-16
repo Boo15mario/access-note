@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class CalendarScreenView : UserControl
+public partial class CalendarScreenView : UserControl
 {
     public CalendarScreenView()
     {

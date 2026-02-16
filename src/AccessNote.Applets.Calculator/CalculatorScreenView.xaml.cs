@@ -2,7 +2,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class CalculatorScreenView : UserControl
+public partial class CalculatorScreenView : UserControl
 {
     public CalculatorScreenView()
     {

@@ -2,7 +2,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class MediaPlayerScreenView : UserControl
+public partial class MediaPlayerScreenView : UserControl
 {
     public MediaPlayerScreenView()
     {

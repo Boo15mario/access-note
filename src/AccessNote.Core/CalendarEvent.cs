@@ -2,7 +2,7 @@ using System;
 
 namespace AccessNote;
 
-internal sealed class CalendarEvent
+public sealed class CalendarEvent
 {
     public int Id { get; set; }
 

@@ -2,7 +2,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class DateTimeScreenView : UserControl
+public partial class DateTimeScreenView : UserControl
 {
     public DateTimeScreenView()
     {

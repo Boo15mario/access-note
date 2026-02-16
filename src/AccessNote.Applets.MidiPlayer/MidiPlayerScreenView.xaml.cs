@@ -2,7 +2,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class MidiPlayerScreenView : UserControl
+public partial class MidiPlayerScreenView : UserControl
 {
     public MidiPlayerScreenView()
     {

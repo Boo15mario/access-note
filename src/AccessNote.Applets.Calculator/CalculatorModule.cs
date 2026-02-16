@@ -129,7 +129,7 @@ internal sealed class CalculatorModule
             return true;
         }
 
-        if (key == Key.OemExclaim || (key == Key.D1 && Keyboard.IsKeyDown(Key.LeftShift) == false && _expression.Length > 0 && char.IsDigit(_expression[^1])))
+        if (key == Key.D1 && Keyboard.Modifiers == ModifierKeys.Shift && _expression.Length > 0 && char.IsDigit(_expression[^1]))
         {
             // '!' for factorial is handled in Evaluate via expression parsing
         }

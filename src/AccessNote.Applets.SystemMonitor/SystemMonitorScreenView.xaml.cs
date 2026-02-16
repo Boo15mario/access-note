@@ -2,7 +2,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class SystemMonitorScreenView : UserControl
+public partial class SystemMonitorScreenView : UserControl
 {
     public SystemMonitorScreenView()
     {

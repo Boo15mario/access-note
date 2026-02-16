@@ -2,7 +2,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class AppLauncherScreenView : UserControl
+public partial class AppLauncherScreenView : UserControl
 {
     public AppLauncherScreenView()
     {

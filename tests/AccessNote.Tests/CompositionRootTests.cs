@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
@@ -29,8 +30,19 @@ public class CompositionRootTests
                     Shell = new MainWindowShellInputs
                     {
                         MainMenuScreen = new Grid(),
-                        NotesScreen = new Grid(),
-                        SettingsScreen = new Grid(),
+                        AppletScreens = new Dictionary<AppletId, FrameworkElement>
+                        {
+                            { AppletId.Notes, new UserControl() },
+                            { AppletId.Settings, new UserControl() },
+                            { AppletId.DateTime, new UserControl() },
+                            { AppletId.Calculator, new UserControl() },
+                            { AppletId.SystemMonitor, new UserControl() },
+                            { AppletId.Calendar, new UserControl() },
+                            { AppletId.Contacts, new UserControl() },
+                            { AppletId.MediaPlayer, new UserControl() },
+                            { AppletId.MidiPlayer, new UserControl() },
+                            { AppletId.AppLauncher, new UserControl() },
+                        },
                         MainMenuList = new ListBox(),
                         StatusRegion = new Border(),
                         StatusText = new TextBlock(),
@@ -79,6 +91,14 @@ public class CompositionRootTests
                         RestoreFocusForActiveScreen = () => { },
                         CloseWindow = () => { },
                     },
+                    DateTime = new MainWindowDateTimeInputs { ScreenView = new DateTimeScreenView() },
+                    Calculator = new MainWindowCalculatorInputs { ScreenView = new CalculatorScreenView() },
+                    MediaPlayer = new MainWindowMediaPlayerInputs { ScreenView = new MediaPlayerScreenView() },
+                    MidiPlayer = new MainWindowMidiPlayerInputs { ScreenView = new MidiPlayerScreenView() },
+                    SystemMonitor = new MainWindowSystemMonitorInputs { ScreenView = new SystemMonitorScreenView() },
+                    Calendar = new MainWindowCalendarInputs { ScreenView = new CalendarScreenView() },
+                    AppLauncher = new MainWindowAppLauncherInputs { ScreenView = new AppLauncherScreenView() },
+                    Contacts = new MainWindowContactsInputs { ScreenView = new ContactsScreenView() },
                 };
 
                 var ex = Record.Exception(() => MainWindowCompositionRoot.Create(inputs));

@@ -182,7 +182,7 @@ internal sealed class MidiPlayerModule
             }
 
             _sequencer.Play(_loadedMeltySynthMidi!, false);
-            _sequencer.Speed = _tempoBpm / 120.0;
+            _sequencer.Speed = (float)(_tempoBpm / 120.0);
 
             _waveOut?.Dispose();
             _waveOut = new WaveOutEvent();
@@ -230,7 +230,7 @@ internal sealed class MidiPlayerModule
 
         if (_sequencer != null)
         {
-            _sequencer.Speed = _tempoBpm / 120.0;
+            _sequencer.Speed = (float)(_tempoBpm / 120.0);
         }
 
         UpdateDisplay();

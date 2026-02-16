@@ -67,7 +67,6 @@ public sealed class MainMenuModuleTests
                 Assert.Equal(1, exitPromptCount);
                 Assert.Contains(announcements, a => a.Contains("Utilities"));
             });
-            });
     }
 
     private static ShellViewAdapter CreateShellView(

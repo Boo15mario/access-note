@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class SettingsScreenView : UserControl
+public partial class SettingsScreenView : UserControl
 {
     public SettingsScreenView()
     {

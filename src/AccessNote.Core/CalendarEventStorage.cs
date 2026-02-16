@@ -6,7 +6,7 @@ using Microsoft.Data.Sqlite;
 
 namespace AccessNote;
 
-internal sealed class CalendarEventStorage : ICalendarEventStorage
+public sealed class CalendarEventStorage : ICalendarEventStorage
 {
     private const string TableSql = """
         CREATE TABLE IF NOT EXISTS calendar_events (

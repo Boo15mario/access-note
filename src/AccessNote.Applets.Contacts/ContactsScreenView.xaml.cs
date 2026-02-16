@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace AccessNote;
 
-internal partial class ContactsScreenView : UserControl
+public partial class ContactsScreenView : UserControl
 {
     public ContactsScreenView()
     {
