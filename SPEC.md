@@ -11,25 +11,73 @@ Detailed Settings implementation roadmap: `SETTINGS_MENU_PLAN.md`.
 - UI: WPF (.NET 8)
 - Pattern: MVVM
 - Storage: SQLite
+- Audio: NAudio, MeltySynth (for MIDI SoundFont playback)
 
 ## Product Shape
 - One fullscreen host app (`Shell`)
-- Menu-driven navigation
+- Menu-driven navigation with submenu support
 - Internal applets launched from menu
-- External program launching supported later
+- External program launching via App Launcher applet
 
-## Screen Map (v1)
+## Screen Map
 1. Main Menu
 2. Notes Workspace
 3. Settings
-4. Exit Confirmation Dialog
+4. Date & Time (Utility)
+5. Calculator (Utility)
+6. System Monitor (Utility)
+7. Calendar
+8. Contacts
+9. Media Player
+10. MIDI Player
+11. App Launcher
+12. Exit Confirmation Dialog
+
+## Main Menu Structure
+```
+Main Menu
+├── Notes
+├── Media Player
+├── MIDI Player
+├── Calendar
+├── Contacts
+├── Utilities ▸
+│   ├── Calculator
+│   ├── System Monitor
+│   └── Date & Time
+├── App Launcher
+├── Settings
+└── Exit
+```
+
+Top-level applets appear directly in the main menu.
+Utility applets are grouped under a "Utilities" submenu.
+Enter on the Utilities entry opens the submenu; Escape returns to the main menu.
+
+## Sound System
+- `login.wav`: plays on application startup
+- `vol.wav`: plays on system volume change
+- Sounds can be enabled/disabled in Settings > General > "Sounds enabled"
+- Sound files are located in the `sounds/` folder alongside the executable
+
+## Theme System
+- Built-in themes: Dark (default), Light, High Contrast
+- Custom themes: JSON files (`*.theme.json`) in `%APPDATA%/AccessNote/themes/`
+- Theme selection in Settings > General > "Theme"
+- All UI elements use WPF `DynamicResource` bindings for theme colors
+- Theme colors: Background, Foreground, Accent, Border, MenuBackground, EditorBackground, StatusBackground, StatusBorder, HeaderForeground, SelectionBackground, SelectionForeground
 
 ## v1 Main Menu
 Top-level entries:
 1. Notes
-2. Settings
-3. Utilities (placeholder)
-4. Exit
+2. Media Player
+3. MIDI Player
+4. Calendar
+5. Contacts
+6. Utilities (submenu)
+7. App Launcher
+8. Settings
+9. Exit
 
 ## Notes Workspace Layout (v1)
 - Header: `Notes`
@@ -74,8 +122,8 @@ Top-level entries:
 | --- | --- |
 | `Up` / `Down` | Move selection |
 | `Home` / `End` | Jump to first/last item |
-| `Enter` | Activate selected item |
-| `Esc` | Open Exit Confirmation Dialog |
+| `Enter` | Activate selected item (or open submenu) |
+| `Esc` | Return to parent menu (or open Exit Confirmation Dialog at root) |
 
 ### Settings
 | Key | Behavior |
@@ -100,6 +148,89 @@ Top-level entries:
 | `Delete` | Delete selected note (with confirmation dialog) |
 | `Ctrl+F` | Focus Notes search box |
 | `Esc` | Cancel active dialog/search, otherwise return to Main Menu |
+
+### Date & Time
+| Key | Behavior |
+| --- | --- |
+| `Enter` | Announce current date and time via NVDA |
+| `Esc` | Return to Utilities submenu |
+
+### Calculator
+| Key | Behavior |
+| --- | --- |
+| `0-9`, `.` | Input digits |
+| `+`, `-`, `*`, `/` | Input operators |
+| `Enter` | Evaluate expression |
+| `Backspace` | Delete last character |
+| `Ctrl+M` | Toggle Basic/Scientific mode |
+| `Up` / `Down` | Navigate calculation history |
+| `Esc` | Clear expression, or return to menu if empty |
+
+### System Monitor
+| Key | Behavior |
+| --- | --- |
+| `F5` | Manual refresh |
+| `Up` / `Down` | Move between sections |
+| `Esc` | Return to Utilities submenu |
+
+### Calendar
+| Key | Behavior |
+| --- | --- |
+| Arrow keys | Navigate days in month grid |
+| `PageUp` / `PageDown` | Previous/next month |
+| `Enter` | View/add event on selected date |
+| `Ctrl+N` | Create new event |
+| `Delete` | Delete selected event |
+| `F6` | Cycle focus: calendar grid / events list |
+| `Esc` | Return to Main Menu |
+
+### Contacts
+| Key | Behavior |
+| --- | --- |
+| `Ctrl+N` | New contact |
+| `Ctrl+S` | Save contact |
+| `Ctrl+F` | Focus search box |
+| `Ctrl+I` | Import contacts (vCard) |
+| `Ctrl+E` | Export contacts (vCard) |
+| `F2` | Rename selected contact |
+| `Delete` | Delete selected contact |
+| `F6` | Cycle focus: contacts list / editor |
+| `Esc` | Return to Main Menu |
+
+### Media Player
+| Key | Behavior |
+| --- | --- |
+| `Space` | Play/Pause |
+| `S` | Stop |
+| `N` | Next track |
+| `P` | Previous track |
+| `+` / `-` | Volume up/down |
+| `M` | Mute toggle |
+| `Left` / `Right` | Seek backward/forward 5 seconds |
+| `O` | Open file to add to playlist |
+| `U` | Add stream URL |
+| `Esc` | Return to Main Menu |
+
+### MIDI Player
+| Key | Behavior |
+| --- | --- |
+| `Space` | Play/Pause |
+| `S` | Stop |
+| `+` / `-` | Increase/decrease tempo |
+| `O` | Open MIDI file |
+| `F3` | Select SoundFont (.sf2) |
+| `Esc` | Return to Main Menu |
+
+### App Launcher
+| Key | Behavior |
+| --- | --- |
+| `Enter` | Launch selected app / navigate into directory |
+| `Tab` | Toggle between Favorites and Browse modes |
+| `Ctrl+N` | Add new favorite |
+| `F2` | Rename selected favorite |
+| `Delete` | Remove selected favorite |
+| `Backspace` | Go up one directory (Browse mode) |
+| `Esc` | Return to Main Menu |
 
 ## Focus and Selection Rules
 - Every screen sets initial focus intentionally.
@@ -141,6 +272,14 @@ Top-level entries:
 ## Initial Applets
 1. Notes Editor (basic text editing)
 2. Settings (keyboard-first v1 options with persistence)
+3. Date & Time (live clock, date, week number, timezone)
+4. Calculator (basic + scientific mode toggle)
+5. System Monitor (CPU, memory, disk usage)
+6. Calendar (month grid navigation, event CRUD)
+7. Contacts (contact list with groups, vCard import/export)
+8. Media Player (audio files + streaming, playlist)
+9. MIDI Player (Windows synth + SoundFont via MeltySynth)
+10. App Launcher (favorites + file browser)
 
 ## Notes Editor (v1 target)
 - New note

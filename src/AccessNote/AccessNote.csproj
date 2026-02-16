@@ -11,5 +11,26 @@
     <ProjectReference Include="..\AccessNote.Shell\AccessNote.Shell.csproj" />
     <ProjectReference Include="..\AccessNote.Applets.Notes\AccessNote.Applets.Notes.csproj" />
     <ProjectReference Include="..\AccessNote.Applets.Settings\AccessNote.Applets.Settings.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.DateTime\AccessNote.Applets.DateTime.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Calculator\AccessNote.Applets.Calculator.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.SystemMonitor\AccessNote.Applets.SystemMonitor.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Calendar\AccessNote.Applets.Calendar.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Contacts\AccessNote.Applets.Contacts.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.MediaPlayer\AccessNote.Applets.MediaPlayer.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.MidiPlayer\AccessNote.Applets.MidiPlayer.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.AppLauncher\AccessNote.Applets.AppLauncher.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\sounds\*.wav" Link="sounds\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <ProjectReference Include="..\AccessNote.Applets.DateTime\AccessNote.Applets.DateTime.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Calculator\AccessNote.Applets.Calculator.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.SystemMonitor\AccessNote.Applets.SystemMonitor.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Calendar\AccessNote.Applets.Calendar.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Contacts\AccessNote.Applets.Contacts.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.MediaPlayer\AccessNote.Applets.MediaPlayer.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.MidiPlayer\AccessNote.Applets.MidiPlayer.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.AppLauncher\AccessNote.Applets.AppLauncher.csproj" />
   </ItemGroup>
 </Project>

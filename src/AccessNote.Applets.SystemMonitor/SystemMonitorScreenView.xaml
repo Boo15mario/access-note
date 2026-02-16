@@ -1,0 +1,66 @@
+<UserControl x:Class="AccessNote.SystemMonitorScreenView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel>
+    <TextBlock Text="System Monitor"
+               FontSize="36"
+               FontWeight="Bold"
+               Foreground="{DynamicResource ThemeHeaderForeground}"
+               Margin="0,0,0,14"
+               AutomationProperties.Name="System Monitor Header" />
+
+    <Border Padding="12"
+            Margin="0,0,0,8"
+            Background="{DynamicResource ThemeEditorBackground}"
+            BorderBrush="{DynamicResource ThemeStatusBorder}"
+            BorderThickness="1"
+            AutomationProperties.Name="CPU Usage Region">
+      <TextBlock x:Name="CpuText"
+                 FontSize="24"
+                 Foreground="{DynamicResource ThemeForeground}"
+                 Text="CPU: --%"
+                 AutomationProperties.Name="CPU usage" />
+    </Border>
+
+    <Border Padding="12"
+            Margin="0,0,0,8"
+            Background="{DynamicResource ThemeEditorBackground}"
+            BorderBrush="{DynamicResource ThemeStatusBorder}"
+            BorderThickness="1"
+            AutomationProperties.Name="Memory Usage Region">
+      <TextBlock x:Name="MemoryText"
+                 FontSize="24"
+                 Foreground="{DynamicResource ThemeForeground}"
+                 Text="Memory: -- / -- GB (--%)"
+                 AutomationProperties.Name="Memory usage" />
+    </Border>
+
+    <Border Padding="12"
+            Margin="0,0,0,0"
+            Background="{DynamicResource ThemeEditorBackground}"
+            BorderBrush="{DynamicResource ThemeStatusBorder}"
+            BorderThickness="1"
+            AutomationProperties.Name="Disk Usage Region">
+      <StackPanel>
+        <TextBlock FontSize="24"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource ThemeForeground}"
+                   Text="Disk Usage"
+                   Margin="0,0,0,4"
+                   AutomationProperties.Name="Disk usage header" />
+        <ItemsControl x:Name="DiskList"
+                      AutomationProperties.Name="Disk drives list">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding}"
+                         FontSize="22"
+                         Foreground="{DynamicResource ThemeForeground}"
+                         Margin="0,2,0,2" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

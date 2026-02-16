@@ -5,8 +5,10 @@ namespace AccessNote;
 internal sealed class StartupHost : IStartupHost
 {
     private readonly Action _loadSettings;
+    private readonly Action _applyTheme;
     private readonly Action _loadPersistedNotes;
     private readonly Action _prepareShellUi;
+    private readonly Action _playStartupSound;
     private readonly Func<StartScreenOption> _getStartScreen;
     private readonly Func<StartScreenOption, AppletId?> _resolveStartApplet;
     private readonly Action _showMainMenu;
@@ -15,8 +17,10 @@ internal sealed class StartupHost : IStartupHost
 
     public StartupHost(
         Action loadSettings,
+        Action applyTheme,
         Action loadPersistedNotes,
         Action prepareShellUi,
+        Action playStartupSound,
         Func<StartScreenOption> getStartScreen,
         Func<StartScreenOption, AppletId?> resolveStartApplet,
         Action showMainMenu,
@@ -24,8 +28,10 @@ internal sealed class StartupHost : IStartupHost
         Action announceMainMenuHint)
     {
         _loadSettings = loadSettings;
+        _applyTheme = applyTheme;
         _loadPersistedNotes = loadPersistedNotes;
         _prepareShellUi = prepareShellUi;
+        _playStartupSound = playStartupSound;
         _getStartScreen = getStartScreen;
         _resolveStartApplet = resolveStartApplet;
         _showMainMenu = showMainMenu;
@@ -35,9 +41,13 @@ internal sealed class StartupHost : IStartupHost
 
     public void LoadSettings() => _loadSettings();
 
+    public void ApplyTheme() => _applyTheme();
+
     public void LoadPersistedNotes() => _loadPersistedNotes();
 
     public void PrepareShellUi() => _prepareShellUi();
+
+    public void PlayStartupSound() => _playStartupSound();
 
     public StartScreenOption GetStartScreen() => _getStartScreen();
 

@@ -23,7 +23,9 @@ internal static class FlowFeatureFactory
         SettingsStateCoordinator settingsState,
         AppletRegistry appletRegistry,
         ScreenRouter screenRouter,
-        SettingsModule settingsModule)
+        SettingsModule settingsModule,
+        ISoundService soundService,
+        Action applyTheme)
     {
         var shellStartupBinder = new ShellStartupBinder(
             mainMenuList: shell.MainMenuList,
@@ -37,8 +39,10 @@ internal static class FlowFeatureFactory
             rebuildSettingsOptions: settingsModule.RebuildOptions);
         var host = new StartupHost(
             loadSettings: settingsState.TryLoadSettings,
+            applyTheme: applyTheme,
             loadPersistedNotes: startup.TryLoadPersistedNotes,
             prepareShellUi: shellStartupBinder.PrepareShellUi,
+            playStartupSound: soundService.PlayStartup,
             getStartScreen: startup.GetStartScreen,
             resolveStartApplet: appletRegistry.ResolveStartAppletId,
             showMainMenu: () => screenRouter.ShowMainMenu(0, shouldAnnounce: false),

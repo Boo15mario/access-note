@@ -6,7 +6,7 @@ namespace AccessNote.Tests;
 public sealed class MainMenuEntryBuilderTests
 {
     [Fact]
-    public void Build_IncludesAppletEntriesThenUtilitiesAndExit()
+    public void Build_IncludesTopLevelAppletsThenExit_WhenNoUtilityApplets()
     {
         var notesApplet = new TestApplet(new AppletDescriptor(AppletId.Notes, "Notes"));
         var settingsApplet = new TestApplet(new AppletDescriptor(AppletId.Settings, "Settings"));
@@ -14,13 +14,12 @@ public sealed class MainMenuEntryBuilderTests
 
         var entries = MainMenuEntryBuilder.Build(registry);
 
-        Assert.Equal(4, entries.Count);
+        Assert.Equal(3, entries.Count);
         Assert.Equal("Notes", entries[0].Label);
         Assert.Equal(AppletId.Notes, entries[0].AppletId);
         Assert.Equal("Settings", entries[1].Label);
         Assert.Equal(AppletId.Settings, entries[1].AppletId);
-        Assert.Equal(MainMenuEntryId.Utilities, entries[2].Id);
-        Assert.Equal(MainMenuEntryId.Exit, entries[3].Id);
+        Assert.Equal(MainMenuEntryId.Exit, entries[2].Id);
     }
 
     private sealed class TestApplet : IApplet

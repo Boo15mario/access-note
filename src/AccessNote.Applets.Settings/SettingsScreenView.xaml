@@ -13,7 +13,7 @@
                Text="Settings"
                FontSize="36"
                FontWeight="Bold"
-               Foreground="#F0F0F0"
+               Foreground="{DynamicResource ThemeHeaderForeground}"
                Margin="0,0,0,16"
                AutomationProperties.Name="Settings Header" />
 
@@ -26,8 +26,8 @@
       <Border Grid.Column="0"
               Margin="0,0,12,0"
               Padding="12"
-              Background="#202020"
-              BorderBrush="#5C5C5C"
+              Background="{DynamicResource ThemeEditorBackground}"
+              BorderBrush="{DynamicResource ThemeStatusBorder}"
               BorderThickness="1"
               AutomationProperties.Name="Settings Categories Region">
         <Grid>
@@ -39,16 +39,16 @@
           <TextBlock Grid.Row="0"
                      Text="Categories"
                      FontSize="20"
-                     Foreground="#F0F0F0"
+                     Foreground="{DynamicResource ThemeForeground}"
                      Margin="0,0,0,8"
                      AutomationProperties.Name="Settings categories label" />
 
           <ListBox x:Name="SettingsCategoryList"
                    Grid.Row="1"
                    FontSize="22"
-                   Foreground="#FFFFFF"
-                   Background="#262626"
-                   BorderBrush="#666666"
+                   Foreground="{DynamicResource ThemeForeground}"
+                   Background="{DynamicResource ThemeMenuBackground}"
+                   BorderBrush="{DynamicResource ThemeBorder}"
                    BorderThickness="1"
                    FocusVisualStyle="{x:Null}"
                    SelectionChanged="OnSettingsCategorySelectionChanged"
@@ -66,8 +66,8 @@
       <Border Grid.Column="1"
               Margin="12,0,0,0"
               Padding="12"
-              Background="#202020"
-              BorderBrush="#5C5C5C"
+              Background="{DynamicResource ThemeEditorBackground}"
+              BorderBrush="{DynamicResource ThemeStatusBorder}"
               BorderThickness="1"
               AutomationProperties.Name="Settings Options Region">
         <Grid>
@@ -81,16 +81,16 @@
                      Grid.Row="0"
                      Text="General"
                      FontSize="20"
-                     Foreground="#F0F0F0"
+                     Foreground="{DynamicResource ThemeForeground}"
                      Margin="0,0,0,8"
                      AutomationProperties.Name="Settings category title" />
 
           <ListBox x:Name="SettingsOptionsList"
                    Grid.Row="1"
                    FontSize="20"
-                   Foreground="#FFFFFF"
-                   Background="#262626"
-                   BorderBrush="#666666"
+                   Foreground="{DynamicResource ThemeForeground}"
+                   Background="{DynamicResource ThemeMenuBackground}"
+                   BorderBrush="{DynamicResource ThemeBorder}"
                    BorderThickness="1"
                    FocusVisualStyle="{x:Null}"
                    SelectionChanged="OnSettingsOptionSelectionChanged"
@@ -107,7 +107,7 @@
                      Grid.Row="2"
                      Margin="0,10,0,0"
                      FontSize="18"
-                     Foreground="#D0D0D0"
+                     Foreground="{DynamicResource ThemeForeground}"
                      TextWrapping="Wrap"
                      AutomationProperties.Name="Settings option hint" />
         </Grid>

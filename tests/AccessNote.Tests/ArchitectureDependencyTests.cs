@@ -84,6 +84,7 @@ public class ArchitectureDependencyTests
 
         var expectedPublicTypes = new[]
         {
+            nameof(AppletCategory),
             nameof(AppletDescriptor),
             nameof(AppletId),
             nameof(AppletRegistrationContext),

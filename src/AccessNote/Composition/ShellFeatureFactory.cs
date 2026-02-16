@@ -15,12 +15,16 @@ internal static class ShellFeatureFactory
         MainWindowCoreInputs core,
         MainWindowShellInputs shell)
     {
-        return new ShellViewAdapter(
+        var adapter = new ShellViewAdapter(
             shell.MainMenuScreen,
-            shell.NotesScreen,
-            shell.SettingsScreen,
             shell.MainMenuList,
             core.Dispatcher);
+        // Register the existing applet screens
+        foreach (var (appletId, screen) in shell.AppletScreens)
+        {
+            adapter.RegisterScreen(appletId, screen);
+        }
+        return adapter;
     }
 
     public static MainMenuModule CreateMainMenuModule(

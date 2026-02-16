@@ -16,8 +16,10 @@ public sealed class StartupFlowCoordinatorTests
             new[]
             {
                 "load_settings",
+                "apply_theme",
                 "load_notes",
                 "prepare_ui",
+                "play_startup_sound",
                 "show_main_menu",
                 "open_applet_notes"
             },
@@ -36,8 +38,10 @@ public sealed class StartupFlowCoordinatorTests
             new[]
             {
                 "load_settings",
+                "apply_theme",
                 "load_notes",
                 "prepare_ui",
+                "play_startup_sound",
                 "show_main_menu",
                 "announce_main_menu_hint"
             },
@@ -60,6 +64,11 @@ public sealed class StartupFlowCoordinatorTests
             Calls.Add("load_settings");
         }
 
+        public void ApplyTheme()
+        {
+            Calls.Add("apply_theme");
+        }
+
         public void LoadPersistedNotes()
         {
             Calls.Add("load_notes");
@@ -68,6 +77,11 @@ public sealed class StartupFlowCoordinatorTests
         public void PrepareShellUi()
         {
             Calls.Add("prepare_ui");
+        }
+
+        public void PlayStartupSound()
+        {
+            Calls.Add("play_startup_sound");
         }
 
         public StartScreenOption GetStartScreen()

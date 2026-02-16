@@ -17,20 +17,23 @@ internal static class SettingsOptionCatalog
     public static IEnumerable<SettingsOptionEntry> GetOptionsForCategory(
         int categoryIndex,
         AppSettings draft,
-        Action resetToDefaults)
+        Action resetToDefaults,
+        IReadOnlyList<string>? availableThemeNames = null)
     {
         ArgumentNullException.ThrowIfNull(draft);
         ArgumentNullException.ThrowIfNull(resetToDefaults);
 
         return categoryIndex switch
         {
-            0 => GetGeneralOptions(draft),
+            0 => GetGeneralOptions(draft, availableThemeNames ?? DefaultThemeNames),
             1 => GetNotesAppletOptions(draft),
             2 => GetAccessibilityOptions(draft),
             3 => GetAdvancedOptions(resetToDefaults),
             _ => Enumerable.Empty<SettingsOptionEntry>()
         };
     }
+
+    private static readonly IReadOnlyList<string> DefaultThemeNames = new[] { "Dark", "Light", "High Contrast" };
 
     public static bool AreEqual(AppSettings left, AppSettings right)
     {
@@ -42,10 +45,12 @@ internal static class SettingsOptionCatalog
                left.ConfirmBeforeDeleteNote == right.ConfirmBeforeDeleteNote &&
                left.NotesSortOrder == right.NotesSortOrder &&
                left.AnnounceStatusMessages == right.AnnounceStatusMessages &&
-               left.AnnounceHintsOnScreenOpen == right.AnnounceHintsOnScreenOpen;
+               left.AnnounceHintsOnScreenOpen == right.AnnounceHintsOnScreenOpen &&
+               left.SoundsEnabled == right.SoundsEnabled &&
+               string.Equals(left.ThemeName, right.ThemeName, StringComparison.Ordinal);
     }
 
-    private static IEnumerable<SettingsOptionEntry> GetGeneralOptions(AppSettings draft)
+    private static IEnumerable<SettingsOptionEntry> GetGeneralOptions(AppSettings draft, IReadOnlyList<string> themeNames)
     {
         return
         [
@@ -55,6 +60,20 @@ internal static class SettingsOptionCatalog
                 Hint = "Left and Right to change startup destination.",
                 GetValue = () => draft.StartScreen == StartScreenOption.Notes ? "Notes" : "Main Menu",
                 ChangeBy = delta => draft.StartScreen = CycleEnum(draft.StartScreen, delta)
+            },
+            new SettingsOptionEntry
+            {
+                Label = "Sounds enabled",
+                Hint = "Toggle startup and volume change sounds.",
+                GetValue = () => draft.SoundsEnabled ? "On" : "Off",
+                ChangeBy = _ => draft.SoundsEnabled = !draft.SoundsEnabled
+            },
+            new SettingsOptionEntry
+            {
+                Label = "Theme",
+                Hint = "Left and Right to change application theme.",
+                GetValue = () => draft.ThemeName,
+                ChangeBy = delta => draft.ThemeName = CycleString(themeNames, draft.ThemeName, delta)
             }
         ];
     }
@@ -138,5 +157,31 @@ internal static class SettingsOptionCatalog
 
         var nextIndex = ((currentIndex + delta) % values.Length + values.Length) % values.Length;
         return values[nextIndex];
+    }
+
+    private static string CycleString(IReadOnlyList<string> options, string current, int delta)
+    {
+        if (options.Count == 0)
+        {
+            return current;
+        }
+
+        var currentIndex = -1;
+        for (var i = 0; i < options.Count; i++)
+        {
+            if (string.Equals(options[i], current, StringComparison.OrdinalIgnoreCase))
+            {
+                currentIndex = i;
+                break;
+            }
+        }
+
+        if (currentIndex < 0)
+        {
+            currentIndex = 0;
+        }
+
+        var nextIndex = ((currentIndex + delta) % options.Count + options.Count) % options.Count;
+        return options[nextIndex];
     }
 }

@@ -17,6 +17,14 @@ internal sealed class MainWindowCompositionInputs
     public required MainWindowNavigationInputs Navigation { get; init; }
     public required MainWindowStartupInputs Startup { get; init; }
     public required MainWindowExitInputs Exit { get; init; }
+    public required MainWindowDateTimeInputs DateTime { get; init; }
+    public required MainWindowCalculatorInputs Calculator { get; init; }
+    public required MainWindowMediaPlayerInputs MediaPlayer { get; init; }
+    public required MainWindowMidiPlayerInputs MidiPlayer { get; init; }
+    public required MainWindowSystemMonitorInputs SystemMonitor { get; init; }
+    public required MainWindowCalendarInputs Calendar { get; init; }
+    public required MainWindowAppLauncherInputs AppLauncher { get; init; }
+    public required MainWindowContactsInputs Contacts { get; init; }
 }
 
 internal sealed class MainWindowCoreInputs
@@ -30,8 +38,7 @@ internal sealed class MainWindowCoreInputs
 internal sealed class MainWindowShellInputs
 {
     public required FrameworkElement MainMenuScreen { get; init; }
-    public required FrameworkElement NotesScreen { get; init; }
-    public required FrameworkElement SettingsScreen { get; init; }
+    public required Dictionary<AppletId, FrameworkElement> AppletScreens { get; init; }
     public required ListBox MainMenuList { get; init; }
     public required FrameworkElement StatusRegion { get; init; }
     public required TextBlock StatusText { get; init; }
@@ -85,4 +92,44 @@ internal sealed class MainWindowExitInputs
     public required Func<bool> TryPersistNotes { get; init; }
     public required Action RestoreFocusForActiveScreen { get; init; }
     public required Action CloseWindow { get; init; }
+}
+
+internal sealed class MainWindowDateTimeInputs
+{
+    public required DateTimeScreenView ScreenView { get; init; }
+}
+
+internal sealed class MainWindowCalculatorInputs
+{
+    public required CalculatorScreenView ScreenView { get; init; }
+}
+
+internal sealed class MainWindowMediaPlayerInputs
+{
+    public required MediaPlayerScreenView ScreenView { get; init; }
+}
+
+internal sealed class MainWindowMidiPlayerInputs
+{
+    public required MidiPlayerScreenView ScreenView { get; init; }
+}
+
+internal sealed class MainWindowSystemMonitorInputs
+{
+    public required SystemMonitorScreenView ScreenView { get; init; }
+}
+
+internal sealed class MainWindowCalendarInputs
+{
+    public required CalendarScreenView ScreenView { get; init; }
+}
+
+internal sealed class MainWindowAppLauncherInputs
+{
+    public required AppLauncherScreenView ScreenView { get; init; }
+}
+
+internal sealed class MainWindowContactsInputs
+{
+    public required ContactsScreenView ScreenView { get; init; }
 }

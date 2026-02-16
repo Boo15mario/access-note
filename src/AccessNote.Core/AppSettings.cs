@@ -35,6 +35,10 @@ public sealed class AppSettings
 
     public bool AnnounceHintsOnScreenOpen { get; set; }
 
+    public bool SoundsEnabled { get; set; }
+
+    public string ThemeName { get; set; } = "Dark";
+
     public AppSettings Clone()
     {
         return new AppSettings
@@ -44,7 +48,9 @@ public sealed class AppSettings
             ConfirmBeforeDeleteNote = ConfirmBeforeDeleteNote,
             NotesSortOrder = NotesSortOrder,
             AnnounceStatusMessages = AnnounceStatusMessages,
-            AnnounceHintsOnScreenOpen = AnnounceHintsOnScreenOpen
+            AnnounceHintsOnScreenOpen = AnnounceHintsOnScreenOpen,
+            SoundsEnabled = SoundsEnabled,
+            ThemeName = ThemeName
         };
     }
 
@@ -57,6 +63,8 @@ public sealed class AppSettings
         NotesSortOrder = source.NotesSortOrder;
         AnnounceStatusMessages = source.AnnounceStatusMessages;
         AnnounceHintsOnScreenOpen = source.AnnounceHintsOnScreenOpen;
+        SoundsEnabled = source.SoundsEnabled;
+        ThemeName = source.ThemeName;
     }
 
     public static AppSettings CreateDefault()
@@ -68,7 +76,9 @@ public sealed class AppSettings
             ConfirmBeforeDeleteNote = true,
             NotesSortOrder = NotesSortOrderOption.LastModifiedNewest,
             AnnounceStatusMessages = true,
-            AnnounceHintsOnScreenOpen = true
+            AnnounceHintsOnScreenOpen = true,
+            SoundsEnabled = true,
+            ThemeName = "Dark"
         };
     }
 }

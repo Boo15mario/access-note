@@ -15,3 +15,16 @@ public interface ISettingsStorage
 
     void SaveSettings(AppSettings settings);
 }
+
+internal interface ICalendarEventStorage
+{
+    IReadOnlyList<CalendarEvent> GetEventsForDate(DateTime date);
+
+    IReadOnlyList<CalendarEvent> GetEventsForMonth(int year, int month);
+
+    void AddEvent(CalendarEvent calendarEvent);
+
+    void UpdateEvent(CalendarEvent calendarEvent);
+
+    void DeleteEvent(int id);
+}

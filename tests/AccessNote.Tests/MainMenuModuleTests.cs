@@ -14,11 +14,12 @@ public sealed class MainMenuModuleTests
         StaTestRunner.Run(
             () =>
             {
+                var utilityChild = MainMenuEntry.ForApplet(new AppletDescriptor(AppletId.Notes, "Placeholder Utility"));
                 var entries = new List<MainMenuEntry>
                 {
                     MainMenuEntry.ForApplet(new AppletDescriptor(AppletId.Notes, "Notes")),
                     MainMenuEntry.ForApplet(new AppletDescriptor(AppletId.Settings, "Settings")),
-                    MainMenuEntry.Utilities(),
+                    MainMenuEntry.Submenu("Utilities", new[] { utilityChild }),
                     MainMenuEntry.Exit(),
                 };
 
@@ -45,23 +46,27 @@ public sealed class MainMenuModuleTests
                     showExitPrompt: () => exitPromptCount++,
                     announce: announcements.Add);
 
+                // Activate Notes
                 module.ShowMainMenu(0, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
+                // Activate Settings
                 module.ShowMainMenu(1, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
+                // Activate Utilities submenu (enters submenu)
                 module.ShowMainMenu(2, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
+                // Activate Exit
                 module.ShowMainMenu(3, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
                 Assert.Equal(1, notesOpenCount);
                 Assert.Equal(1, settingsOpenCount);
                 Assert.Equal(1, exitPromptCount);
-                Assert.Contains("Utilities is not implemented yet.", announcements);
-                Assert.Equal(3, mainMenuList.SelectedIndex);
+                Assert.Contains(announcements, a => a.Contains("Utilities"));
+            });
             });
     }
 
@@ -70,8 +75,6 @@ public sealed class MainMenuModuleTests
         out ListBox mainMenuList)
     {
         var mainMenuScreen = new Grid();
-        var notesScreen = new Grid();
-        var settingsScreen = new Grid();
         mainMenuList = new ListBox
         {
             ItemsSource = entries,
@@ -79,8 +82,6 @@ public sealed class MainMenuModuleTests
 
         return new ShellViewAdapter(
             mainMenuScreen: mainMenuScreen,
-            notesScreen: notesScreen,
-            settingsScreen: settingsScreen,
             mainMenuList: mainMenuList,
             dispatcher: Dispatcher.CurrentDispatcher);
     }

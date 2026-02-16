@@ -20,6 +20,8 @@ public sealed class SettingsStorage : ISettingsStorage
     private const string NotesSortOrderKey = "notes_sort_order";
     private const string AnnounceStatusMessagesKey = "announce_status_messages";
     private const string AnnounceHintsOnScreenOpenKey = "announce_hints_on_screen_open";
+    private const string SoundsEnabledKey = "sounds_enabled";
+    private const string ThemeNameKey = "theme_name";
 
     private readonly string _databasePath;
 
@@ -86,6 +88,18 @@ public sealed class SettingsStorage : ISettingsStorage
             settings.AnnounceHintsOnScreenOpen = announceHints;
         }
 
+        if (values.TryGetValue(SoundsEnabledKey, out var soundsEnabledValue) &&
+            bool.TryParse(soundsEnabledValue, out var soundsEnabled))
+        {
+            settings.SoundsEnabled = soundsEnabled;
+        }
+
+        if (values.TryGetValue(ThemeNameKey, out var themeNameValue) &&
+            !string.IsNullOrWhiteSpace(themeNameValue))
+        {
+            settings.ThemeName = themeNameValue;
+        }
+
         return settings;
     }
 
@@ -104,6 +118,8 @@ public sealed class SettingsStorage : ISettingsStorage
         UpsertSetting(connection, transaction, NotesSortOrderKey, settings.NotesSortOrder.ToString());
         UpsertSetting(connection, transaction, AnnounceStatusMessagesKey, settings.AnnounceStatusMessages.ToString());
         UpsertSetting(connection, transaction, AnnounceHintsOnScreenOpenKey, settings.AnnounceHintsOnScreenOpen.ToString());
+        UpsertSetting(connection, transaction, SoundsEnabledKey, settings.SoundsEnabled.ToString());
+        UpsertSetting(connection, transaction, ThemeNameKey, settings.ThemeName);
 
         transaction.Commit();
     }

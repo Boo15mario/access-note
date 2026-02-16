@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace AccessNote;
 
@@ -6,12 +7,13 @@ internal enum MainMenuEntryId
 {
     Applet,
     Utilities,
-    Exit
+    Exit,
+    Submenu
 }
 
 internal sealed class MainMenuEntry
 {
-    private MainMenuEntry(MainMenuEntryId id, string label, AppletId? appletId)
+    private MainMenuEntry(MainMenuEntryId id, string label, AppletId? appletId, IReadOnlyList<MainMenuEntry>? children = null)
     {
         if (string.IsNullOrWhiteSpace(label))
         {
@@ -31,12 +33,19 @@ internal sealed class MainMenuEntry
         Id = id;
         Label = label;
         AppletId = appletId;
+        Children = children ?? Array.Empty<MainMenuEntry>();
     }
 
     public static MainMenuEntry ForApplet(AppletDescriptor descriptor)
     {
         ArgumentNullException.ThrowIfNull(descriptor);
         return new MainMenuEntry(MainMenuEntryId.Applet, descriptor.Label, descriptor.Id);
+    }
+
+    public static MainMenuEntry Submenu(string label, IReadOnlyList<MainMenuEntry> children)
+    {
+        ArgumentNullException.ThrowIfNull(children);
+        return new MainMenuEntry(MainMenuEntryId.Submenu, label, appletId: null, children: children);
     }
 
     public static MainMenuEntry Utilities(string label = "Utilities")
@@ -54,6 +63,8 @@ internal sealed class MainMenuEntry
     public string Label { get; }
 
     public AppletId? AppletId { get; }
+
+    public IReadOnlyList<MainMenuEntry> Children { get; }
 
     public override string ToString()
     {

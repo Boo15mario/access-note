@@ -16,8 +16,19 @@ public partial class MainWindow
             Shell = new MainWindowShellInputs
             {
                 MainMenuScreen = MainMenuScreen,
-                NotesScreen = NotesScreen,
-                SettingsScreen = SettingsScreen,
+                AppletScreens = new Dictionary<AppletId, FrameworkElement>
+                {
+                    { AppletId.Notes, NotesScreen },
+                    { AppletId.Settings, SettingsScreen },
+                    { AppletId.DateTime, DateTimeScreen },
+                    { AppletId.Calculator, CalculatorScreen },
+                    { AppletId.AppLauncher, AppLauncherScreen },
+                    { AppletId.MediaPlayer, MediaPlayerScreen },
+                    { AppletId.MidiPlayer, MidiPlayerScreen },
+                    { AppletId.SystemMonitor, SystemMonitorScreen },
+                    { AppletId.Contacts, ContactsScreen },
+                    { AppletId.Calendar, CalendarScreen },
+                },
                 MainMenuList = MainMenuList,
                 StatusRegion = StatusRegion,
                 StatusText = StatusText,
@@ -65,6 +76,38 @@ public partial class MainWindow
                 TryPersistNotes = () => _notesEventController.TryPersistNotes(),
                 RestoreFocusForActiveScreen = () => _navigationController.RestoreFocusForActiveScreen(),
                 CloseWindow = Close,
+            },
+            DateTime = new MainWindowDateTimeInputs
+            {
+                ScreenView = DateTimeScreen,
+            },
+            Calculator = new MainWindowCalculatorInputs
+            {
+                ScreenView = CalculatorScreen,
+            },
+            MediaPlayer = new MainWindowMediaPlayerInputs
+            {
+                ScreenView = MediaPlayerScreen,
+            },
+            MidiPlayer = new MainWindowMidiPlayerInputs
+            {
+                ScreenView = MidiPlayerScreen,
+            },
+            SystemMonitor = new MainWindowSystemMonitorInputs
+            {
+                ScreenView = SystemMonitorScreen,
+            },
+            Calendar = new MainWindowCalendarInputs
+            {
+                ScreenView = CalendarScreen,
+            },
+            AppLauncher = new MainWindowAppLauncherInputs
+            {
+                ScreenView = AppLauncherScreen,
+            },
+            Contacts = new MainWindowContactsInputs
+            {
+                ScreenView = ContactsScreen,
             },
         };
     }

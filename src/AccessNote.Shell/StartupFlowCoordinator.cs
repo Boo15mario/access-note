@@ -3,8 +3,10 @@ namespace AccessNote;
 internal interface IStartupHost
 {
     void LoadSettings();
+    void ApplyTheme();
     void LoadPersistedNotes();
     void PrepareShellUi();
+    void PlayStartupSound();
     StartScreenOption GetStartScreen();
     bool TryResolveStartApplet(StartScreenOption startScreen, out AppletId appletId);
     void ShowMainMenu();
@@ -24,8 +26,10 @@ internal sealed class StartupFlowCoordinator
     public void HandleLoaded()
     {
         _host.LoadSettings();
+        _host.ApplyTheme();
         _host.LoadPersistedNotes();
         _host.PrepareShellUi();
+        _host.PlayStartupSound();
 
         _host.ShowMainMenu();
         if (_host.TryResolveStartApplet(_host.GetStartScreen(), out var appletId))

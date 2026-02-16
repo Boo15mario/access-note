@@ -5,6 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:notes="clr-namespace:AccessNote;assembly=AccessNote.Applets.Notes"
         xmlns:settings="clr-namespace:AccessNote;assembly=AccessNote.Applets.Settings"
+        xmlns:datetime="clr-namespace:AccessNote;assembly=AccessNote.Applets.DateTime"
+        xmlns:calculator="clr-namespace:AccessNote;assembly=AccessNote.Applets.Calculator"
+        xmlns:contacts="clr-namespace:AccessNote;assembly=AccessNote.Applets.Contacts"
+        xmlns:applauncher="clr-namespace:AccessNote;assembly=AccessNote.Applets.AppLauncher"
+        xmlns:mediaplayer="clr-namespace:AccessNote;assembly=AccessNote.Applets.MediaPlayer"
+        xmlns:midiplayer="clr-namespace:AccessNote;assembly=AccessNote.Applets.MidiPlayer"
+        xmlns:sysmonitor="clr-namespace:AccessNote;assembly=AccessNote.Applets.SystemMonitor"
+        xmlns:calendar="clr-namespace:AccessNote;assembly=AccessNote.Applets.Calendar"
         mc:Ignorable="d"
         Title="Access Note"
         Width="1200"
@@ -15,7 +23,7 @@
         Loaded="OnLoaded"
         Closing="OnClosing"
         PreviewKeyDown="OnPreviewKeyDown">
-  <Grid Background="#111111" Margin="24">
+  <Grid Background="{DynamicResource ThemeBackground}" Margin="24">
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
       <RowDefinition Height="Auto" />
@@ -31,16 +39,16 @@
                  Text="Access Note"
                  FontSize="36"
                  FontWeight="Bold"
-                 Foreground="#F0F0F0"
+                 Foreground="{DynamicResource ThemeHeaderForeground}"
                  Margin="0,0,0,20"
                  AutomationProperties.Name="Access Note Header" />
 
       <ListBox x:Name="MainMenuList"
                Grid.Row="1"
                FontSize="28"
-               Foreground="#FFFFFF"
-               Background="#222222"
-               BorderBrush="#666666"
+               Foreground="{DynamicResource ThemeForeground}"
+               Background="{DynamicResource ThemeMenuBackground}"
+               BorderBrush="{DynamicResource ThemeBorder}"
                BorderThickness="2"
                Padding="8"
                FocusVisualStyle="{x:Null}"
@@ -59,20 +67,36 @@
 
     <settings:SettingsScreenView x:Name="SettingsScreen" Visibility="Collapsed" />
 
+    <datetime:DateTimeScreenView x:Name="DateTimeScreen" Visibility="Collapsed" />
+
+    <calculator:CalculatorScreenView x:Name="CalculatorScreen" Visibility="Collapsed" />
+
+    <contacts:ContactsScreenView x:Name="ContactsScreen" Visibility="Collapsed" />
+
+    <mediaplayer:MediaPlayerScreenView x:Name="MediaPlayerScreen" Visibility="Collapsed" />
+
+    <midiplayer:MidiPlayerScreenView x:Name="MidiPlayerScreen" Visibility="Collapsed" />
+
+    <sysmonitor:SystemMonitorScreenView x:Name="SystemMonitorScreen" Visibility="Collapsed" />
+
+    <calendar:CalendarScreenView x:Name="CalendarScreen" Visibility="Collapsed" />
+
+    <applauncher:AppLauncherScreenView x:Name="AppLauncherScreen" Visibility="Collapsed" />
+
     <Border Grid.Row="1"
             x:Name="StatusRegion"
             Margin="0,20,0,0"
-            BorderBrush="#5C5C5C"
+            BorderBrush="{DynamicResource ThemeStatusBorder}"
             BorderThickness="1"
             Padding="10"
-            Background="#1A1A1A"
+            Background="{DynamicResource ThemeStatusBackground}"
             Focusable="True"
             KeyboardNavigation.IsTabStop="True"
             AutomationProperties.Name="Status Region">
       <TextBlock x:Name="StatusText"
                  Text="Ready"
                  FontSize="18"
-                 Foreground="#F0F0F0"
+                 Foreground="{DynamicResource ThemeForeground}"
                  AutomationProperties.LiveSetting="Polite" />
     </Border>
   </Grid>

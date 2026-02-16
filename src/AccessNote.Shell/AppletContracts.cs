@@ -6,7 +6,21 @@ namespace AccessNote;
 public enum AppletId
 {
     Notes,
-    Settings
+    Settings,
+    DateTime,
+    Calculator,
+    SystemMonitor,
+    MediaPlayer,
+    MidiPlayer,
+    AppLauncher,
+    Contacts,
+    Calendar
+}
+
+public enum AppletCategory
+{
+    TopLevel,
+    Utility
 }
 
 public sealed class AppletDescriptor
@@ -25,7 +39,8 @@ public sealed class AppletDescriptor
         string label,
         string screenHintText,
         string helpText,
-        StartScreenOption? startScreenOption = null)
+        StartScreenOption? startScreenOption = null,
+        AppletCategory category = AppletCategory.TopLevel)
     {
         if (string.IsNullOrWhiteSpace(label))
         {
@@ -47,6 +62,7 @@ public sealed class AppletDescriptor
         ScreenHintText = screenHintText;
         HelpText = helpText;
         StartScreenOption = startScreenOption;
+        Category = category;
     }
 
     public AppletId Id { get; }
@@ -58,6 +74,8 @@ public sealed class AppletDescriptor
     public string HelpText { get; }
 
     public StartScreenOption? StartScreenOption { get; }
+
+    public AppletCategory Category { get; }
 }
 
 public interface IApplet

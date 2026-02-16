@@ -1,0 +1,78 @@
+<UserControl x:Class="AccessNote.MediaPlayerScreenView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Border Padding="12"
+          Background="{DynamicResource ThemeEditorBackground}"
+          BorderBrush="{DynamicResource ThemeStatusBorder}"
+          BorderThickness="1"
+          AutomationProperties.Name="Media Player Region">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <TextBlock Text="Media Player"
+                 FontSize="36"
+                 FontWeight="Bold"
+                 Foreground="{DynamicResource ThemeHeaderForeground}"
+                 Margin="0,0,0,14"
+                 AutomationProperties.Name="Media Player Header" />
+
+      <TextBlock x:Name="TrackTitleText"
+                 Grid.Row="1"
+                 Text="No track loaded"
+                 FontSize="24"
+                 Foreground="{DynamicResource ThemeForeground}"
+                 Margin="0,0,0,4"
+                 AutomationProperties.Name="Track title" />
+
+      <TextBlock x:Name="ArtistText"
+                 Grid.Row="2"
+                 FontSize="20"
+                 Foreground="{DynamicResource ThemeForeground}"
+                 Margin="0,0,0,8"
+                 AutomationProperties.Name="Artist" />
+
+      <TextBlock x:Name="ProgressText"
+                 Grid.Row="3"
+                 Text="0:00 / 0:00"
+                 FontSize="20"
+                 Foreground="{DynamicResource ThemeForeground}"
+                 Margin="0,0,0,4"
+                 AutomationProperties.Name="Playback progress" />
+
+      <TextBlock x:Name="VolumeText"
+                 Grid.Row="4"
+                 Text="Volume: 100%"
+                 FontSize="20"
+                 Foreground="{DynamicResource ThemeForeground}"
+                 Margin="0,0,0,4"
+                 AutomationProperties.Name="Volume level" />
+
+      <TextBlock x:Name="PlaybackStateText"
+                 Grid.Row="5"
+                 Text="Stopped"
+                 FontSize="20"
+                 Foreground="{DynamicResource ThemeForeground}"
+                 Margin="0,0,0,12"
+                 AutomationProperties.Name="Playback state" />
+
+      <ListBox x:Name="PlaylistList"
+               Grid.Row="6"
+               FontSize="20"
+               Foreground="{DynamicResource ThemeForeground}"
+               Background="{DynamicResource ThemeMenuBackground}"
+               BorderBrush="{DynamicResource ThemeBorder}"
+               BorderThickness="1"
+               FocusVisualStyle="{x:Null}"
+               AutomationProperties.Name="Playlist" />
+    </Grid>
+  </Border>
+</UserControl>

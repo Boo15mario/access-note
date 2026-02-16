@@ -1,0 +1,181 @@
+<UserControl x:Class="AccessNote.ContactsScreenView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Text="Contacts"
+               FontSize="36"
+               FontWeight="Bold"
+               Foreground="{DynamicResource ThemeHeaderForeground}"
+               Margin="0,0,0,14"
+               AutomationProperties.Name="Contacts Header" />
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="2*" />
+        <ColumnDefinition Width="3*" />
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0"
+              Margin="0,0,12,0"
+              Padding="12"
+              Background="{DynamicResource ThemeEditorBackground}"
+              BorderBrush="{DynamicResource ThemeStatusBorder}"
+              BorderThickness="1"
+              AutomationProperties.Name="Contacts List Region">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <TextBlock Grid.Row="0"
+                     Text="Group"
+                     FontSize="20"
+                     Foreground="{DynamicResource ThemeForeground}"
+                     Margin="0,0,0,4"
+                     AutomationProperties.Name="Group filter label" />
+
+          <ComboBox x:Name="GroupFilterCombo"
+                    Grid.Row="1"
+                    MinHeight="36"
+                    FontSize="20"
+                    Margin="0,0,0,12"
+                    SelectionChanged="OnGroupFilterChanged"
+                    AutomationProperties.Name="Group filter" />
+
+          <TextBlock Grid.Row="2"
+                     Text="Search"
+                     FontSize="20"
+                     Foreground="{DynamicResource ThemeForeground}"
+                     Margin="0,0,0,4"
+                     AutomationProperties.Name="Search label" />
+
+          <TextBox x:Name="ContactSearchBox"
+                   Grid.Row="3"
+                   MinHeight="42"
+                   FontSize="20"
+                   Margin="0,0,0,12"
+                   TextChanged="OnSearchTextChanged"
+                   AutomationProperties.Name="Contacts search box" />
+
+          <ListBox x:Name="ContactsList"
+                   Grid.Row="4"
+                   FontSize="22"
+                   Foreground="{DynamicResource ThemeForeground}"
+                   Background="{DynamicResource ThemeMenuBackground}"
+                   BorderBrush="{DynamicResource ThemeBorder}"
+                   BorderThickness="1"
+                   FocusVisualStyle="{x:Null}"
+                   SelectionChanged="OnContactsSelectionChanged"
+                   AutomationProperties.Name="Contacts List">
+            <ListBox.ItemContainerStyle>
+              <Style TargetType="ListBoxItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
+              </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding DisplayName}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </Border>
+
+      <Border Grid.Column="1"
+              Margin="12,0,0,0"
+              Padding="12"
+              Background="{DynamicResource ThemeEditorBackground}"
+              BorderBrush="{DynamicResource ThemeStatusBorder}"
+              BorderThickness="1"
+              AutomationProperties.Name="Contact Details Region">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+
+          <TextBlock Grid.Row="0" Text="First Name" FontSize="18"
+                     Foreground="{DynamicResource ThemeForeground}" Margin="0,0,0,4"
+                     AutomationProperties.Name="First Name label" />
+          <TextBox x:Name="FirstNameBox" Grid.Row="1" MinHeight="36" FontSize="18" Margin="0,0,0,8"
+                   AutomationProperties.Name="First Name" />
+
+          <TextBlock Grid.Row="2" Text="Last Name" FontSize="18"
+                     Foreground="{DynamicResource ThemeForeground}" Margin="0,0,0,4"
+                     AutomationProperties.Name="Last Name label" />
+          <TextBox x:Name="LastNameBox" Grid.Row="3" MinHeight="36" FontSize="18" Margin="0,0,0,8"
+                   AutomationProperties.Name="Last Name" />
+
+          <TextBlock Grid.Row="4" Text="Phone" FontSize="18"
+                     Foreground="{DynamicResource ThemeForeground}" Margin="0,0,0,4"
+                     AutomationProperties.Name="Phone label" />
+          <TextBox x:Name="PhoneBox" Grid.Row="5" MinHeight="36" FontSize="18" Margin="0,0,0,8"
+                   AutomationProperties.Name="Phone" />
+
+          <TextBlock Grid.Row="6" Text="Email" FontSize="18"
+                     Foreground="{DynamicResource ThemeForeground}" Margin="0,0,0,4"
+                     AutomationProperties.Name="Email label" />
+          <TextBox x:Name="EmailBox" Grid.Row="7" MinHeight="36" FontSize="18" Margin="0,0,0,8"
+                   AutomationProperties.Name="Email" />
+
+          <TextBlock Grid.Row="8" Text="Address" FontSize="18"
+                     Foreground="{DynamicResource ThemeForeground}" Margin="0,0,0,4"
+                     AutomationProperties.Name="Address label" />
+          <TextBox x:Name="AddressBox" Grid.Row="9" MinHeight="36" FontSize="18" Margin="0,0,0,8"
+                   AutomationProperties.Name="Address" />
+
+          <TextBlock Grid.Row="10" Text="Notes" FontSize="18"
+                     Foreground="{DynamicResource ThemeForeground}" Margin="0,0,0,4"
+                     AutomationProperties.Name="Notes label" />
+          <TextBox x:Name="NotesBox" Grid.Row="11" MinHeight="36" FontSize="18" Margin="0,0,0,8"
+                   AutomationProperties.Name="Notes" />
+
+          <TextBlock Grid.Row="12" Text="Group" FontSize="18"
+                     Foreground="{DynamicResource ThemeForeground}" Margin="0,0,0,4"
+                     AutomationProperties.Name="Group label" />
+          <ComboBox x:Name="GroupCombo" Grid.Row="13" MinHeight="36" FontSize="18" Margin="0,0,0,8"
+                    IsEditable="True"
+                    AutomationProperties.Name="Group" />
+        </Grid>
+      </Border>
+    </Grid>
+
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+      <Button x:Name="SaveButton" Content="Save" FontSize="20" MinWidth="100" Padding="12,6"
+              Margin="0,0,8,0" Click="OnSaveClicked"
+              AutomationProperties.Name="Save contact" />
+      <Button x:Name="DeleteButton" Content="Delete" FontSize="20" MinWidth="100" Padding="12,6"
+              Margin="0,0,8,0" Click="OnDeleteClicked"
+              AutomationProperties.Name="Delete contact" />
+      <Button x:Name="BackButton" Content="Back" FontSize="20" MinWidth="100" Padding="12,6"
+              Click="OnBackClicked"
+              AutomationProperties.Name="Back to menu" />
+    </StackPanel>
+  </Grid>
+</UserControl>

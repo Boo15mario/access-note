@@ -7,10 +7,13 @@ namespace AccessNote;
 internal sealed class MainMenuModule
 {
     private readonly ShellViewAdapter _shellView;
-    private readonly IReadOnlyList<MainMenuEntry> _entries;
+    private readonly IReadOnlyList<MainMenuEntry> _rootEntries;
     private readonly Action<AppletId> _openApplet;
     private readonly Action _showExitPrompt;
     private readonly Action<string> _announce;
+
+    private IReadOnlyList<MainMenuEntry> _activeEntries;
+    private bool _inSubmenu;
 
     public MainMenuModule(
         ShellViewAdapter shellView,
@@ -20,20 +23,23 @@ internal sealed class MainMenuModule
         Action<string> announce)
     {
         _shellView = shellView ?? throw new ArgumentNullException(nameof(shellView));
-        _entries = entries ?? throw new ArgumentNullException(nameof(entries));
+        _rootEntries = entries ?? throw new ArgumentNullException(nameof(entries));
         _openApplet = openApplet ?? throw new ArgumentNullException(nameof(openApplet));
         _showExitPrompt = showExitPrompt ?? throw new ArgumentNullException(nameof(showExitPrompt));
         _announce = announce ?? throw new ArgumentNullException(nameof(announce));
+        _activeEntries = _rootEntries;
     }
 
     public void ShowMainMenu(int focusIndex, bool shouldAnnounce)
     {
+        _activeEntries = _rootEntries;
+        _inSubmenu = false;
         _shellView.ShowMainMenuScreen();
         SetSelection(focusIndex, shouldAnnounce: false);
 
         if (shouldAnnounce && _shellView.MainMenuSelectedIndex >= 0)
         {
-            _announce($"Main menu. {_entries[_shellView.MainMenuSelectedIndex].Label} selected.");
+            _announce($"Main menu. {_activeEntries[_shellView.MainMenuSelectedIndex].Label} selected.");
         }
     }
 
@@ -67,12 +73,17 @@ internal sealed class MainMenuModule
                 SetSelection(0);
                 return true;
             case MainMenuInputCommand.MoveEnd:
-                SetSelection(_entries.Count - 1);
+                SetSelection(_activeEntries.Count - 1);
                 return true;
             case MainMenuInputCommand.ActivateSelection:
                 ActivateSelection();
                 return true;
             case MainMenuInputCommand.ShowExitPrompt:
+                if (_inSubmenu)
+                {
+                    ReturnToRootMenu();
+                    return true;
+                }
                 _showExitPrompt();
                 return true;
             default:
@@ -82,7 +93,7 @@ internal sealed class MainMenuModule
 
     private void SetSelection(int index, bool shouldAnnounce = true)
     {
-        var selectedIndex = _shellView.SetMainMenuSelection(index, _entries);
+        var selectedIndex = _shellView.SetMainMenuSelection(index, _activeEntries);
         if (selectedIndex < 0)
         {
             return;
@@ -90,14 +101,14 @@ internal sealed class MainMenuModule
 
         if (shouldAnnounce)
         {
-            _announce(_entries[selectedIndex].Label);
+            _announce(_activeEntries[selectedIndex].Label);
         }
     }
 
     private void ActivateSelection()
     {
         var selectedIndex = _shellView.MainMenuSelectedIndex < 0 ? 0 : _shellView.MainMenuSelectedIndex;
-        var selectedEntry = _entries[selectedIndex];
+        var selectedEntry = _activeEntries[selectedIndex];
 
         if (selectedEntry.Id == MainMenuEntryId.Applet && selectedEntry.AppletId.HasValue)
         {
@@ -107,6 +118,9 @@ internal sealed class MainMenuModule
 
         switch (selectedEntry.Id)
         {
+            case MainMenuEntryId.Submenu:
+                EnterSubmenu(selectedEntry);
+                return;
             case MainMenuEntryId.Exit:
                 _showExitPrompt();
                 return;
@@ -117,5 +131,35 @@ internal sealed class MainMenuModule
                 _announce("Unknown menu action.");
                 return;
         }
+    }
+
+    private void EnterSubmenu(MainMenuEntry submenuEntry)
+    {
+        _activeEntries = submenuEntry.Children;
+        _inSubmenu = true;
+        _shellView.ShowMainMenuScreen();
+        SetSelection(0, shouldAnnounce: false);
+        _announce($"{submenuEntry.Label}. {_activeEntries[0].Label} selected.");
+    }
+
+    private void ReturnToRootMenu()
+    {
+        _activeEntries = _rootEntries;
+        _inSubmenu = false;
+        _shellView.ShowMainMenuScreen();
+
+        // Try to focus the Utilities submenu entry
+        int utilitiesIndex = 0;
+        for (int i = 0; i < _rootEntries.Count; i++)
+        {
+            if (_rootEntries[i].Id == MainMenuEntryId.Submenu)
+            {
+                utilitiesIndex = i;
+                break;
+            }
+        }
+
+        SetSelection(utilitiesIndex, shouldAnnounce: false);
+        _announce($"Main menu. {_rootEntries[utilitiesIndex].Label} selected.");
     }
 }
