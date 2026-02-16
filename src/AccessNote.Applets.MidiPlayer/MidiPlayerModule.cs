@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MeltySynth;
 using NAudio.Midi;
 using NAudio.Wave;
+using MeltySynthLib = MeltySynth;
 
 namespace AccessNote;
 
@@ -29,8 +29,8 @@ internal sealed class MidiPlayerModule
 
     // SoundFont mode
     private string? _soundFontPath;
-    private Synthesizer? _synthesizer;
-    private MidiFileSequencer? _sequencer;
+    private MeltySynthLib.Synthesizer? _synthesizer;
+    private MeltySynthLib.MidiFileSequencer? _sequencer;
     private WaveOutEvent? _waveOut;
 
     private DateTime _playbackStartTime;
@@ -38,6 +38,8 @@ internal sealed class MidiPlayerModule
     private TimeSpan _pausedElapsed;
 
     private bool UseSoundFont => _soundFontPath != null && _synthesizer != null;
+
+    private MeltySynthLib.MidiFile? _loadedMeltySynthMidi;
 
     public void Enter(
         TextBlock fileNameText,
@@ -278,7 +280,7 @@ internal sealed class MidiPlayerModule
 
             if (_synthesizer != null)
             {
-                _loadedMeltySynthMidi = new MeltySynth.MidiFile(path);
+                _loadedMeltySynthMidi = new MeltySynthLib.MidiFile(path);
             }
         }
         catch
@@ -287,8 +289,6 @@ internal sealed class MidiPlayerModule
             _loadedMidiFile = null;
         }
     }
-
-    private MeltySynth.MidiFile? _loadedMeltySynthMidi;
 
     private void LoadSoundFont(string path)
     {
@@ -299,13 +299,13 @@ internal sealed class MidiPlayerModule
             _pausedElapsed = TimeSpan.Zero;
 
             _soundFontPath = path;
-            var settings = new SynthesizerSettings(44100);
-            _synthesizer = new Synthesizer(_soundFontPath, settings);
-            _sequencer = new MidiFileSequencer(_synthesizer);
+            var settings = new MeltySynthLib.SynthesizerSettings(44100);
+            _synthesizer = new MeltySynthLib.Synthesizer(_soundFontPath, settings);
+            _sequencer = new MeltySynthLib.MidiFileSequencer(_synthesizer);
 
             if (_midiFilePath != null)
             {
-                _loadedMeltySynthMidi = new MeltySynth.MidiFile(_midiFilePath);
+                _loadedMeltySynthMidi = new MeltySynthLib.MidiFile(_midiFilePath);
             }
         }
         catch
@@ -434,10 +434,10 @@ internal sealed class MidiPlayerModule
 
     private sealed class SynthWaveProvider : IWaveProvider
     {
-        private readonly Synthesizer _synthesizer;
-        private readonly MidiFileSequencer _sequencer;
+        private readonly MeltySynthLib.Synthesizer _synthesizer;
+        private readonly MeltySynthLib.MidiFileSequencer _sequencer;
 
-        public SynthWaveProvider(Synthesizer synthesizer, MidiFileSequencer sequencer)
+        public SynthWaveProvider(MeltySynthLib.Synthesizer synthesizer, MeltySynthLib.MidiFileSequencer sequencer)
         {
             _synthesizer = synthesizer;
             _sequencer = sequencer;
@@ -453,10 +453,7 @@ internal sealed class MidiPlayerModule
             var left = new float[sampleCount];
             var right = new float[sampleCount];
 
-            _sequencer.RenderInterleavedInt16(
-                null!,
-                left,
-                right);
+            _sequencer.Render(left, right);
 
             // Interleave into the byte buffer as IEEE float
             int byteIndex = offset;
