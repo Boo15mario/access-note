@@ -1,0 +1,39 @@
+using System;
+
+namespace AccessNote;
+
+internal sealed class {{APPLET_NAME}}Applet : IApplet
+{
+    private readonly Action _enter;
+    private readonly Action _restoreFocus;
+    private readonly Func<bool> _canLeave;
+
+    public {{APPLET_NAME}}Applet(
+        AppletDescriptor descriptor,
+        Action enter,
+        Action restoreFocus,
+        Func<bool> canLeave)
+    {
+        Descriptor = descriptor ?? throw new ArgumentNullException(nameof(descriptor));
+        _enter = enter ?? throw new ArgumentNullException(nameof(enter));
+        _restoreFocus = restoreFocus ?? throw new ArgumentNullException(nameof(restoreFocus));
+        _canLeave = canLeave ?? throw new ArgumentNullException(nameof(canLeave));
+    }
+
+    public AppletDescriptor Descriptor { get; }
+
+    public void Enter()
+    {
+        _enter();
+    }
+
+    public void RestoreFocus()
+    {
+        _restoreFocus();
+    }
+
+    public bool CanLeave()
+    {
+        return _canLeave();
+    }
+}

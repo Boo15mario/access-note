@@ -1,0 +1,79 @@
+<Window x:Class="AccessNote.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:notes="clr-namespace:AccessNote;assembly=AccessNote.Applets.Notes"
+        xmlns:settings="clr-namespace:AccessNote;assembly=AccessNote.Applets.Settings"
+        mc:Ignorable="d"
+        Title="Access Note"
+        Width="1200"
+        Height="800"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowState="Maximized"
+        Loaded="OnLoaded"
+        Closing="OnClosing"
+        PreviewKeyDown="OnPreviewKeyDown">
+  <Grid Background="#111111" Margin="24">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid x:Name="MainMenuScreen">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Row="0"
+                 Text="Access Note"
+                 FontSize="36"
+                 FontWeight="Bold"
+                 Foreground="#F0F0F0"
+                 Margin="0,0,0,20"
+                 AutomationProperties.Name="Access Note Header" />
+
+      <ListBox x:Name="MainMenuList"
+               Grid.Row="1"
+               FontSize="28"
+               Foreground="#FFFFFF"
+               Background="#222222"
+               BorderBrush="#666666"
+               BorderThickness="2"
+               Padding="8"
+               FocusVisualStyle="{x:Null}"
+               AutomationProperties.Name="Main Menu">
+        <ListBox.ItemContainerStyle>
+          <Style TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="AutomationProperties.Name" Value="{Binding}" />
+          </Style>
+        </ListBox.ItemContainerStyle>
+      </ListBox>
+    </Grid>
+
+    <notes:NotesScreenView x:Name="NotesScreen" Visibility="Collapsed" />
+
+    <settings:SettingsScreenView x:Name="SettingsScreen" Visibility="Collapsed" />
+
+    <Border Grid.Row="1"
+            x:Name="StatusRegion"
+            Margin="0,20,0,0"
+            BorderBrush="#5C5C5C"
+            BorderThickness="1"
+            Padding="10"
+            Background="#1A1A1A"
+            Focusable="True"
+            KeyboardNavigation.IsTabStop="True"
+            AutomationProperties.Name="Status Region">
+      <TextBlock x:Name="StatusText"
+                 Text="Ready"
+                 FontSize="18"
+                 Foreground="#F0F0F0"
+                 AutomationProperties.LiveSetting="Polite" />
+    </Border>
+  </Grid>
+</Window>

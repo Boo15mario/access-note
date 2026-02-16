@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AccessNote.Core\AccessNote.Core.csproj" />
+    <ProjectReference Include="..\AccessNote.Shell\AccessNote.Shell.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Notes\AccessNote.Applets.Notes.csproj" />
+    <ProjectReference Include="..\AccessNote.Applets.Settings\AccessNote.Applets.Settings.csproj" />
+  </ItemGroup>
+</Project>

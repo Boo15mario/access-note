@@ -1,0 +1,20 @@
+namespace AccessNote;
+
+internal sealed class {{APPLET_NAME}}Module
+{
+    public void Enter()
+    {
+        // TODO: initialize and show applet-specific state.
+    }
+
+    public void RestoreFocus()
+    {
+        // TODO: restore focus to applet default region.
+    }
+
+    public bool CanLeave()
+    {
+        // TODO: guard unsaved changes when leaving this applet.
+        return true;
+    }
+}

@@ -1,0 +1,49 @@
+<Window x:Class="AccessNote.ExitConfirmationDialog"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Exit Access Note"
+        Width="500"
+        Height="220"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        PreviewKeyDown="OnPreviewKeyDown"
+        Loaded="OnLoaded">
+  <Grid Margin="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Text="Exit Access Note?"
+               FontSize="28"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               AutomationProperties.Name="Exit Access Note question" />
+
+    <StackPanel Grid.Row="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                Margin="0,20,0,0">
+      <Button x:Name="YesButton"
+              Content="Yes"
+              Width="140"
+              Height="52"
+              Margin="0,0,12,0"
+              FontSize="22"
+              IsDefault="True"
+              Click="OnYesClick"
+              AutomationProperties.Name="Yes, exit Access Note" />
+      <Button x:Name="NoButton"
+              Content="No"
+              Width="140"
+              Height="52"
+              FontSize="22"
+              IsCancel="True"
+              Click="OnNoClick"
+              AutomationProperties.Name="No, stay in Access Note" />
+    </StackPanel>
+  </Grid>
+</Window>

@@ -1,0 +1,115 @@
+<UserControl x:Class="AccessNote.NotesScreenView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Text="Notes"
+               FontSize="36"
+               FontWeight="Bold"
+               Foreground="#F0F0F0"
+               Margin="0,0,0,14"
+               AutomationProperties.Name="Notes Header" />
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="2*" />
+        <ColumnDefinition Width="3*" />
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0"
+              Margin="0,0,12,0"
+              Padding="12"
+              Background="#202020"
+              BorderBrush="#5C5C5C"
+              BorderThickness="1"
+              AutomationProperties.Name="Notes List Region">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <TextBlock Grid.Row="0"
+                     Text="Search"
+                     FontSize="20"
+                     Foreground="#F0F0F0"
+                     Margin="0,0,0,8"
+                     AutomationProperties.Name="Search label" />
+
+          <TextBox x:Name="NoteSearchBox"
+                   Grid.Row="1"
+                   MinHeight="42"
+                   FontSize="20"
+                   Margin="0,0,0,12"
+                   TextChanged="OnNoteSearchTextChanged"
+                   AutomationProperties.Name="Notes search box" />
+
+          <ListBox x:Name="NotesList"
+                   Grid.Row="2"
+                   FontSize="22"
+                   Foreground="#FFFFFF"
+                   Background="#262626"
+                   BorderBrush="#666666"
+                   BorderThickness="1"
+                   FocusVisualStyle="{x:Null}"
+                   SelectionChanged="OnNotesSelectionChanged"
+                   AutomationProperties.Name="Notes List">
+            <ListBox.ItemContainerStyle>
+              <Style TargetType="ListBoxItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="AutomationProperties.Name" Value="{Binding DisplayTitle}" />
+              </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding DisplayTitle}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </Border>
+
+      <Border Grid.Column="1"
+              Margin="12,0,0,0"
+              Padding="12"
+              Background="#202020"
+              BorderBrush="#5C5C5C"
+              BorderThickness="1"
+              AutomationProperties.Name="Editor Region">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <TextBlock x:Name="EditorTitleText"
+                     Grid.Row="0"
+                     Text="Editor"
+                     FontSize="20"
+                     Foreground="#F0F0F0"
+                     Margin="0,0,0,8"
+                     AutomationProperties.Name="Editor title" />
+
+          <TextBox x:Name="EditorTextBox"
+                   Grid.Row="1"
+                   AcceptsReturn="True"
+                   AcceptsTab="True"
+                   TextWrapping="Wrap"
+                   VerticalScrollBarVisibility="Auto"
+                   HorizontalScrollBarVisibility="Auto"
+                   FontSize="20"
+                   TextChanged="OnEditorTextChanged"
+                   AutomationProperties.Name="Note editor" />
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

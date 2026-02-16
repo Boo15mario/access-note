@@ -1,0 +1,147 @@
+<UserControl x:Class="AccessNote.SettingsScreenView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Text="Settings"
+               FontSize="36"
+               FontWeight="Bold"
+               Foreground="#F0F0F0"
+               Margin="0,0,0,16"
+               AutomationProperties.Name="Settings Header" />
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="2*" />
+        <ColumnDefinition Width="3*" />
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0"
+              Margin="0,0,12,0"
+              Padding="12"
+              Background="#202020"
+              BorderBrush="#5C5C5C"
+              BorderThickness="1"
+              AutomationProperties.Name="Settings Categories Region">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <TextBlock Grid.Row="0"
+                     Text="Categories"
+                     FontSize="20"
+                     Foreground="#F0F0F0"
+                     Margin="0,0,0,8"
+                     AutomationProperties.Name="Settings categories label" />
+
+          <ListBox x:Name="SettingsCategoryList"
+                   Grid.Row="1"
+                   FontSize="22"
+                   Foreground="#FFFFFF"
+                   Background="#262626"
+                   BorderBrush="#666666"
+                   BorderThickness="1"
+                   FocusVisualStyle="{x:Null}"
+                   SelectionChanged="OnSettingsCategorySelectionChanged"
+                   AutomationProperties.Name="Settings categories list">
+            <ListBox.ItemContainerStyle>
+              <Style TargetType="ListBoxItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Padding" Value="10" />
+              </Style>
+            </ListBox.ItemContainerStyle>
+          </ListBox>
+        </Grid>
+      </Border>
+
+      <Border Grid.Column="1"
+              Margin="12,0,0,0"
+              Padding="12"
+              Background="#202020"
+              BorderBrush="#5C5C5C"
+              BorderThickness="1"
+              AutomationProperties.Name="Settings Options Region">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+
+          <TextBlock x:Name="SettingsCategoryTitleText"
+                     Grid.Row="0"
+                     Text="General"
+                     FontSize="20"
+                     Foreground="#F0F0F0"
+                     Margin="0,0,0,8"
+                     AutomationProperties.Name="Settings category title" />
+
+          <ListBox x:Name="SettingsOptionsList"
+                   Grid.Row="1"
+                   FontSize="20"
+                   Foreground="#FFFFFF"
+                   Background="#262626"
+                   BorderBrush="#666666"
+                   BorderThickness="1"
+                   FocusVisualStyle="{x:Null}"
+                   SelectionChanged="OnSettingsOptionSelectionChanged"
+                   AutomationProperties.Name="Settings options list">
+            <ListBox.ItemContainerStyle>
+              <Style TargetType="ListBoxItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Padding" Value="10" />
+              </Style>
+            </ListBox.ItemContainerStyle>
+          </ListBox>
+
+          <TextBlock x:Name="SettingsOptionHintText"
+                     Grid.Row="2"
+                     Margin="0,10,0,0"
+                     FontSize="18"
+                     Foreground="#D0D0D0"
+                     TextWrapping="Wrap"
+                     AutomationProperties.Name="Settings option hint" />
+        </Grid>
+      </Border>
+    </Grid>
+
+    <StackPanel Grid.Row="2"
+                Orientation="Horizontal"
+                Margin="0,20,0,0"
+                AutomationProperties.Name="Settings actions">
+      <Button x:Name="SettingsSaveButton"
+              Content="Save"
+              Width="220"
+              Height="64"
+              FontSize="24"
+              Margin="0,0,12,0"
+              Click="OnSettingsSaveClick"
+              AutomationProperties.Name="Save settings" />
+      <Button x:Name="SettingsResetButton"
+              Content="Reset Defaults"
+              Width="260"
+              Height="64"
+              FontSize="24"
+              Margin="0,0,12,0"
+              Click="OnSettingsResetClick"
+              AutomationProperties.Name="Reset settings to defaults" />
+      <Button x:Name="SettingsBackButton"
+              Content="Back"
+              Width="220"
+              Height="64"
+              FontSize="24"
+              IsCancel="True"
+              Click="OnSettingsBackClick"
+              AutomationProperties.Name="Back" />
+    </StackPanel>
+  </Grid>
+</UserControl>
