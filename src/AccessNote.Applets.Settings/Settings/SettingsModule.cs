@@ -31,7 +31,8 @@ internal sealed class SettingsModule
         Dispatcher dispatcher,
         Action returnToMainMenu,
         Action<Exception> handleSaveError,
-        Action<string> announce)
+        Action<string> announce,
+        Action applyTheme)
     {
         var controller = new SettingsInteractionController(categories.Count);
         _view = new SettingsViewAdapter(
@@ -66,7 +67,8 @@ internal sealed class SettingsModule
             focusSettingsRegion: _focus.FocusRegion,
             returnToMainMenu: returnToMainMenu,
             handleSaveError: handleSaveError,
-            announce: announce);
+            announce: announce,
+            applyTheme: applyTheme);
         _flow = new SettingsFlowCoordinator(
             controller,
             _view,

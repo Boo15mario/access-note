@@ -14,6 +14,7 @@ internal static class InputFeatureFactory
             handleActiveAppletInput: screenRouter.HandleInputForActiveApplet,
             showExitPrompt: navigationController.ShowExitPrompt,
             getHelpText: navigationController.GetHelpText,
-            announce: statusAnnouncer.Announce);
+            announce: statusAnnouncer.Announce,
+            returnToMainMenu: () => navigationController.ShowMainMenu(0, shouldAnnounce: true));
     }
 }

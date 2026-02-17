@@ -13,6 +13,7 @@ internal sealed class SettingsActionsCoordinator
     private readonly Action _returnToMainMenu;
     private readonly Action<Exception> _handleSaveError;
     private readonly Action<string> _announce;
+    private readonly Action _applyTheme;
 
     public SettingsActionsCoordinator(
         ISettingsDialogService dialogs,
@@ -22,7 +23,8 @@ internal sealed class SettingsActionsCoordinator
         Action focusSettingsRegion,
         Action returnToMainMenu,
         Action<Exception> handleSaveError,
-        Action<string> announce)
+        Action<string> announce,
+        Action applyTheme)
     {
         _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _session = session ?? throw new ArgumentNullException(nameof(session));
@@ -32,6 +34,7 @@ internal sealed class SettingsActionsCoordinator
         _returnToMainMenu = returnToMainMenu ?? throw new ArgumentNullException(nameof(returnToMainMenu));
         _handleSaveError = handleSaveError ?? throw new ArgumentNullException(nameof(handleSaveError));
         _announce = announce ?? throw new ArgumentNullException(nameof(announce));
+        _applyTheme = applyTheme ?? throw new ArgumentNullException(nameof(applyTheme));
     }
 
     public bool SaveSettingsDraft(bool announce)
@@ -42,6 +45,8 @@ internal sealed class SettingsActionsCoordinator
             _handleSaveError(error);
             return false;
         }
+
+        _applyTheme();
 
         if (announce)
         {
@@ -92,6 +97,7 @@ internal sealed class SettingsActionsCoordinator
         switch (leaveResolution.Result)
         {
             case SettingsLeaveResult.LeaveAfterSave:
+                _applyTheme();
                 _announce("Settings saved.");
                 return true;
             case SettingsLeaveResult.StayAfterSaveFailure:

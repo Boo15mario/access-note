@@ -12,14 +12,19 @@ internal sealed class DateTimeModule
     private TextBlock? _timeText;
     private TextBlock? _weekText;
     private DispatcherTimer? _timer;
+    private Action<string>? _announce;
+    private Action? _returnToMainMenu;
 
-    public void Enter(TextBlock dateText, TextBlock timeText, TextBlock weekText)
+    public void Enter(TextBlock dateText, TextBlock timeText, TextBlock weekText, Action<string> announce, Action returnToMainMenu)
     {
         _dateText = dateText;
         _timeText = timeText;
         _weekText = weekText;
+        _announce = announce;
+        _returnToMainMenu = returnToMainMenu;
 
         UpdateDisplay();
+        AnnounceDateTime();
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += OnTimerTick;
@@ -32,7 +37,8 @@ internal sealed class DateTimeModule
 
     public bool HandleInput(Key key, ModifierKeys modifiers)
     {
-        return false;
+        _returnToMainMenu?.Invoke();
+        return true;
     }
 
     public bool CanLeave()
@@ -75,6 +81,14 @@ internal sealed class DateTimeModule
                 now, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
             var timezone = TimeZoneInfo.Local.DisplayName;
             _weekText.Text = $"Week {weekNumber} — {timezone}";
+        }
+    }
+
+    private void AnnounceDateTime()
+    {
+        if (_dateText != null && _timeText != null)
+        {
+            _announce?.Invoke($"Date and Time. {_dateText.Text}. {_timeText.Text}.");
         }
     }
 }

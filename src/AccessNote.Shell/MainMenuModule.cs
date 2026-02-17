@@ -34,6 +34,7 @@ internal sealed class MainMenuModule
     {
         _activeEntries = _rootEntries;
         _inSubmenu = false;
+        _shellView.UpdateMainMenuItems(_activeEntries);
         _shellView.ShowMainMenuScreen();
         SetSelection(focusIndex, shouldAnnounce: false);
 
@@ -137,6 +138,7 @@ internal sealed class MainMenuModule
     {
         _activeEntries = submenuEntry.Children;
         _inSubmenu = true;
+        _shellView.UpdateMainMenuItems(_activeEntries);
         _shellView.ShowMainMenuScreen();
         SetSelection(0, shouldAnnounce: false);
         _announce($"{submenuEntry.Label}. {_activeEntries[0].Label} selected.");
@@ -146,6 +148,7 @@ internal sealed class MainMenuModule
     {
         _activeEntries = _rootEntries;
         _inSubmenu = false;
+        _shellView.UpdateMainMenuItems(_activeEntries);
         _shellView.ShowMainMenuScreen();
 
         // Try to focus the Utilities submenu entry

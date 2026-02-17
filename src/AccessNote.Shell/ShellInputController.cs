@@ -11,6 +11,7 @@ internal sealed class ShellInputController
     private readonly Action _showExitPrompt;
     private readonly Func<string> _getHelpText;
     private readonly Action<string> _announce;
+    private readonly Action _returnToMainMenu;
 
     public ShellInputController(
         Func<AppletId?> getActiveAppletId,
@@ -18,7 +19,8 @@ internal sealed class ShellInputController
         Func<KeyEventArgs, Key, ModifierKeys, bool> handleActiveAppletInput,
         Action showExitPrompt,
         Func<string> getHelpText,
-        Action<string> announce)
+        Action<string> announce,
+        Action returnToMainMenu)
     {
         _getActiveAppletId = getActiveAppletId ?? throw new ArgumentNullException(nameof(getActiveAppletId));
         _handleMainMenu = handleMainMenu ?? throw new ArgumentNullException(nameof(handleMainMenu));
@@ -26,6 +28,7 @@ internal sealed class ShellInputController
         _showExitPrompt = showExitPrompt ?? throw new ArgumentNullException(nameof(showExitPrompt));
         _getHelpText = getHelpText ?? throw new ArgumentNullException(nameof(getHelpText));
         _announce = announce ?? throw new ArgumentNullException(nameof(announce));
+        _returnToMainMenu = returnToMainMenu ?? throw new ArgumentNullException(nameof(returnToMainMenu));
     }
 
     public void HandlePreviewKeyDown(KeyEventArgs e)
@@ -48,6 +51,13 @@ internal sealed class ShellInputController
         if (handledByActiveScreen)
         {
             e.Handled = true;
+            return;
+        }
+
+        if (activeAppletId.HasValue && key == Key.Escape)
+        {
+            e.Handled = true;
+            _returnToMainMenu();
             return;
         }
 

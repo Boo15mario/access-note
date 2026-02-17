@@ -8,7 +8,8 @@ internal static class SettingsFeatureFactory
         MainWindowNavigationInputs navigation,
         StatusAnnouncer statusAnnouncer,
         ErrorNotifier errorNotifier,
-        ISettingsDialogService settingsDialogs)
+        ISettingsDialogService settingsDialogs,
+        Action applyTheme)
     {
         return new SettingsModule(
             dialogs: settingsDialogs,
@@ -25,6 +26,7 @@ internal static class SettingsFeatureFactory
             dispatcher: core.Dispatcher,
             returnToMainMenu: navigation.ReturnToMainMenuFromSettings,
             handleSaveError: errorNotifier.ShowSettingsSaveError,
-            announce: statusAnnouncer.Announce);
+            announce: statusAnnouncer.Announce,
+            applyTheme: applyTheme);
     }
 }

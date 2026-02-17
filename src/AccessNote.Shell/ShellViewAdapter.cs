@@ -40,6 +40,11 @@ public sealed class ShellViewAdapter
         _mainMenuScreen.Visibility = Visibility.Visible;
     }
 
+    internal void UpdateMainMenuItems(IReadOnlyList<MainMenuEntry> entries)
+    {
+        _mainMenuList.ItemsSource = entries;
+    }
+
     public void ShowAppletScreen(AppletId appletId)
     {
         _mainMenuScreen.Visibility = Visibility.Collapsed;

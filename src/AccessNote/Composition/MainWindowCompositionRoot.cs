@@ -28,7 +28,6 @@ internal static class MainWindowCompositionRoot
             errorNotifier: errorNotifier,
             announce: statusAnnouncer.Announce);
         var notesModule = NotesFeatureFactory.CreateModule(core, shell, notes, navigation, statusAnnouncer, errorNotifier, notesDialogs, settingsState);
-        var settingsModule = SettingsFeatureFactory.CreateModule(core, settings, navigation, statusAnnouncer, errorNotifier, settingsDialogs);
         var soundService = new SoundService(
             soundsDirectory: System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sounds"),
             isSoundEnabled: () => core.SettingsSession.Current.SoundsEnabled);
@@ -42,13 +41,16 @@ internal static class MainWindowCompositionRoot
             var theme = ThemeLoader.Resolve(availableThemes, themeName);
             ThemeManager.Apply(theme, System.Windows.Application.Current.Resources);
         };
+        var settingsModule = SettingsFeatureFactory.CreateModule(core, settings, navigation, statusAnnouncer, errorNotifier, settingsDialogs, applyTheme);
         IAppletRegistration[] appletRegistrations =
         {
             new NotesAppletRegistration(
                 notesModule: notesModule,
                 getInitialFocus: () => core.SettingsSession.Current.NotesInitialFocus),
             new SettingsAppletRegistration(settingsModule: settingsModule),
-            new DateTimeAppletRegistration(screenView: inputs.DateTime.ScreenView),
+            new DateTimeAppletRegistration(
+                screenView: inputs.DateTime.ScreenView,
+                showMainMenu: () => navigation.ShowMainMenu(0, true)),
             new CalculatorAppletRegistration(screenView: inputs.Calculator.ScreenView),
             new MediaPlayerAppletRegistration(screenView: inputs.MediaPlayer.ScreenView),
             new MidiPlayerAppletRegistration(screenView: inputs.MidiPlayer.ScreenView),
