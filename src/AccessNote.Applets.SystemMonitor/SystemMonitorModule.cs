@@ -19,20 +19,24 @@ internal sealed class SystemMonitorModule
     private TimeSpan _lastCpuTime;
     private DateTime _lastCheckTime;
     private int _focusedSection;
+    private Action<string>? _announce;
 
-    public void Enter(TextBlock cpuText, TextBlock memoryText, ItemsControl diskList)
+    public void Enter(TextBlock cpuText, TextBlock memoryText, ItemsControl diskList, Action<string> announce)
     {
         _cpuText = cpuText;
         _memoryText = memoryText;
         _diskList = diskList;
         _diskList.ItemsSource = _diskEntries;
         _focusedSection = 0;
+        _announce = announce;
 
         var process = Process.GetCurrentProcess();
         _lastCpuTime = process.TotalProcessorTime;
         _lastCheckTime = DateTime.UtcNow;
 
         UpdateDisplay();
+
+        _announce($"System Monitor. {_cpuText.Text}. {_memoryText.Text}.");
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
         _timer.Tick += OnTimerTick;
@@ -48,22 +52,37 @@ internal sealed class SystemMonitorModule
         if (key == Key.F5)
         {
             UpdateDisplay();
+            AnnounceFocusedSection();
             return true;
         }
 
         if (key == Key.Up)
         {
             if (_focusedSection > 0) _focusedSection--;
+            AnnounceFocusedSection();
             return true;
         }
 
         if (key == Key.Down)
         {
             if (_focusedSection < 2) _focusedSection++;
+            AnnounceFocusedSection();
             return true;
         }
 
         return false;
+    }
+
+    private void AnnounceFocusedSection()
+    {
+        var text = _focusedSection switch
+        {
+            0 => _cpuText?.Text ?? "CPU: unavailable",
+            1 => _memoryText?.Text ?? "Memory: unavailable",
+            2 => _diskEntries.Count > 0 ? string.Join(". ", _diskEntries) : "No disks available",
+            _ => string.Empty
+        };
+        _announce?.Invoke(text);
     }
 
     public bool CanLeave()

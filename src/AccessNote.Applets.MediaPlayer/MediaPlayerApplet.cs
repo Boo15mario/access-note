@@ -42,8 +42,8 @@ internal sealed class MediaPlayerApplet : IApplet
             _screenView.ProgressTextControl,
             _screenView.VolumeTextControl,
             _screenView.PlaybackStateTextControl,
-            _screenView.PlaylistListControl);
-        _announceHint(Descriptor.ScreenHintText);
+            _screenView.PlaylistListControl,
+            _announceHint);
     }
 
     public void RestoreFocus()

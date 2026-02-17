@@ -42,7 +42,6 @@ internal sealed class AppLauncherApplet : IApplet
             _screenView.DetailNameControl,
             _screenView.DetailPathControl,
             _screenView.DetailArgumentsControl);
-        _announceHint(Descriptor.ScreenHintText);
     }
 
     public void RestoreFocus()

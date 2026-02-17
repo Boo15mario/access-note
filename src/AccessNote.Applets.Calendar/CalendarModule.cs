@@ -23,6 +23,7 @@ internal sealed class CalendarModule
     private int _currentMonth;
     private DateTime _selectedDate;
     private int _focusRegion; // 0 = calendar grid, 1 = events list
+    private Action<string>? _announce;
 
     public CalendarModule(ICalendarEventStorage storage)
     {
@@ -34,13 +35,15 @@ internal sealed class CalendarModule
         ListBox dayCellsList,
         TextBlock selectedDateText,
         ListBox eventsList,
-        TextBlock eventDetailText)
+        TextBlock eventDetailText,
+        Action<string> announce)
     {
         _monthYearHeader = monthYearHeader;
         _dayCellsList = dayCellsList;
         _selectedDateText = selectedDateText;
         _eventsList = eventsList;
         _eventDetailText = eventDetailText;
+        _announce = announce;
 
         _dayCellsList.ItemsSource = _dayCells;
         _eventsList.ItemsSource = _events;
@@ -54,6 +57,10 @@ internal sealed class CalendarModule
         RebuildCalendarGrid();
         SelectDayInGrid(_selectedDate.Day);
         UpdateEventsForSelectedDate();
+
+        var dateStr = _selectedDate.ToString("dddd, MMMM d, yyyy", CultureInfo.CurrentCulture);
+        var evtCount = _events.Count;
+        _announce($"Calendar. {dateStr}. {evtCount} event(s).");
     }
 
     public void RestoreFocus()
@@ -79,6 +86,7 @@ internal sealed class CalendarModule
         {
             _focusRegion = _focusRegion == 0 ? 1 : 0;
             RestoreFocus();
+            _announce?.Invoke(_focusRegion == 0 ? "Calendar grid" : $"Events list. {_events.Count} event(s).");
             return true;
         }
 
@@ -189,6 +197,7 @@ internal sealed class CalendarModule
         _selectedDate = newDate;
         SelectDayInGrid(_selectedDate.Day);
         UpdateEventsForSelectedDate();
+        AnnounceSelectedDate();
     }
 
     private void ChangeMonth(int offset)
@@ -204,6 +213,15 @@ internal sealed class CalendarModule
         RebuildCalendarGrid();
         SelectDayInGrid(_selectedDate.Day);
         UpdateEventsForSelectedDate();
+        AnnounceSelectedDate();
+    }
+
+    private void AnnounceSelectedDate()
+    {
+        var dateStr = _selectedDate.ToString("dddd, MMMM d, yyyy", CultureInfo.CurrentCulture);
+        var evtCount = _events.Count;
+        var evtText = evtCount > 0 ? $" {evtCount} event(s)." : "";
+        _announce?.Invoke($"{dateStr}.{evtText}");
     }
 
     private void RebuildCalendarGrid()

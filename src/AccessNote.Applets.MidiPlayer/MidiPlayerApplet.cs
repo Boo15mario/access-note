@@ -41,8 +41,8 @@ internal sealed class MidiPlayerApplet : IApplet
             _screenView.PlaybackStateTextControl,
             _screenView.ProgressTextControl,
             _screenView.TempoTextControl,
-            _screenView.SoundFontTextControl);
-        _announceHint(Descriptor.ScreenHintText);
+            _screenView.SoundFontTextControl,
+            _announceHint);
     }
 
     public void RestoreFocus()

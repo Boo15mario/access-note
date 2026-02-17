@@ -41,20 +41,29 @@ internal sealed class MidiPlayerModule
 
     private MeltySynthLib.MidiFile? _loadedMeltySynthMidi;
 
+    private Action<string>? _announce;
+
     public void Enter(
         TextBlock fileNameText,
         TextBlock playbackStateText,
         TextBlock progressText,
         TextBlock tempoText,
-        TextBlock soundFontText)
+        TextBlock soundFontText,
+        Action<string> announce)
     {
         _fileNameText = fileNameText;
         _playbackStateText = playbackStateText;
         _progressText = progressText;
         _tempoText = tempoText;
         _soundFontText = soundFontText;
+        _announce = announce;
 
         UpdateDisplay();
+
+        var status = _midiFilePath == null
+            ? "MIDI Player. No file loaded. Press O to open a file."
+            : $"MIDI Player. {Path.GetFileName(_midiFilePath)}. {_state}.";
+        _announce(status);
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
         _timer.Tick += OnTimerTick;

@@ -39,8 +39,8 @@ internal sealed class SystemMonitorApplet : IApplet
         _module.Enter(
             _screenView.CpuTextControl,
             _screenView.MemoryTextControl,
-            _screenView.DiskListControl);
-        _announceHint(Descriptor.ScreenHintText);
+            _screenView.DiskListControl,
+            _announceHint);
     }
 
     public void RestoreFocus()

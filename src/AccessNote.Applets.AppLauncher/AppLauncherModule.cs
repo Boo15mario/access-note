@@ -51,6 +51,10 @@ internal sealed class AppLauncherModule
         _appList.SelectionChanged += OnSelectionChanged;
         LoadFavorites();
         UpdateModeDisplay();
+
+        var mode = _isBrowseMode ? "Browse" : "Favorites";
+        var count = _isBrowseMode ? _browseEntries.Count : _favorites.Count;
+        _announce($"App Launcher. {mode} mode. {count} items.");
     }
 
     public void RestoreFocus()
@@ -141,6 +145,10 @@ internal sealed class AppLauncherModule
             LoadFavorites();
         }
         UpdateModeDisplay();
+
+        var mode = _isBrowseMode ? "Browse" : "Favorites";
+        var count = _isBrowseMode ? _browseEntries.Count : _favorites.Count;
+        _announce($"{mode} mode. {count} items.");
     }
 
     private void UpdateModeDisplay()
@@ -348,6 +356,7 @@ internal sealed class AppLauncherModule
         {
             _currentDirectory = parent.FullName;
             LoadBrowseEntries();
+            _announce($"{Path.GetFileName(_currentDirectory)}. {_browseEntries.Count} items.");
         }
     }
 

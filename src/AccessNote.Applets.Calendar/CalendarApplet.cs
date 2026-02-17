@@ -41,8 +41,8 @@ internal sealed class CalendarApplet : IApplet
             _screenView.DayCellsListControl,
             _screenView.SelectedDateTextControl,
             _screenView.EventsListControl,
-            _screenView.EventDetailTextControl);
-        _announceHint(Descriptor.ScreenHintText);
+            _screenView.EventDetailTextControl,
+            _announceHint);
     }
 
     public void RestoreFocus()

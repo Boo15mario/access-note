@@ -27,13 +27,16 @@ internal sealed class MediaPlayerModule
     private float _volumeBeforeMute = 1.0f;
     private bool _isMuted;
 
+    private Action<string>? _announce;
+
     public void Enter(
         TextBlock trackTitleText,
         TextBlock artistText,
         TextBlock progressText,
         TextBlock volumeText,
         TextBlock playbackStateText,
-        ListBox playlistList)
+        ListBox playlistList,
+        Action<string> announce)
     {
         _trackTitleText = trackTitleText;
         _artistText = artistText;
@@ -41,11 +44,17 @@ internal sealed class MediaPlayerModule
         _volumeText = volumeText;
         _playbackStateText = playbackStateText;
         _playlistList = playlistList;
+        _announce = announce;
 
         UpdatePlaylistDisplay();
         UpdateVolumeDisplay();
         UpdatePlaybackStateDisplay();
         UpdateTrackInfoDisplay();
+
+        var status = _playlist.Count == 0
+            ? "Media Player. No tracks loaded. Press O to open a file."
+            : $"Media Player. {_playbackStateText.Text}. {_playlist.Count} tracks.";
+        _announce(status);
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += OnTimerTick;
@@ -83,6 +92,7 @@ internal sealed class MediaPlayerModule
         {
             case Key.Space:
                 TogglePlayPause();
+                _announce?.Invoke(_playbackStateText?.Text ?? "");
                 return true;
 
             case Key.S:
@@ -90,36 +100,44 @@ internal sealed class MediaPlayerModule
                 UpdatePlaybackStateDisplay();
                 UpdateTrackInfoDisplay();
                 UpdateProgressDisplay();
+                _announce?.Invoke("Stopped.");
                 return true;
 
             case Key.N:
                 NextTrack();
+                _announce?.Invoke(_trackTitleText?.Text ?? "Next track");
                 return true;
 
             case Key.P:
                 PreviousTrack();
+                _announce?.Invoke(_trackTitleText?.Text ?? "Previous track");
                 return true;
 
             case Key.Add:
             case Key.OemPlus:
                 AdjustVolume(0.1f);
+                _announce?.Invoke(_volumeText?.Text ?? "");
                 return true;
 
             case Key.Subtract:
             case Key.OemMinus:
                 AdjustVolume(-0.1f);
+                _announce?.Invoke(_volumeText?.Text ?? "");
                 return true;
 
             case Key.M:
                 ToggleMute();
+                _announce?.Invoke(_volumeText?.Text ?? "");
                 return true;
 
             case Key.Left:
                 Seek(-5);
+                _announce?.Invoke(_progressText?.Text ?? "");
                 return true;
 
             case Key.Right:
                 Seek(5);
+                _announce?.Invoke(_progressText?.Text ?? "");
                 return true;
 
             case Key.O:
