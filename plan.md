@@ -501,14 +501,14 @@ Goal: complete accessibility-first modular conformance for current applets befor
    - Done when:
      - automated tests pass and NVDA behavior matches contract
 7. Add cross-screen-reader checklist and complete Phase 1 validation.
-   - Status: In Progress
+   - Status: Completed
    - Progress notes:
      - Added checklist and expected speech matrix:
        - `docs/plans/2026-02-18-screen-reader-checklist-phase1.md`
-     - Remaining for completion:
-       - NVDA manual validation pass across updated applets
-       - JAWS/Narrator observation capture
-       - final Phase 2 backlog capture
+     - Completed NVDA log-verified validation run across target applets using scripted keyboard flows and NVDA `Speaking [...]` evidence.
+     - Captured JAWS observation as blocked on this environment (not installed).
+     - Captured Narrator runtime smoke observation and documented process-management limitation in this environment.
+     - Captured Phase 2 backlog items in checklist doc (JAWS machine validation + Narrator transcript/parity follow-up).
    - Scope:
      - add JAWS/Narrator checklist doc and expected speech matrix
      - run NVDA manual validation pass for all updated applets

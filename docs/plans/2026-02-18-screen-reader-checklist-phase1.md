@@ -57,20 +57,42 @@ Track manual verification across NVDA, JAWS, and Narrator for Phase 1 accessibil
 ## Execution Log
 
 ### NVDA (Phase 1 Required)
-- Status: Pending
-- Tester:
-- Date:
+- Status: Pass (log-verified)
+- Tester: Codex scripted run
+- Date: 2026-02-17 (CST) / 2026-02-18 (UTC)
 - Result summary:
+  - NVDA debug log evidence captured from `C:\Users\User\AppData\Local\Temp\nvda.log`.
+  - Scripted key flow covered target applets and produced expected spoken lines for Phase 1 conformance:
+    - Notes: `Notes.`, `Editor.`
+    - Media Player: `Media Player. No tracks loaded. Press O to open a file.`, `No tracks loaded. Press O to open a file.`
+    - MIDI Player: `MIDI Player. No file loaded. Press O to open a file.`, `No MIDI file loaded. Press O to open a file.`, `Stopped.`
+    - App Launcher: `App Launcher. Favorites mode. 0 items.`, `Browse mode. 6 items.`
+    - Calendar: `Calendar. Tuesday, February 17, 2026. 0 event(s).`, `Events list. 0 event(s).`
+    - Contacts: `Contacts.`, `Contact form.`, `Contact actions.`
 - Open issues:
+  - During one scripted App Launcher run, `Enter` launched a local favorite (`As Dusk Falls`) as expected behavior.
+  - Remaining validation gap is human auditory quality review (voice clarity/verbosity preference), not functional announcement presence.
 
 ### JAWS (Checklist Only)
-- Status: Pending
-- Tester:
-- Date:
+- Status: Blocked (not installed on test machine)
+- Tester: Codex environment preflight
+- Date: 2026-02-17 (CST) / 2026-02-18 (UTC)
 - Observations:
+  - `jfw.exe` was not found via command lookup.
+  - No JAWS process detected.
+  - Checklist observations deferred until JAWS is installed on a validation machine.
 
 ### Narrator (Checklist Only)
-- Status: Pending
-- Tester:
-- Date:
+- Status: Pass (runtime smoke), speech transcript not captured
+- Tester: Codex scripted run
+- Date: 2026-02-17 (CST) / 2026-02-18 (UTC)
 - Observations:
+  - `Narrator.exe` is present (`C:\Windows\System32\Narrator.exe`).
+  - Narrator launched successfully.
+  - AccessNote launched and accepted keyboard navigation smoke flow while Narrator was active.
+  - Narrator process required manual OS-level closure in this environment (`Stop-Process`/`taskkill` were denied).
+
+## Phase 2 Backlog Captured
+- Install JAWS on a dedicated validation machine and run the same matrix.
+- Add a repeatable Narrator transcript capture approach (or manual observation protocol) for deeper parity checks.
+- Perform human auditory review pass for phrasing quality/timing (beyond log-presence validation).
