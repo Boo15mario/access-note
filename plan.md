@@ -514,3 +514,47 @@ Goal: complete accessibility-first modular conformance for current applets befor
      - run NVDA manual validation pass for all updated applets
    - Done when:
      - NVDA pass complete, checklist published, and Phase 2 backlog captured
+
+## AppLauncher Parity and Feedback (Current Pass)
+Goal: align App Launcher favorites interaction with the `access-menu` pattern and improve spoken feedback outcomes.
+
+1. Add AppLauncher dialog service and add-favorite dialog.
+   - Status: Pending
+   - Scope:
+     - add `IAppLauncherDialogService` and concrete `AppLauncherDialogService`
+     - add `AddFavoriteDialog` with two sources:
+       - use current browse selection
+       - browse filesystem
+   - Done when:
+     - dialog returns a validated add-favorite result payload
+2. Wire existing AppLauncher buttons to module handlers.
+   - Status: Pending
+   - Scope:
+     - wire `Add`, `Remove`, and `Launch` button click paths
+     - keep keyboard shortcuts unchanged
+   - Done when:
+     - button actions match keyboard behavior
+3. Implement two-source add-to-favorites flow in module.
+   - Status: Pending
+   - Scope:
+     - current selection source (browse mode, launchable file only)
+     - browse source fallback
+     - duplicate detection and list refresh
+   - Done when:
+     - add flow supports both sources with deterministic outcomes
+4. Expand AppLauncher spoken feedback contract.
+   - Status: Pending
+   - Scope:
+     - standard outcome announcements for add/remove/launch
+     - validation/error messages for invalid add source and failures
+     - single-call outcome announcements
+   - Done when:
+     - spoken feedback is consistent and test-backed
+5. Add focused tests and validate.
+   - Status: Pending
+   - Scope:
+     - announcement text tests
+     - add-source decision tests
+     - module flow tests for add/remove button paths
+   - Done when:
+     - Windows test suite passes and behavior matches design
