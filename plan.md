@@ -258,6 +258,54 @@ Goal: finish moving shell orchestration out of host project and remove Notes/Set
      - Updated `MainMenuModule` activation flow to open whichever applet id is attached to the selected entry.
      - Updated host/test menu entry construction to the new `MainMenuEntry` factories (`ForApplet`, `Utilities`, `Exit`).
      - Verified with Windows test run (`33/33` passing).
+
+## Plugin Discovery Modularity (Current Pass)
+Goal: make applet growth more modular by adding trusted startup discovery so new applet registrations can be added without changing host composition each time.
+
+1. Add trusted plugin registration loader + allowlist validation.
+   - Status: Completed
+   - Progress notes:
+     - Added `TrustedAppletRegistrationLoader` in `src/AccessNote.Shell/TrustedAppletRegistrationLoader.cs`.
+     - Implemented allowlist parsing from `%LocalAppData%\\AccessNote\\applets\\allowlist.txt`.
+     - Enforced filename-only `.dll` entries and skip-on-warning behavior.
+     - Added warning aggregation for missing/invalid/unloadable plugin assemblies.
+   - Scope:
+     - `AccessNote.Shell` loader that reads `%LocalAppData%\\AccessNote\\applets\\allowlist.txt`
+     - safe validation (filename-only `.dll` entries)
+     - assembly/type discovery for `IAppletRegistration`
+     - skip-on-failure behavior with warning collection
+   - Done when:
+     - invalid or missing plugin entries do not crash startup
+     - successful entries return instantiated registrations
+2. Wire loader into composition pipeline.
+   - Status: Completed
+   - Progress notes:
+     - Updated `MainWindowCompositionRoot` to discover plugin registrations and append them to built-in registrations.
+     - Added fallback path: if plugin composition fails, app starts with built-in applets only.
+     - Added plugin warning diagnostics via `Trace.WriteLine` and one combined status announcement.
+   - Scope:
+     - append discovered registrations to built-in registrations in `MainWindowCompositionRoot`
+     - add concise startup status announcement on discovery warnings
+     - write detailed diagnostics to trace output
+   - Done when:
+     - registry includes built-in + discovered applets
+     - warnings are visible without blocking startup
+3. Add focused tests for discovery behavior.
+   - Status: Completed
+   - Progress notes:
+     - Added `TrustedAppletRegistrationLoaderTests` covering:
+       - missing allowlist file
+       - invalid allowlist entry
+       - missing assembly
+       - successful discovery with duplicate allowlist dedupe
+       - allowlisted assembly with no exported registrations
+     - Verified with Windows test run (`55/55` passing).
+   - Scope:
+     - allowlist parsing/validation
+     - successful discovery path
+     - skip behavior for missing dll/invalid entry/ctor mismatch
+   - Done when:
+     - tests pass in the existing Windows test run
 8. Add scaffold generator script for new applets.
    - Status: Completed
    - Progress notes:
@@ -348,3 +396,58 @@ Goal: remove remaining hardcoded applet assumptions so future applets can be add
      - Verified with dry-run test (`TestApplet`), then reverted test artifacts.
      - Verified with Windows test run (`41/41` passing).
    - Scope: optional scaffold+wire path for project reference, enum extension, composition registration, and test stubs.
+
+## Worklist Accessibility Conformance (Phase 1)
+Goal: complete accessibility-first modular conformance for current applets before feature expansion work.
+
+1. Define Accessibility Contract v1 and shared guardrails.
+   - Status: Pending
+   - Scope:
+     - add `docs/plans/2026-02-18-accessibility-contract-v1.md`
+     - define message style, announce-vs-native-speech rules, one-call announcement rule
+     - define minimum `F1` help/hint expectations
+   - Done when:
+     - contract doc is approved and referenced by applet/tests
+2. Add minimal shared accessibility policies and validators.
+   - Status: Pending
+   - Scope:
+     - add announcement text normalization/dedupe helper
+     - add help/hint contract validation test helper
+   - Done when:
+     - shared helpers exist without adding heavy framework complexity
+3. Conform Media Player accessibility behavior.
+   - Status: Pending
+   - Scope:
+     - track change announcements
+     - playback state announcements (play/pause/stop)
+   - Done when:
+     - automated tests pass and NVDA behavior matches contract
+4. Conform MIDI Player accessibility behavior.
+   - Status: Pending
+   - Scope:
+     - file load announcements
+     - playback state announcements
+   - Done when:
+     - automated tests pass and NVDA behavior matches contract
+5. Conform App Launcher accessibility behavior.
+   - Status: Pending
+   - Scope:
+     - mode switch announcements
+     - navigation feedback announcements
+   - Done when:
+     - automated tests pass and NVDA behavior matches contract
+6. Conform Calendar, Notes, and Contacts accessibility behavior.
+   - Status: Pending
+   - Scope:
+     - Calendar navigation announcement review/fix
+     - Notes editing accessibility review/fix
+     - Contacts list-navigation announcements (no feature expansion)
+   - Done when:
+     - automated tests pass and NVDA behavior matches contract
+7. Add cross-screen-reader checklist and complete Phase 1 validation.
+   - Status: Pending
+   - Scope:
+     - add JAWS/Narrator checklist doc and expected speech matrix
+     - run NVDA manual validation pass for all updated applets
+   - Done when:
+     - NVDA pass complete, checklist published, and Phase 2 backlog captured
