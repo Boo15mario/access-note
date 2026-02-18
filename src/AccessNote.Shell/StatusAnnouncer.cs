@@ -18,8 +18,9 @@ internal sealed class StatusAnnouncer
 
     public void Announce(string message)
     {
-        _statusText.Text = message;
-        AutomationProperties.SetName(_statusText, message);
+        var normalizedMessage = AnnouncementTextPolicy.Normalize(message);
+        _statusText.Text = normalizedMessage;
+        AutomationProperties.SetName(_statusText, normalizedMessage);
 
         if (!_shouldRaiseLiveRegion())
         {

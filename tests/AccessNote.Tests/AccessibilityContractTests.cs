@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AccessNote.Tests;
 
@@ -34,9 +35,13 @@ public sealed class AccessibilityContractTests
         foreach (var file in appletFiles)
         {
             var content = File.ReadAllText(file);
-            Assert.Contains("helpText:", content);
-            Assert.DoesNotContain("helpText: \"Help is not available.\"", content, StringComparison.Ordinal);
-            Assert.Contains("screenHintText:", content);
+            var helpTextMatch = Regex.Match(content, "helpText:\\s*\"([^\"]+)\"");
+            Assert.True(helpTextMatch.Success, $"Could not find helpText descriptor in {file}.");
+            HelpTextContractValidator.AssertHelpText(helpTextMatch.Groups[1].Value, file);
+
+            var hintTextMatch = Regex.Match(content, "screenHintText:\\s*\"([^\"]+)\"");
+            Assert.True(hintTextMatch.Success, $"Could not find screenHintText descriptor in {file}.");
+            HelpTextContractValidator.AssertHintText(hintTextMatch.Groups[1].Value, file);
         }
     }
 

@@ -86,7 +86,7 @@ internal sealed class CalendarModule
         {
             _focusRegion = _focusRegion == 0 ? 1 : 0;
             RestoreFocus();
-            _announce?.Invoke(_focusRegion == 0 ? "Calendar grid" : $"Events list. {_events.Count} event(s).");
+            _announce?.Invoke(_focusRegion == 0 ? "Calendar grid" : CalendarAnnouncementText.EventsList(_events.Count));
             return true;
         }
 
@@ -141,6 +141,7 @@ internal sealed class CalendarModule
             _focusRegion = 1;
             UpdateEventsForSelectedDate();
             RestoreFocus();
+            _announce?.Invoke(CalendarAnnouncementText.EventsList(_events.Count));
             return true;
         }
 
@@ -177,6 +178,7 @@ internal sealed class CalendarModule
         if (key == Key.Enter)
         {
             UpdateEventDetail();
+            AnnounceSelectedEvent();
             return true;
         }
 
@@ -380,6 +382,7 @@ internal sealed class CalendarModule
 
             _focusRegion = 1;
             RestoreFocus();
+            _announce?.Invoke(CalendarAnnouncementText.EventCreated(newEvent.Title));
         }
         catch
         {
@@ -390,6 +393,7 @@ internal sealed class CalendarModule
     private void DeleteSelectedEvent()
     {
         if (_eventsList?.SelectedItem is not CalendarEvent evt) return;
+        var deletedTitle = evt.Title;
 
         try
         {
@@ -398,10 +402,21 @@ internal sealed class CalendarModule
             RebuildCalendarGrid();
             SelectDayInGrid(_selectedDate.Day);
             UpdateEventDetail();
+            _announce?.Invoke(CalendarAnnouncementText.EventDeleted(deletedTitle));
         }
         catch
         {
             // Silently handle storage errors
         }
+    }
+
+    private void AnnounceSelectedEvent()
+    {
+        if (_eventsList?.SelectedItem is not CalendarEvent evt)
+        {
+            return;
+        }
+
+        _announce?.Invoke(CalendarAnnouncementText.EventSelected(evt.Title));
     }
 }

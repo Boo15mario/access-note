@@ -91,8 +91,14 @@ internal sealed class MediaPlayerModule
         switch (key)
         {
             case Key.Space:
+                if (_playlist.Count == 0 && _waveOut == null)
+                {
+                    _announce?.Invoke(MediaPlayerAnnouncementText.NoTracksLoaded());
+                    return true;
+                }
+
                 TogglePlayPause();
-                _announce?.Invoke(_playbackStateText?.Text ?? "");
+                AnnouncePlaybackState();
                 return true;
 
             case Key.S:
@@ -100,17 +106,29 @@ internal sealed class MediaPlayerModule
                 UpdatePlaybackStateDisplay();
                 UpdateTrackInfoDisplay();
                 UpdateProgressDisplay();
-                _announce?.Invoke("Stopped.");
+                AnnouncePlaybackState();
                 return true;
 
             case Key.N:
+                if (_playlist.Count == 0)
+                {
+                    _announce?.Invoke(MediaPlayerAnnouncementText.NoTracksLoaded());
+                    return true;
+                }
+
                 NextTrack();
-                _announce?.Invoke(_trackTitleText?.Text ?? "Next track");
+                AnnounceTrackChanged();
                 return true;
 
             case Key.P:
+                if (_playlist.Count == 0)
+                {
+                    _announce?.Invoke(MediaPlayerAnnouncementText.NoTracksLoaded());
+                    return true;
+                }
+
                 PreviousTrack();
-                _announce?.Invoke(_trackTitleText?.Text ?? "Previous track");
+                AnnounceTrackChanged();
                 return true;
 
             case Key.Add:
@@ -138,6 +156,10 @@ internal sealed class MediaPlayerModule
             case Key.Right:
                 Seek(5);
                 _announce?.Invoke(_progressText?.Text ?? "");
+                return true;
+
+            case Key.T:
+                AnnounceTrackInfo();
                 return true;
 
             case Key.O:
@@ -317,9 +339,11 @@ internal sealed class MediaPlayerModule
 
         if (dialog.ShowDialog() == true)
         {
+            var addedCount = 0;
             foreach (var file in dialog.FileNames)
             {
                 _playlist.Add(file);
+                addedCount++;
             }
 
             UpdatePlaylistDisplay();
@@ -328,6 +352,14 @@ internal sealed class MediaPlayerModule
             {
                 _currentTrackIndex = 0;
                 PlayCurrentTrack();
+            }
+
+            if (addedCount > 0)
+            {
+                _announce?.Invoke(MediaPlayerAnnouncementText.TracksAdded(
+                    count: addedCount,
+                    trackTitle: GetCurrentTrackTitle(),
+                    playbackState: GetPlaybackStateText()));
             }
         }
     }
@@ -363,6 +395,11 @@ internal sealed class MediaPlayerModule
                 _currentTrackIndex = 0;
                 PlayCurrentTrack();
             }
+
+            _announce?.Invoke(MediaPlayerAnnouncementText.TracksAdded(
+                count: 1,
+                trackTitle: GetCurrentTrackTitle(),
+                playbackState: GetPlaybackStateText()));
         }
     }
 
@@ -374,10 +411,12 @@ internal sealed class MediaPlayerModule
             {
                 _currentTrackIndex++;
                 PlayCurrentTrack();
+                AnnounceTrackChanged();
             }
             else
             {
                 UpdatePlaybackStateDisplay();
+                _announce?.Invoke(MediaPlayerAnnouncementText.PlaybackFinished());
             }
         });
     }
@@ -484,6 +523,59 @@ internal sealed class MediaPlayerModule
     {
         return path.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void AnnounceTrackInfo()
+    {
+        var title = _trackTitleText?.Text ?? "No track loaded";
+        var state = _playbackStateText?.Text ?? "Stopped";
+
+        if (_audioStream != null)
+        {
+            var current = _audioStream.CurrentTime;
+            var total = _audioStream.TotalTime;
+            var remaining = total - current;
+            _announce?.Invoke($"{title}. {state}. {FormatTime(current)} of {FormatTime(total)}. {FormatTime(remaining)} remaining.");
+        }
+        else
+        {
+            _announce?.Invoke($"{title}. {state}.");
+        }
+    }
+
+    private void AnnouncePlaybackState()
+    {
+        _announce?.Invoke(MediaPlayerAnnouncementText.PlaybackState(
+            state: GetPlaybackStateText(),
+            trackTitle: GetCurrentTrackTitle()));
+    }
+
+    private void AnnounceTrackChanged()
+    {
+        _announce?.Invoke(MediaPlayerAnnouncementText.TrackChanged(
+            trackTitle: GetCurrentTrackTitle(),
+            playbackState: GetPlaybackStateText()));
+    }
+
+    private string GetPlaybackStateText()
+    {
+        return _playbackStateText?.Text ?? "Stopped";
+    }
+
+    private string GetCurrentTrackTitle()
+    {
+        if (_currentTrackIndex < 0 || _currentTrackIndex >= _playlist.Count)
+        {
+            return string.Empty;
+        }
+
+        var path = _playlist[_currentTrackIndex];
+        if (IsStreamUrl(path))
+        {
+            return "Stream";
+        }
+
+        return Path.GetFileNameWithoutExtension(path);
     }
 
     private static string FormatTime(TimeSpan time)

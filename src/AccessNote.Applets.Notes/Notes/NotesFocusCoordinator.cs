@@ -79,6 +79,15 @@ internal sealed class NotesFocusCoordinator
         };
 
         FocusRegionInternal(next);
+
+        if (next == FocusRegion.List)
+        {
+            _announce(NotesAnnouncementText.FocusNotesList());
+        }
+        else if (next == FocusRegion.Editor)
+        {
+            _announce(NotesAnnouncementText.FocusEditor());
+        }
     }
 
     public void HandleEscape()

@@ -258,16 +258,19 @@ internal sealed class ContactsModule
         if (_screenView.ContactsListControl.IsKeyboardFocusWithin)
         {
             _screenView.FirstNameBoxControl.Focus();
+            _announce(ContactsAnnouncementText.FocusContactForm());
         }
         else if (_screenView.SaveButtonControl.IsKeyboardFocusWithin
                  || _screenView.DeleteButtonControl.IsKeyboardFocusWithin
                  || _screenView.BackButtonControl.IsKeyboardFocusWithin)
         {
             _screenView.ContactsListControl.Focus();
+            _announce(ContactsAnnouncementText.FocusContactsList());
         }
         else
         {
             _screenView.SaveButtonControl.Focus();
+            _announce(ContactsAnnouncementText.FocusContactActions());
         }
     }
 

@@ -413,35 +413,87 @@ Goal: complete accessibility-first modular conformance for current applets befor
    - Done when:
      - contract doc is approved and referenced by applet/tests
 2. Add minimal shared accessibility policies and validators.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `src/AccessNote.Shell/AnnouncementTextPolicy.cs` for message normalization and whitespace collapsing.
+     - Updated `StatusAnnouncer` to normalize announcement text through `AnnouncementTextPolicy`.
+     - Added reusable test validator `tests/AccessNote.Tests/HelpTextContractValidator.cs`.
+     - Strengthened `AccessibilityContractTests` to parse and validate applet `helpText` and `screenHintText` entries consistently.
    - Scope:
      - add announcement text normalization/dedupe helper
      - add help/hint contract validation test helper
    - Done when:
      - shared helpers exist without adding heavy framework complexity
 3. Conform Media Player accessibility behavior.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `MediaPlayerAnnouncementText` helper for consistent announcement wording.
+     - Updated `MediaPlayerModule` to:
+       - announce actionable message when no tracks are loaded
+       - announce playback state with current track context
+       - announce track changes consistently for next/previous and auto-advance
+       - announce track additions after file/stream add flows
+     - Added `MediaPlayerAnnouncementTextTests`.
+     - Verified with Windows test run (`62/62` passing).
    - Scope:
      - track change announcements
      - playback state announcements (play/pause/stop)
    - Done when:
      - automated tests pass and NVDA behavior matches contract
 4. Conform MIDI Player accessibility behavior.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `MidiPlayerAnnouncementText` helper for consistent playback/file-load announcement wording.
+     - Updated `MidiPlayerModule` to:
+       - announce actionable message when no file is loaded
+       - announce playback state for play/pause/stop actions
+       - announce MIDI file load success/failure
+       - announce playback completion when track reaches end
+     - Refined stop behavior:
+       - key `S` now stops playback without tearing down the periodic UI timer
+       - full module `Stop()` still performs timer teardown for screen exit
+     - Added `MidiPlayerAnnouncementTextTests`.
+     - Verified with Windows test run (`65/65` passing).
    - Scope:
      - file load announcements
      - playback state announcements
    - Done when:
      - automated tests pass and NVDA behavior matches contract
 5. Conform App Launcher accessibility behavior.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `AppLauncherAnnouncementText` helper for mode/navigation announcement wording.
+     - Updated `AppLauncherModule` to use contract-aligned announcements for:
+       - screen entry mode summary
+       - mode toggle changes (Favorites/Browse)
+       - browse-directory navigation (enter folder / navigate up)
+     - Added `AppLauncherAnnouncementTextTests`.
+     - Verified with Windows test run (`68/68` passing).
    - Scope:
      - mode switch announcements
      - navigation feedback announcements
    - Done when:
      - automated tests pass and NVDA behavior matches contract
 6. Conform Calendar, Notes, and Contacts accessibility behavior.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added focused announcement helpers:
+       - `CalendarAnnouncementText`
+       - `NotesAnnouncementText`
+       - `ContactsAnnouncementText`
+     - Calendar updates:
+       - announce events-list context when moving from grid to events
+       - announce selected event on Enter
+       - announce event created/deleted outcomes
+     - Notes updates:
+       - announce focus region when cycling between list/editor with `F6`
+     - Contacts updates:
+       - announce focus region transitions when cycling focus with `F6`
+     - Added tests:
+       - `CalendarAnnouncementTextTests`
+       - `NotesAnnouncementTextTests`
+       - `ContactsAnnouncementTextTests`
+     - Verified with Windows test run (`75/75` passing).
    - Scope:
      - Calendar navigation announcement review/fix
      - Notes editing accessibility review/fix
@@ -449,7 +501,14 @@ Goal: complete accessibility-first modular conformance for current applets befor
    - Done when:
      - automated tests pass and NVDA behavior matches contract
 7. Add cross-screen-reader checklist and complete Phase 1 validation.
-   - Status: Pending
+   - Status: In Progress
+   - Progress notes:
+     - Added checklist and expected speech matrix:
+       - `docs/plans/2026-02-18-screen-reader-checklist-phase1.md`
+     - Remaining for completion:
+       - NVDA manual validation pass across updated applets
+       - JAWS/Narrator observation capture
+       - final Phase 2 backlog capture
    - Scope:
      - add JAWS/Narrator checklist doc and expected speech matrix
      - run NVDA manual validation pass for all updated applets

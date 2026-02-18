@@ -52,9 +52,10 @@ internal sealed class AppLauncherModule
         LoadFavorites();
         UpdateModeDisplay();
 
-        var mode = _isBrowseMode ? "Browse" : "Favorites";
         var count = _isBrowseMode ? _browseEntries.Count : _favorites.Count;
-        _announce($"App Launcher. {mode} mode. {count} items.");
+        _announce(AppLauncherAnnouncementText.EnterScreen(
+            isBrowseMode: _isBrowseMode,
+            count: count));
     }
 
     public void RestoreFocus()
@@ -146,9 +147,10 @@ internal sealed class AppLauncherModule
         }
         UpdateModeDisplay();
 
-        var mode = _isBrowseMode ? "Browse" : "Favorites";
         var count = _isBrowseMode ? _browseEntries.Count : _favorites.Count;
-        _announce($"{mode} mode. {count} items.");
+        _announce(AppLauncherAnnouncementText.ModeChanged(
+            isBrowseMode: _isBrowseMode,
+            count: count));
     }
 
     private void UpdateModeDisplay()
@@ -341,6 +343,9 @@ internal sealed class AppLauncherModule
             var dirName = entry.Trim('[', ']');
             _currentDirectory = Path.Combine(_currentDirectory, dirName);
             LoadBrowseEntries();
+            _announce(AppLauncherAnnouncementText.DirectoryChanged(
+                directoryName: dirName,
+                count: _browseEntries.Count));
         }
         else
         {
@@ -356,7 +361,15 @@ internal sealed class AppLauncherModule
         {
             _currentDirectory = parent.FullName;
             LoadBrowseEntries();
-            _announce($"{Path.GetFileName(_currentDirectory)}. {_browseEntries.Count} items.");
+            var directoryName = Path.GetFileName(_currentDirectory);
+            if (string.IsNullOrWhiteSpace(directoryName))
+            {
+                directoryName = _currentDirectory;
+            }
+
+            _announce(AppLauncherAnnouncementText.DirectoryChanged(
+                directoryName: directoryName,
+                count: _browseEntries.Count));
         }
     }
 

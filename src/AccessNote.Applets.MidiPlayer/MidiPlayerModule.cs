@@ -79,11 +79,19 @@ internal sealed class MidiPlayerModule
         switch (key)
         {
             case Key.Space:
+                if (_midiFilePath == null)
+                {
+                    _announce?.Invoke(MidiPlayerAnnouncementText.NoFileLoaded());
+                    return true;
+                }
+
                 TogglePlayPause();
+                AnnouncePlaybackState();
                 return true;
 
             case Key.S when modifiers == ModifierKeys.None:
-                Stop();
+                StopPlaybackAndResetState();
+                AnnouncePlaybackState();
                 return true;
 
             case Key.Add:
@@ -116,10 +124,7 @@ internal sealed class MidiPlayerModule
 
     public void Stop()
     {
-        StopPlayback();
-        _state = PlaybackState.Stopped;
-        _pausedElapsed = TimeSpan.Zero;
-        UpdateDisplay();
+        StopPlaybackAndResetState();
 
         if (_timer != null)
         {
@@ -141,53 +146,54 @@ internal sealed class MidiPlayerModule
         }
         else
         {
-            StartPlayback();
-            _state = PlaybackState.Playing;
+            _state = StartPlayback()
+                ? PlaybackState.Playing
+                : PlaybackState.Stopped;
         }
 
         UpdateDisplay();
     }
 
-    private void StartPlayback()
+    private bool StartPlayback()
     {
         if (_midiFilePath == null)
-            return;
+            return false;
 
         if (UseSoundFont)
         {
-            StartSoundFontPlayback();
+            return StartSoundFontPlayback();
         }
-        else
-        {
-            StartWindowsMidiPlayback();
-        }
+
+        return StartWindowsMidiPlayback();
     }
 
-    private void StartWindowsMidiPlayback()
+    private bool StartWindowsMidiPlayback()
     {
         try
         {
             _midiOut ??= new MidiOut(0);
             _playbackStartTime = DateTime.Now - _pausedElapsed;
+            return true;
         }
         catch
         {
             // Windows MIDI device unavailable
+            return false;
         }
     }
 
-    private void StartSoundFontPlayback()
+    private bool StartSoundFontPlayback()
     {
         try
         {
             if (_sequencer == null || _synthesizer == null)
-                return;
+                return false;
 
             if (_state == PlaybackState.Paused && _waveOut != null)
             {
                 _waveOut.Play();
                 _playbackStartTime = DateTime.Now - _pausedElapsed;
-                return;
+                return true;
             }
 
             _sequencer.Play(_loadedMeltySynthMidi!, false);
@@ -200,10 +206,12 @@ internal sealed class MidiPlayerModule
             _waveOut.Play();
             _playbackStartTime = DateTime.Now;
             _pausedElapsed = TimeSpan.Zero;
+            return true;
         }
         catch
         {
             // SoundFont playback error
+            return false;
         }
     }
 
@@ -258,8 +266,17 @@ internal sealed class MidiPlayerModule
             StopPlayback();
             _state = PlaybackState.Stopped;
             _pausedElapsed = TimeSpan.Zero;
-            LoadMidiFile(dialog.FileName);
+            var loaded = LoadMidiFile(dialog.FileName);
             UpdateDisplay();
+
+            if (loaded)
+            {
+                _announce?.Invoke(MidiPlayerAnnouncementText.FileLoaded(Path.GetFileName(dialog.FileName)));
+            }
+            else
+            {
+                _announce?.Invoke(MidiPlayerAnnouncementText.FileLoadFailed());
+            }
         }
     }
 
@@ -278,7 +295,7 @@ internal sealed class MidiPlayerModule
         }
     }
 
-    private void LoadMidiFile(string path)
+    private bool LoadMidiFile(string path)
     {
         try
         {
@@ -291,11 +308,14 @@ internal sealed class MidiPlayerModule
             {
                 _loadedMeltySynthMidi = new MeltySynthLib.MidiFile(path);
             }
+
+            return true;
         }
         catch
         {
             _midiFilePath = null;
             _loadedMidiFile = null;
+            return false;
         }
     }
 
@@ -375,8 +395,8 @@ internal sealed class MidiPlayerModule
             var elapsed = DateTime.Now - _playbackStartTime;
             if (elapsed >= _totalDuration && _totalDuration > TimeSpan.Zero)
             {
-                Stop();
-                _state = PlaybackState.Stopped;
+                StopPlaybackAndResetState();
+                _announce?.Invoke(MidiPlayerAnnouncementText.PlaybackFinished());
             }
         }
 
@@ -439,6 +459,21 @@ internal sealed class MidiPlayerModule
         Stopped,
         Playing,
         Paused,
+    }
+
+    private void StopPlaybackAndResetState()
+    {
+        StopPlayback();
+        _state = PlaybackState.Stopped;
+        _pausedElapsed = TimeSpan.Zero;
+        UpdateDisplay();
+    }
+
+    private void AnnouncePlaybackState()
+    {
+        _announce?.Invoke(MidiPlayerAnnouncementText.PlaybackState(
+            state: _state.ToString(),
+            fileName: _midiFilePath != null ? Path.GetFileName(_midiFilePath) : string.Empty));
     }
 
     private sealed class SynthWaveProvider : IWaveProvider
