@@ -401,7 +401,11 @@ Goal: remove remaining hardcoded applet assumptions so future applets can be add
 Goal: complete accessibility-first modular conformance for current applets before feature expansion work.
 
 1. Define Accessibility Contract v1 and shared guardrails.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `docs/plans/2026-02-18-accessibility-contract-v1.md`.
+     - Documented message style, announce-vs-native-speech guidance, one-call announcement rule, and `F1` help contract.
+     - Added `tests/AccessNote.Tests/AccessibilityContractTests.cs` to enforce contract doc presence and prevent placeholder applet help text.
    - Scope:
      - add `docs/plans/2026-02-18-accessibility-contract-v1.md`
      - define message style, announce-vs-native-speech rules, one-call announcement rule
