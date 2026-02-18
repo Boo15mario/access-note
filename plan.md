@@ -519,7 +519,11 @@ Goal: complete accessibility-first modular conformance for current applets befor
 Goal: align App Launcher favorites interaction with the `access-menu` pattern and improve spoken feedback outcomes.
 
 1. Add AppLauncher dialog service and add-favorite dialog.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `IAppLauncherDialogService` and add-favorite payload contracts in `AppLauncherDialogContracts.cs`.
+     - Added `AppLauncherDialogService` to own add-flow dialog orchestration.
+     - Added `AddFavoriteDialog` (two source choices: current selection or file browse).
    - Scope:
      - add `IAppLauncherDialogService` and concrete `AppLauncherDialogService`
      - add `AddFavoriteDialog` with two sources:
@@ -528,14 +532,21 @@ Goal: align App Launcher favorites interaction with the `access-menu` pattern an
    - Done when:
      - dialog returns a validated add-favorite result payload
 2. Wire existing AppLauncher buttons to module handlers.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Wired `Add`, `Remove`, and `Launch` button clicks in `AppLauncherModule` with attach/detach lifecycle handling.
+     - Updated `AppLauncherApplet.Enter(...)` to pass existing screen buttons to the module.
    - Scope:
      - wire `Add`, `Remove`, and `Launch` button click paths
      - keep keyboard shortcuts unchanged
    - Done when:
      - button actions match keyboard behavior
 3. Implement two-source add-to-favorites flow in module.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Implemented add request building from current browse selection when valid.
+     - Added browse fallback path and duplicate-by-path detection.
+     - Added deterministic favorites refresh/selection behavior without breaking browse mode.
    - Scope:
      - current selection source (browse mode, launchable file only)
      - browse source fallback
@@ -543,7 +554,10 @@ Goal: align App Launcher favorites interaction with the `access-menu` pattern an
    - Done when:
      - add flow supports both sources with deterministic outcomes
 4. Expand AppLauncher spoken feedback contract.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Expanded `AppLauncherAnnouncementText` with add/remove/launch/validation messages.
+     - Updated module outcomes to use single-call announcement helpers for success and validation failures.
    - Scope:
      - standard outcome announcements for add/remove/launch
      - validation/error messages for invalid add source and failures
@@ -551,10 +565,63 @@ Goal: align App Launcher favorites interaction with the `access-menu` pattern an
    - Done when:
      - spoken feedback is consistent and test-backed
 5. Add focused tests and validate.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `AppLauncherModuleTests` for button-driven add/remove flows and duplicate/no-selection outcomes.
+     - Extended `AppLauncherAnnouncementTextTests` for new standardized messages.
+     - Verified with Windows test run (`83/83` passing).
    - Scope:
      - announcement text tests
      - add-source decision tests
      - module flow tests for add/remove button paths
    - Done when:
      - Windows test suite passes and behavior matches design
+
+## AppLauncher Start Menu Hybrid Browse (Next Pass)
+Goal: replace filesystem browse mode with a modular Start Menu-first catalog and add Steam/Xbox/Heroic coverage while preserving accessibility and maintainability.
+
+1. Add browse catalog contracts and core model.
+   - Status: Pending
+   - Scope:
+     - add `IAppBrowseSource` and browse item model types
+     - add `LaunchSpec` and target-type abstractions
+   - Done when:
+     - browse sources can return normalized app records through one contract
+2. Implement source adapters.
+   - Status: Pending
+   - Scope:
+     - `StartMenuBrowseSource` (ProgramData + user Start Menu)
+     - `SteamBrowseSource` (launcher + installed games)
+     - `XboxBrowseSource` (installed package inventory)
+     - `HeroicBrowseSource` (launcher + installed games)
+   - Done when:
+     - each source returns deterministic records and silently skips unavailable environments
+3. Build merged browse catalog and navigator.
+   - Status: Pending
+   - Scope:
+     - add `AppBrowseCatalogBuilder` merge/dedupe/sort behavior
+     - add `AppBrowseNavigator` enter/up/current-folder mechanics
+   - Done when:
+     - module can render and navigate virtual browse tree without filesystem traversal
+4. Integrate catalog layer into AppLauncher module.
+   - Status: Pending
+   - Scope:
+     - replace `LoadBrowseEntries` filesystem logic with navigator-backed entries
+     - keep existing `Tab`/`Enter`/`Backspace` behavior
+     - keep spoken feedback contract intact
+   - Done when:
+     - browse mode shows Start Menu/Steam/Xbox/Heroic virtual tree and remains fully keyboard accessible
+5. Extend launch + favorites for non-path targets.
+   - Status: Pending
+   - Scope:
+     - add launch dispatcher for `DirectPath`, `ShellApp`, `CustomCommand`
+     - support favorite persistence and duplicate checks for launch tokens
+   - Done when:
+     - platform entries can launch and be favorited without breaking existing favorites
+6. Add focused tests and validate on Windows.
+   - Status: Pending
+   - Scope:
+     - catalog/navigator/source parsing/favorites integration tests
+     - regression tests for existing AppLauncher behaviors
+   - Done when:
+     - Windows test suite passes and manual NVDA browse-mode validation is clean
