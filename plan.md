@@ -581,14 +581,36 @@ Goal: align App Launcher favorites interaction with the `access-menu` pattern an
 Goal: replace filesystem browse mode with a modular Start Menu-first catalog and add Steam/Xbox/Heroic coverage while preserving accessibility and maintainability.
 
 1. Add browse catalog contracts and core model.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added browse contracts/model in AppLauncher applet:
+       - `LaunchSpec`, `LaunchTargetType`, `AppBrowseSourceEntry`, `IAppBrowseSource`
+       - `AppBrowseNode`, `AppBrowseCatalogBuilder`, `AppBrowseNavigator`
+     - Added launch/favorite token infrastructure:
+       - `AppLauncherProcessLauncher`
+       - `AppLauncherFavoriteLaunchCodec`
+       - `AppBrowseSourceFactory`
    - Scope:
      - add `IAppBrowseSource` and browse item model types
      - add `LaunchSpec` and target-type abstractions
    - Done when:
      - browse sources can return normalized app records through one contract
 2. Implement source adapters.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added `StartMenuBrowseSource`:
+       - scans both Common and user Start Menu program roots
+       - includes `.lnk`, `.exe`, `.bat`
+       - applies root-level duplicate suppression when app name exists in subfolders
+     - Added `SteamBrowseSource`:
+       - includes Steam launcher
+       - parses Steam libraries and `appmanifest_*.acf` for installed games
+     - Added `XboxBrowseSource`:
+       - reads installed packages from `Get-AppxPackage`
+       - inspects package manifest applications and builds shell-app launch ids
+     - Added `HeroicBrowseSource`:
+       - includes Heroic launcher
+       - parses Heroic `installed.json` metadata and maps games to executable/URI targets
    - Scope:
      - `StartMenuBrowseSource` (ProgramData + user Start Menu)
      - `SteamBrowseSource` (launcher + installed games)
@@ -597,14 +619,24 @@ Goal: replace filesystem browse mode with a modular Start Menu-first catalog and
    - Done when:
      - each source returns deterministic records and silently skips unavailable environments
 3. Build merged browse catalog and navigator.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Implemented merged catalog/dedupe/sort flow in `AppBrowseCatalogBuilder`.
+     - Implemented folder enter/up/current-entry navigation in `AppBrowseNavigator`.
+     - Added tests for merge-dedupe and folder/app ordering in `AppBrowseCatalogBuilderTests`.
+     - Added tests for navigation enter/up behavior in `AppBrowseNavigatorTests`.
    - Scope:
      - add `AppBrowseCatalogBuilder` merge/dedupe/sort behavior
      - add `AppBrowseNavigator` enter/up/current-folder mechanics
    - Done when:
      - module can render and navigate virtual browse tree without filesystem traversal
 4. Integrate catalog layer into AppLauncher module.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Refactored `AppLauncherModule` browse mode to consume `AppBrowseNavigator` entries.
+     - Removed filesystem directory traversal browse model from module.
+     - Preserved keyboard interaction model (`Tab`, `Enter`, `Backspace`) with virtual tree navigation.
+     - Kept browse/favorites mode announcements aligned with existing contract.
    - Scope:
      - replace `LoadBrowseEntries` filesystem logic with navigator-backed entries
      - keep existing `Tab`/`Enter`/`Backspace` behavior
@@ -612,16 +644,301 @@ Goal: replace filesystem browse mode with a modular Start Menu-first catalog and
    - Done when:
      - browse mode shows Start Menu/Steam/Xbox/Heroic virtual tree and remains fully keyboard accessible
 5. Extend launch + favorites for non-path targets.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added launch dispatch for direct path, shell app model id, and URI targets.
+     - Added favorite token encoding/decoding for non-path targets (`shellapp:`, `uri:`) with backward-compatible plain path support.
+     - Updated add-to-favorites and duplicate detection to use normalized launch identity keys.
+     - Updated favorite launch flow to resolve stored token/path into `LaunchSpec`.
+     - Added `AppLauncherFavoriteLaunchCodecTests`.
    - Scope:
      - add launch dispatcher for `DirectPath`, `ShellApp`, `CustomCommand`
      - support favorite persistence and duplicate checks for launch tokens
    - Done when:
      - platform entries can launch and be favorited without breaking existing favorites
 6. Add focused tests and validate on Windows.
-   - Status: Pending
+   - Status: Completed
+   - Progress notes:
+     - Added tests:
+       - `AppBrowseCatalogBuilderTests`
+       - `AppBrowseNavigatorTests`
+       - `AppLauncherFavoriteLaunchCodecTests`
+     - Verified with Windows test run (`90/90` passing).
+     - Existing AppLauncher regression tests remain passing.
    - Scope:
      - catalog/navigator/source parsing/favorites integration tests
      - regression tests for existing AppLauncher behaviors
    - Done when:
      - Windows test suite passes and manual NVDA browse-mode validation is clean
+
+## AppLauncher Game Title Quality (Current Pass)
+Goal: keep `Steam`, `Xbox`, and `Heroic` sources while ensuring Games submenu entries announce real game titles.
+
+1. Improve Heroic title fallback behavior.
+   - Status: Completed
+   - Progress notes:
+     - Added title normalization fallback to prefer install-folder names when Heroic metadata title fields are opaque IDs.
+   - Scope:
+     - `HeroicBrowseSource` title resolution only (no source removal)
+   - Done when:
+     - Heroic games announce readable names (for example install-folder game titles) in Games submenu
+2. Improve Xbox title resolution behavior.
+   - Status: Completed
+   - Progress notes:
+     - Added Start Apps name resolution path to prefer real app/game names over manifest resource keys.
+   - Scope:
+     - `XboxBrowseSource` display-name resolution only
+   - Done when:
+     - Xbox games/apps in Games submenu announce Start Apps titles when available
+3. Add regression tests and validate.
+   - Status: Completed
+   - Progress notes:
+     - Added focused unit tests for Heroic and Xbox title resolution behavior.
+     - Verified with Windows test run (`99/99` passing).
+   - Scope:
+     - parser/title fallback tests only
+   - Done when:
+     - Windows test suite passes with the new title-resolution tests
+
+## AppLauncher 10x Do-Now Pass (Current Pass)
+Goal: execute the 10x quick-win batch for browse performance, title trust, and browse productivity.
+
+1. Add browse catalog cache + background refresh.
+   - Status: Completed
+   - Progress notes:
+     - Added in-module browse root cache reuse on browse-mode entry for faster initial render.
+     - Added background catalog refresh with UI-thread apply and path/selection restore.
+   - Scope:
+     - cache most recent browse catalog root
+     - refresh in background without blocking input
+   - Done when:
+     - browse mode can show cached entries immediately and refresh asynchronously
+2. Add title confidence/provenance surfacing.
+   - Status: Completed
+   - Progress notes:
+     - Added `TitleConfidence` and `AppBrowseTitleMetadata` to browse source contract flow.
+     - Threaded source label + title metadata through browse nodes.
+     - Added detail rendering in App Launcher to include source and title confidence/provenance.
+   - Scope:
+     - source adapters provide metadata
+     - details panel surfaces metadata for current browse app
+   - Done when:
+     - browse app details show source and confidence/provenance text
+3. Add instant filter and one-key browse favorite.
+   - Status: Completed
+   - Progress notes:
+     - Added type-to-filter behavior in browse mode with spoken count feedback.
+     - Added one-key quick favorite in browse mode via `Insert`.
+     - Added help text update for new shortcuts.
+   - Scope:
+     - inline browse filtering
+     - quick add current browse selection to favorites
+   - Done when:
+     - user can filter by typing and favorite current browse app without dialog flow
+4. Add focused tests and validate.
+   - Status: Completed
+   - Progress notes:
+     - Added tests for:
+       - browse filter behavior
+       - quick favorite from browse
+       - browse details source/title confidence
+       - filter announcement text
+       - navigator path restore
+     - Verified with Windows test run (`105/105` passing).
+   - Scope:
+     - AppLauncher module announcements/filtering/shortcut behavior
+     - browse navigator restore path behavior
+   - Done when:
+     - test suite passes with coverage for new quick-win behaviors
+
+## AppLauncher Unified Games Superfolder (Current Pass)
+Goal: add a source-agnostic top-level Games submenu while preserving per-source browse folders.
+
+1. Extend browse entry contract for explicit game classification.
+   - Status: Completed
+   - Progress notes:
+     - Added `IsGame` flag to `AppBrowseSourceEntry`.
+     - Marked Steam/Heroic/Xbox game entries with `IsGame = true`.
+   - Scope:
+     - browse source contract update only
+     - source adapters annotate game records
+   - Done when:
+     - catalog can identify game entries explicitly without relying only on category path
+2. Build top-level unified `Games` folder in catalog builder.
+   - Status: Completed
+   - Progress notes:
+     - Added root-level `Games` folder materialization in `AppBrowseCatalogBuilder`.
+     - Preserved original source folder trees while duplicating game launch entries into unified `Games`.
+     - Kept global launch-identity dedupe across sources.
+   - Scope:
+     - catalog builder only
+     - no routing/input changes required in module
+   - Done when:
+     - browse root includes `Games` with merged game titles and source folders remain intact
+3. Add tests and validate behavior end-to-end.
+   - Status: Completed
+   - Progress notes:
+     - Added catalog tests for:
+       - cross-source unified games aggregation
+       - explicit `IsGame` flag when category path is empty
+     - Added module test for keyboard entry into root `Games` folder and aggregated title rendering.
+     - Verified with Windows test run (`108/108` passing).
+   - Scope:
+     - catalog and module tests for unified games experience
+   - Done when:
+     - test suite passes and unified games navigation is regression-covered
+
+## AppLauncher Xbox Game Noise Filter (Current Pass)
+Goal: keep real Xbox games discoverable while removing Xbox infrastructure/service entries from game lists.
+
+1. Add Xbox infrastructure suppression rules.
+   - Status: Completed
+   - Progress notes:
+     - Added infrastructure suppression for known helper/service apps (`Gaming Services`, `XboxIdentityProvider`, `XboxGameCallableUI`, `XboxSpeechToTextOverlay`, `Xbox TCUI`).
+   - Scope:
+     - `XboxBrowseSource` filtering only
+   - Done when:
+     - infrastructure apps no longer appear as game entries
+2. Improve Xbox game package detection.
+   - Status: Completed
+   - Progress notes:
+     - Extended package qualification to include install-location heuristics (`XboxGames`, `MSIXVC`) in addition to existing gaming-token/dependency checks.
+   - Scope:
+     - `XboxBrowseSource` package qualification only
+   - Done when:
+     - Xbox game packages using Xbox install roots are included more reliably
+3. Add focused tests and validate.
+   - Status: Completed
+   - Progress notes:
+     - Added tests verifying suppression of `Gaming Services` and non-suppression of real game titles.
+     - Verified with Windows test run (`110/110` passing).
+   - Scope:
+     - Xbox source filtering tests only
+   - Done when:
+     - test suite passes with suppression behavior covered
+
+## AppLauncher Xbox StartApps Qualification (Current Pass)
+Goal: include tokenless Xbox game packages (for example Forza family IDs) in Xbox discovery using StartApps package matching.
+
+1. Expand Xbox package qualification with StartApps package-family matching.
+   - Status: Completed
+   - Progress notes:
+     - Added package qualification based on `Get-StartApps` AppID prefix matching (`<PackageFamilyName>!`).
+     - This covers game packages without explicit `xbox/gaming/gamepass` name tokens.
+   - Scope:
+     - `XboxBrowseSource` qualification only
+   - Done when:
+     - tokenless Xbox game packages are no longer excluded by initial qualification
+2. Add focused regression test and validate.
+   - Status: Completed
+   - Progress notes:
+     - Added `XboxBrowseSourceTests.ResolveDisplayName_UsesStartAppsMatch_ForTokenlessPackage`.
+     - Verified with Windows test run (`111/111` passing).
+   - Scope:
+     - Xbox source test coverage for tokenless package matching scenario
+   - Done when:
+     - tests pass and qualification logic is regression-covered
+
+## AppLauncher Xbox Submenu Cleanup (Current Pass)
+Goal: reduce Xbox submenu noise by removing utility/internal endpoints while keeping real game discovery and primary launcher entries.
+
+1. Filter non-game Xbox submenu items to user-visible StartApps only.
+   - Status: Completed
+   - Progress notes:
+     - Added exact StartApps gate for non-game entries to avoid internal package endpoints and duplicate launcher aliases.
+   - Scope:
+     - `XboxBrowseSource` non-game item filtering only
+   - Done when:
+     - Xbox submenu no longer includes internal duplicate app entries
+2. Suppress additional Xbox utility entries.
+   - Status: Completed
+   - Progress notes:
+     - Added suppression tokens for `Game Bar` / `XboxGamingOverlay` and `Xbox Series X` helper entries.
+   - Scope:
+     - infrastructure suppression list only
+   - Done when:
+     - Xbox submenu keeps focused launcher/game navigation and drops utility noise
+3. Add regression test and validate.
+   - Status: Completed
+   - Progress notes:
+     - Added test for `Game Bar` suppression.
+     - Verified with Windows test run (`112/112` passing).
+   - Scope:
+     - Xbox suppression test coverage
+   - Done when:
+     - test suite passes with new submenu cleanup behavior covered
+
+## AppLauncher Xbox Games Folder Decontamination (Current Pass)
+Goal: prevent non-game/system packages from leaking into `Xbox -> [Games]` while preserving tokenless Xbox game packages (for example Forza family IDs).
+
+1. Narrow tokenless package fallback to likely Store game package names.
+   - Status: Completed
+   - Progress notes:
+     - Restricted tokenless StartApps package-family qualification to packages matching `Microsoft.<hex-id>` shape.
+     - Prevents broad inclusion of unrelated system packages with generic StartApps entries.
+   - Scope:
+     - `XboxBrowseSource` package qualification only
+   - Done when:
+     - `Xbox -> [Games]` no longer fills with non-game `Global.*`/system entries
+2. Add focused tests and validate.
+   - Status: Completed
+   - Progress notes:
+     - Added tests for package-name shape classification (`true` for Forza-style, `false` for system package names).
+     - Verified with Windows test run (`114/114` passing).
+   - Scope:
+     - Xbox source qualification tests only
+   - Done when:
+     - regression tests cover new qualification guardrail
+
+## AppLauncher Xbox Defender Suppression (Current Pass)
+Goal: remove Windows Defender from `Xbox -> [Games]` false positives.
+
+1. Add Defender suppression token rules.
+   - Status: Completed
+   - Progress notes:
+     - Added suppression tokens for `Microsoft Defender` and `SecHealthUI` in Xbox infrastructure filtering.
+   - Scope:
+     - Xbox suppression list only
+   - Done when:
+     - Defender entries are excluded from Xbox game lists
+2. Add test and validate.
+   - Status: Completed
+   - Progress notes:
+     - Added regression test: `ShouldSuppressInfrastructureApp_ReturnsTrue_ForMicrosoftDefender`.
+     - Verified with Windows test run (`115/115` passing).
+   - Scope:
+     - Xbox suppression test coverage only
+   - Done when:
+     - tests pass with Defender suppression covered
+
+## AppLauncher Xbox Rule Table Refactor (Current Pass)
+Goal: make Xbox filtering rules easier to maintain by centralizing token-based heuristics in configuration-like tables.
+
+1. Centralize Xbox filtering tokens.
+   - Status: Completed
+   - Progress notes:
+     - Replaced scattered inline string checks with centralized token tables for:
+       - gaming package detection
+       - install-path markers
+       - infrastructure suppression
+   - Scope:
+     - `XboxBrowseSource` maintainability refactor only
+   - Done when:
+     - rule values can be updated in one place without touching predicate logic
+2. Consolidate predicate logic on shared matcher.
+   - Status: Completed
+   - Progress notes:
+     - Added shared token-matching helper and routed `ContainsGamingToken`, `ContainsXboxToken`, and infrastructure checks through it.
+     - Kept behavior equivalent to the current validated state.
+   - Scope:
+     - internal helper refactor only
+   - Done when:
+     - behavior remains unchanged and tests stay green
+3. Validate no regression.
+   - Status: Completed
+   - Progress notes:
+     - Verified with Windows test run (`115/115` passing).
+   - Scope:
+     - full regression run
+   - Done when:
+     - refactor ships with no behavioral regressions

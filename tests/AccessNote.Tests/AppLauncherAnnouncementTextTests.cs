@@ -25,4 +25,52 @@ public sealed class AppLauncherAnnouncementTextTests
 
         Assert.Equal("Music. 12 items.", text);
     }
+
+    [Fact]
+    public void AddedToFavorites_UsesStandardWording()
+    {
+        var text = AppLauncherAnnouncementText.AddedToFavorites("Calculator");
+
+        Assert.Equal("Added Calculator to favorites.", text);
+    }
+
+    [Fact]
+    public void AlreadyInFavorites_UsesStandardWording()
+    {
+        var text = AppLauncherAnnouncementText.AlreadyInFavorites("Calculator");
+
+        Assert.Equal("Calculator is already in favorites.", text);
+    }
+
+    [Fact]
+    public void NoFavoriteSelected_UsesStandardWording()
+    {
+        var text = AppLauncherAnnouncementText.NoFavoriteSelected();
+
+        Assert.Equal("No favorite selected.", text);
+    }
+
+    [Fact]
+    public void RemovedFromFavorites_UsesStandardWording()
+    {
+        var text = AppLauncherAnnouncementText.RemovedFromFavorites("Calculator");
+
+        Assert.Equal("Removed Calculator from favorites.", text);
+    }
+
+    [Fact]
+    public void FilterApplied_WithQuery_UsesStandardWording()
+    {
+        var text = AppLauncherAnnouncementText.FilterApplied("steam", 2);
+
+        Assert.Equal("Filter steam. 2 items.", text);
+    }
+
+    [Fact]
+    public void FilterApplied_WithoutQuery_UsesClearedWording()
+    {
+        var text = AppLauncherAnnouncementText.FilterApplied(string.Empty, 8);
+
+        Assert.Equal("Filter cleared. 8 items.", text);
+    }
 }

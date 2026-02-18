@@ -97,6 +97,7 @@ dotnet test tests/AccessNote.Tests/AccessNote.Tests.csproj
 | S | Stop |
 | N | Next track |
 | P | Previous track |
+| T | Announce track info (title, position, remaining time) |
 | + | Volume up |
 | - | Volume down |
 | M | Toggle mute |

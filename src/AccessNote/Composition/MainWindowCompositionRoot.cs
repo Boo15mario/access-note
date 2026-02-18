@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+
 namespace AccessNote;
 
 internal static class MainWindowCompositionRoot
@@ -42,7 +48,7 @@ internal static class MainWindowCompositionRoot
             ThemeManager.Apply(theme, System.Windows.Application.Current.Resources);
         };
         var settingsModule = SettingsFeatureFactory.CreateModule(core, settings, navigation, statusAnnouncer, errorNotifier, settingsDialogs, applyTheme);
-        IAppletRegistration[] appletRegistrations =
+        IAppletRegistration[] builtInAppletRegistrations =
         {
             new NotesAppletRegistration(
                 notesModule: notesModule,
@@ -57,7 +63,8 @@ internal static class MainWindowCompositionRoot
             new SystemMonitorAppletRegistration(screenView: inputs.SystemMonitor.ScreenView),
             new AppLauncherAppletRegistration(
                 screenView: inputs.AppLauncher.ScreenView,
-                storage: new FavoriteAppStorage(core.DatabasePath)),
+                storage: new FavoriteAppStorage(core.DatabasePath),
+                owner: core.Owner),
             new CalendarAppletRegistration(
                 screenView: inputs.Calendar.ScreenView,
                 module: new CalendarModule(new CalendarEventStorage(core.DatabasePath))),
@@ -66,14 +73,55 @@ internal static class MainWindowCompositionRoot
                 storage: new ContactStorage(core.DatabasePath),
                 showMainMenu: () => navigation.ShowMainMenu(0, true)),
         };
-        var appletRegistry = AppletRegistrationComposer.CreateRegistry(
-            registrations: appletRegistrations,
-            context: new AppletRegistrationContext
+        var pluginDirectoryPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "AccessNote",
+            "applets");
+        var allowlistManifestPath = Path.Combine(pluginDirectoryPath, TrustedAppletRegistrationLoader.DefaultAllowlistFileName);
+        var pluginLoader = new TrustedAppletRegistrationLoader();
+        var pluginDiscoveryResult = pluginLoader.Discover(pluginDirectoryPath, allowlistManifestPath);
+        var startupWarnings = new List<string>(pluginDiscoveryResult.Warnings);
+        var registrationContext = new AppletRegistrationContext
+        {
+            ShellView = shellView,
+            AnnounceHint = settingsState.AnnounceHint,
+            Dispatcher = core.Dispatcher,
+        };
+
+        AppletRegistry appletRegistry;
+        if (pluginDiscoveryResult.Registrations.Count == 0)
+        {
+            appletRegistry = AppletRegistrationComposer.CreateRegistry(
+                registrations: builtInAppletRegistrations,
+                context: registrationContext);
+        }
+        else
+        {
+            try
             {
-                ShellView = shellView,
-                AnnounceHint = settingsState.AnnounceHint,
-                Dispatcher = core.Dispatcher,
-            });
+                appletRegistry = AppletRegistrationComposer.CreateRegistry(
+                    registrations: builtInAppletRegistrations.Concat(pluginDiscoveryResult.Registrations),
+                    context: registrationContext);
+            }
+            catch (Exception ex)
+            {
+                startupWarnings.Add($"Plugin applet composition failed. Falling back to built-in applets only: {ex.Message}");
+                appletRegistry = AppletRegistrationComposer.CreateRegistry(
+                    registrations: builtInAppletRegistrations,
+                    context: registrationContext);
+            }
+        }
+
+        if (startupWarnings.Count > 0)
+        {
+            foreach (var warning in startupWarnings)
+            {
+                Trace.WriteLine($"[AppletPlugin] {warning}");
+            }
+
+            statusAnnouncer.Announce($"Some applet plugins were skipped. {startupWarnings.Count} issue(s) found.");
+        }
+
         var mainMenuEntries = MainMenuEntryBuilder.Build(appletRegistry);
         var helpTextProvider = new HelpTextProvider(appletRegistry);
         var mainMenuModule = ShellFeatureFactory.CreateMainMenuModule(shellView, mainMenuEntries, menuActions, statusAnnouncer);

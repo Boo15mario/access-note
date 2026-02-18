@@ -141,12 +141,14 @@ You have unlimited stamina. The human does not. Use your persistence wisely—lo
 <environment>
 - Workspace is used from WSL, while app build/test tools run on Windows.
 - Prefer Windows binaries from WSL for reliability:
-  - Build: `"/mnt/c/Program Files/dotnet/dotnet.exe" build "$(wslpath -w src/AccessNote/AccessNote.csproj)"`
-  - Test: `"/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\Program Files\dotnet\dotnet.exe' test 'F:\git\access-note\tests\AccessNote.Tests\AccessNote.Tests.csproj'"`
-  - Launch app: `"/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -Command "Start-Process -FilePath 'F:\git\access-note\src\AccessNote\bin\Debug\net8.0-windows\AccessNote.exe'"`
-  - Check process: `"/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -Command "Get-Process -Name AccessNote -ErrorAction SilentlyContinue | Select-Object Id,ProcessName"`
-  - Manual NVDA settings checks: `docs/settings-test-checklist.md`
-- If Windows binary execution is blocked in sandbox, request escalated permissions and re-run.
+  - Build: `"/mnt/c/Program Files/dotnet/dotnet.exe" build src/AccessNote/AccessNote.csproj`
+  - Test: `"/mnt/c/Program Files/dotnet/dotnet.exe" test tests/AccessNote.Tests/AccessNote.Tests.csproj`
+  - Build to run folder: `"/mnt/c/Program Files/dotnet/dotnet.exe" build src/AccessNote/AccessNote.csproj -o src/AccessNote/bin/Run`
+  - Launch app: `cmd.exe /C start "" "F:\git\access-note\src\AccessNote\bin\Run\AccessNote.exe"`
+  - If the default build output folder is locked by a running app, build to the Run folder instead.
+- The app is a .NET 8 WPF accessibility-first app tested with NVDA screen reader.
+- Screen reader announcements use `StatusAnnouncer` (UIA LiveRegion). Two rapid `Announce()` calls cancel each other — combine into a single call.
+- NVDA "X of Y" position announcements come from WPF `SelectionItemPattern` on ListBoxItems — the `ListBox.ItemsSource` must match the logical items.
 </environment>
 <architecture>
 - Project boundaries:

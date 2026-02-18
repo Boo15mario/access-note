@@ -30,7 +30,7 @@ internal sealed class AppLauncherApplet : IApplet
         id: AppletId.AppLauncher,
         label: "App Launcher",
         screenHintText: "App Launcher.",
-        helpText: "App Launcher. Enter to launch, Tab to switch modes, Ctrl+N to add favorite, Delete to remove, Escape to return.",
+        helpText: "App Launcher. Enter to launch, Tab to switch modes, type to filter in browse mode, Insert to favorite current browse item, Ctrl+N to add favorite, Delete to remove, Escape to return.",
         category: AppletCategory.TopLevel);
 
     public void Enter()
@@ -41,7 +41,11 @@ internal sealed class AppLauncherApplet : IApplet
             _screenView.AppListControl,
             _screenView.DetailNameControl,
             _screenView.DetailPathControl,
-            _screenView.DetailArgumentsControl);
+            _screenView.DetailArgumentsControl,
+            _screenView.AddButtonControl,
+            _screenView.RemoveButtonControl,
+            _screenView.LaunchButtonControl);
+        _dispatcher.BeginInvoke(_module.RestoreFocus, DispatcherPriority.Input);
     }
 
     public void RestoreFocus()
