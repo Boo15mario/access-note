@@ -38,6 +38,6 @@ Keep repeatable keyboard test data in one place for manual NVDA verification run
 - `Settings options list`
 - `Start screen. Main Menu. Left and Right to change startup destination.`
 - `Unsaved Settings` dialog with `Save settings changes` initial focus
-- `Main menu. Settings selected.`
+- `Home screen. Settings selected.`
 - `Saved.`
 - `Notes List` when startup is `Notes`

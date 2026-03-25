@@ -16,7 +16,7 @@ dotnet run --project src/AccessNote/AccessNote.csproj
 
 ## Current Implemented Flow
 - Fullscreen shell window
-- Keyboard-driven Main Menu (`Notes`, `Settings`, `Utilities`, `Exit`)
+- Keyboard-driven Home Screen (`Notes`, `Media Center`, `Utilities`, `Settings`, `Exit`)
 - Notes workspace with:
   - Notes list + search box
   - Multi-line editor
@@ -28,8 +28,8 @@ dotnet run --project src/AccessNote/AccessNote.csproj
 - Settings keyboard navigation (`Tab`, arrows, `Enter`, `Ctrl+S`, `Esc`) with persisted values
 - Unsaved settings prompt on leave (`Save`, `Discard`, `Cancel`)
 - `Notes Applet` settings are grouped in their own category
-- `Back`/`Esc` returns to Main Menu and restores focus to `Settings`
-- Exit confirmation dialog for `Esc` on Main Menu and `Alt+F4`
+- `Back`/`Esc` returns to Home Screen and restores focus to `Settings`
+- Exit confirmation dialog for `Esc` on Home Screen and `Alt+F4`
 
 ## Notes Storage
 - SQLite file path: `%LOCALAPPDATA%\AccessNote\access-note.db`

@@ -159,8 +159,8 @@ You have unlimited stamina. The human does not. Use your persistence wisely—lo
 - Keep composition wiring in `MainWindowCompositionRoot` and `*FeatureFactory` files; avoid pushing new wiring back into `MainWindow`.
 - Keep `MainWindow` partials as thin event/delegation layers. Put behavior in controllers/modules:
   - `ShellNavigationController`, `ShellInputController`, `NotesEventController`, `SettingsEventController`
-  - `MainMenuModule`, `NotesModule`, `SettingsModule`
-- Main menu entries are typed and descriptor-driven (`MainMenuEntry.ForApplet(AppletDescriptor)` + `AppletId`); avoid hardcoded Notes/Settings action switches.
+  - `HomeScreenModule`, `NotesModule`, `SettingsModule`
+- Home screen entries are typed and descriptor-driven (`HomeScreenEntry.ForApplet(AppletDescriptor)` + `AppletId`); avoid hardcoded Notes/Settings action switches.
 - Routing is applet-id based (`OpenApplet(AppletId)`, `ScreenRouter.ActiveAppletId`); do not reintroduce screen-specific routing enums for applet flow control.
 - Settings screen state is split by concern:
   - `SettingsViewStateCoordinator` (orchestration)

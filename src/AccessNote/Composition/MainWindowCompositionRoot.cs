@@ -56,7 +56,7 @@ internal static class MainWindowCompositionRoot
             new SettingsAppletRegistration(settingsModule: settingsModule),
             new DateTimeAppletRegistration(
                 screenView: inputs.DateTime.ScreenView,
-                showMainMenu: () => navigation.ShowMainMenu(0, true)),
+                showHomeScreen: () => navigation.ShowHomeScreen(0, true)),
             new CalculatorAppletRegistration(screenView: inputs.Calculator.ScreenView),
             new MediaPlayerAppletRegistration(screenView: inputs.MediaPlayer.ScreenView),
             new MidiPlayerAppletRegistration(screenView: inputs.MidiPlayer.ScreenView),
@@ -71,7 +71,7 @@ internal static class MainWindowCompositionRoot
             new ContactsAppletRegistration(
                 screenView: inputs.Contacts.ScreenView,
                 storage: new ContactStorage(core.DatabasePath),
-                showMainMenu: () => navigation.ShowMainMenu(0, true)),
+                showHomeScreen: () => navigation.ShowHomeScreen(0, true)),
         };
         var pluginDirectoryPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -122,9 +122,9 @@ internal static class MainWindowCompositionRoot
             statusAnnouncer.Announce($"Some applet plugins were skipped. {startupWarnings.Count} issue(s) found.");
         }
 
-        var mainMenuEntries = MainMenuEntryBuilder.Build(appletRegistry);
+        var mainMenuEntries = HomeScreenEntryBuilder.Build(appletRegistry);
         var helpTextProvider = new HelpTextProvider(appletRegistry);
-        var mainMenuModule = ShellFeatureFactory.CreateMainMenuModule(shellView, mainMenuEntries, menuActions, statusAnnouncer);
+        var mainMenuModule = ShellFeatureFactory.CreateHomeScreenModule(shellView, mainMenuEntries, menuActions, statusAnnouncer);
         var screenRouter = FlowFeatureFactory.CreateScreenRouter(mainMenuModule, appletRegistry);
         var startupFlowCoordinator = FlowFeatureFactory.CreateStartupFlowCoordinator(
             startup,
@@ -147,7 +147,8 @@ internal static class MainWindowCompositionRoot
             statusAnnouncer,
             screenRouter,
             mainMenuModule,
-            shellNavigationController);
+            shellNavigationController,
+            shellDialogs);
         var notesEventController = new NotesEventController(
             notesModule: notesModule,
             getActiveAppletId: () => screenRouter.ActiveAppletId,

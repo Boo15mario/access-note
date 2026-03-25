@@ -29,7 +29,7 @@ internal sealed class SettingsModule
         Button resetButton,
         Button backButton,
         Dispatcher dispatcher,
-        Action returnToMainMenu,
+        Action returnToHomeScreen,
         Action<Exception> handleSaveError,
         Action<string> announce,
         Action applyTheme)
@@ -65,7 +65,7 @@ internal sealed class SettingsModule
             dispatcher: dispatcher,
             rebuildOptions: () => _state.RebuildOptions(announceSelection: false),
             focusSettingsRegion: _focus.FocusRegion,
-            returnToMainMenu: returnToMainMenu,
+            returnToHomeScreen: returnToHomeScreen,
             handleSaveError: handleSaveError,
             announce: announce,
             applyTheme: applyTheme);
@@ -77,7 +77,7 @@ internal sealed class SettingsModule
             changeOption: _state.ChangeSelectedOption,
             focusRegion: _focus.FocusRegion,
             moveFocusToOptions: _focus.MoveFocusToOptions,
-            attemptReturnToMainMenu: _actions.AttemptReturnToMainMenu,
+            attemptReturnToHomeScreen: _actions.AttemptReturnToHomeScreen,
             saveSettings: shouldAnnounce => { _actions.SaveSettingsDraft(shouldAnnounce); },
             resetSettings: shouldAnnounce => { _actions.ResetSettingsDraft(shouldAnnounce); });
     }
@@ -132,9 +132,9 @@ internal sealed class SettingsModule
         _focus.FocusRegion();
     }
 
-    public void AttemptReturnToMainMenu()
+    public void AttemptReturnToHomeScreen()
     {
-        _actions.AttemptReturnToMainMenu();
+        _actions.AttemptReturnToHomeScreen();
     }
 
     public bool EnsureCanLeaveSettings()

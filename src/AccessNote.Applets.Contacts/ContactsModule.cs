@@ -17,7 +17,7 @@ internal sealed class ContactsModule
     private readonly ContactsScreenView _screenView;
     private readonly Action<string> _announce;
     private readonly Dispatcher _dispatcher;
-    private readonly Action _showMainMenu;
+    private readonly Action _showHomeScreen;
 
     private Contact? _selectedContact;
     private bool _suppressSelectionChanged;
@@ -29,20 +29,20 @@ internal sealed class ContactsModule
         ContactsScreenView screenView,
         Action<string> announce,
         Dispatcher dispatcher,
-        Action showMainMenu)
+        Action showHomeScreen)
     {
         _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         _screenView = screenView ?? throw new ArgumentNullException(nameof(screenView));
         _announce = announce ?? throw new ArgumentNullException(nameof(announce));
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
-        _showMainMenu = showMainMenu ?? throw new ArgumentNullException(nameof(showMainMenu));
+        _showHomeScreen = showHomeScreen ?? throw new ArgumentNullException(nameof(showHomeScreen));
 
         _screenView.SearchTextChanged = OnSearchTextChanged;
         _screenView.ContactsSelectionChanged = OnContactsSelectionChanged;
         _screenView.GroupFilterChanged = OnGroupFilterChanged;
         _screenView.SaveClicked = SaveContact;
         _screenView.DeleteClicked = DeleteContact;
-        _screenView.BackClicked = () => _showMainMenu();
+        _screenView.BackClicked = () => _showHomeScreen();
     }
 
     public void Enter()
@@ -120,7 +120,7 @@ internal sealed class ContactsModule
 
         if (key == Key.Escape)
         {
-            _showMainMenu();
+            _showHomeScreen();
             return true;
         }
 

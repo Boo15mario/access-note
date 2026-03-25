@@ -6,16 +6,16 @@ internal sealed class ContactsAppletRegistration : IAppletRegistration
 {
     private readonly ContactsScreenView _screenView;
     private readonly ContactStorage _storage;
-    private readonly Action _showMainMenu;
+    private readonly Action _showHomeScreen;
 
     public ContactsAppletRegistration(
         ContactsScreenView screenView,
         ContactStorage storage,
-        Action showMainMenu)
+        Action showHomeScreen)
     {
         _screenView = screenView ?? throw new ArgumentNullException(nameof(screenView));
         _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-        _showMainMenu = showMainMenu ?? throw new ArgumentNullException(nameof(showMainMenu));
+        _showHomeScreen = showHomeScreen ?? throw new ArgumentNullException(nameof(showHomeScreen));
     }
 
     public IApplet Create(AppletRegistrationContext context)
@@ -27,7 +27,7 @@ internal sealed class ContactsAppletRegistration : IAppletRegistration
             screenView: _screenView,
             announce: context.AnnounceHint,
             dispatcher: context.Dispatcher,
-            showMainMenu: _showMainMenu);
+            showHomeScreen: _showHomeScreen);
 
         return new ContactsApplet(
             shellView: context.ShellView,

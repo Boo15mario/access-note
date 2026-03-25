@@ -30,8 +30,8 @@ internal sealed class CalendarApplet : IApplet
         id: AppletId.Calendar,
         label: "Calendar",
         screenHintText: "Calendar.",
-        helpText: "Calendar. Arrow keys navigate days, PageUp PageDown change month, Enter view events, Control N new event, Delete remove event, F6 cycle focus, Escape to return to menu.",
-        category: AppletCategory.TopLevel);
+        helpText: "Calendar. Arrow keys navigate days, PageUp PageDown change month, Enter view events, Control N new event, Delete remove event, F6 cycle focus, Escape to return to home screen.",
+        category: AppletCategory.Utility);
 
     public void Enter()
     {

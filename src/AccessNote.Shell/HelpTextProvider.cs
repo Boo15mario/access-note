@@ -15,7 +15,7 @@ internal sealed class HelpTextProvider
     {
         if (!activeAppletId.HasValue)
         {
-            return "Main menu. Use Up and Down to move, Enter to activate, Escape to exit.";
+            return "Home screen. Use Up and Down to move, Enter to activate, Escape to return or exit.";
         }
 
         if (_appletRegistry.TryGetDescriptor(activeAppletId.Value, out var descriptor))

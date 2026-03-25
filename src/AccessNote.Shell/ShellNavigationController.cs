@@ -8,6 +8,7 @@ internal sealed class ShellNavigationController
     private readonly HelpTextProvider _helpTextProvider;
     private readonly ScreenRouter _screenRouter;
     private readonly ExitFlowCoordinator _exitFlowCoordinator;
+    private string? _contextMenuFilterCategory;
 
     public ShellNavigationController(
         HelpTextProvider helpTextProvider,
@@ -24,14 +25,23 @@ internal sealed class ShellNavigationController
         _screenRouter.OpenApplet(appletId);
     }
 
-    public void ReturnToMainMenuFromSettings()
+    public void OpenSettingsForCategory(string category)
     {
-        _screenRouter.ShowMainMenu(1, shouldAnnounce: true);
+        _contextMenuFilterCategory = category;
+        _screenRouter.OpenApplet(AppletId.Settings);
+        _contextMenuFilterCategory = null;
     }
 
-    public void ShowMainMenu(int focusIndex, bool shouldAnnounce)
+    public string? ContextMenuFilterCategory => _contextMenuFilterCategory;
+
+    public void ReturnToHomeScreenFromSettings()
     {
-        _screenRouter.ShowMainMenu(focusIndex, shouldAnnounce);
+        _screenRouter.ShowHomeScreen(1, shouldAnnounce: true);
+    }
+
+    public void ShowHomeScreen(int focusIndex, bool shouldAnnounce)
+    {
+        _screenRouter.ShowHomeScreen(focusIndex, shouldAnnounce);
     }
 
     public void HandleClosing(CancelEventArgs e)

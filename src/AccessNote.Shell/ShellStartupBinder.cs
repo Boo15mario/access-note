@@ -10,7 +10,7 @@ internal sealed class ShellStartupBinder
     private readonly ListBox _notesList;
     private readonly ListBox _settingsCategoryList;
     private readonly ListBox _settingsOptionsList;
-    private readonly IEnumerable<MainMenuEntry> _mainMenuEntries;
+    private readonly IEnumerable<HomeScreenEntry> _mainMenuEntries;
     private readonly IEnumerable<NoteDocument> _visibleNotes;
     private readonly IEnumerable<string> _settingsCategories;
     private readonly IEnumerable<string> _visibleSettingsOptions;
@@ -21,7 +21,7 @@ internal sealed class ShellStartupBinder
         ListBox notesList,
         ListBox settingsCategoryList,
         ListBox settingsOptionsList,
-        IEnumerable<MainMenuEntry> mainMenuEntries,
+        IEnumerable<HomeScreenEntry> mainMenuEntries,
         IEnumerable<NoteDocument> visibleNotes,
         IEnumerable<string> settingsCategories,
         IEnumerable<string> visibleSettingsOptions,

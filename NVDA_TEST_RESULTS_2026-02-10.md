@@ -16,12 +16,12 @@
 
 ## Key Evidence From Logs
 - `20:47:13.920`: `Settings. Work in progress. Press Escape or Back to return.`
-- `20:47:16.916`: `Main menu. Settings selected.`
+- `20:47:16.916`: `Home screen. Settings selected.`
 - `20:47:38.379`: `Saved.`
 - `20:47:51.722`: `Unsaved Changes` dialog announced, initial focus on `Save changes`.
-- `20:51:38.220`: Back button path returned to `Main menu. Settings selected.`
+- `20:51:38.220`: Back button path returned to `Home screen. Settings selected.`
 - `20:51:44.642`: focus moved to `Discard changes` in Unsaved dialog.
-- `20:51:44.993`: after discard selection, returned to `Main menu. Notes selected.`
+- `20:51:44.993`: after discard selection, returned to `Home screen. Notes selected.`
 - `20:51:50.728`: `Notes search box` announced after `Ctrl+F`.
 - `20:51:50.732`: `Search.` status announcement spoken.
 - `20:51:51.760`: `Notes List` announced after `Ctrl+L`.
@@ -30,12 +30,12 @@
 
 | Case ID | Status | Evidence |
 | --- | --- | --- |
-| `NAV-001` | Pass | Startup announces app window and main menu item (`Notes`). |
-| `NAV-002` | Pass | Main menu movement announces item names and positions. |
+| `NAV-001` | Pass | Startup announces app window and home screen item (`Notes`). |
+| `NAV-002` | Pass | Home screen movement announces item names and positions. |
 | `NAV-003` | Pass | Enter on `Notes` opens notes workspace and announces `Notes.` |
 | `SET-001` | Pass | Settings entry announces `Work in progress` message. |
-| `SET-002` | Pass | `Esc` in settings returns to main menu with focus on `Settings`. |
-| `SET-003` | Pass | `Enter` on `Back` returns to main menu with focus on `Settings`. |
+| `SET-002` | Pass | `Esc` in settings returns to home screen with focus on `Settings`. |
+| `SET-003` | Pass | `Enter` on `Back` returns to home screen with focus on `Settings`. |
 | `NOT-001` | Pass | Notes opens with list/editor focus behavior and selected note announcement. |
 | `NOT-003` | Pass | `Ctrl+S` speaks `Saved.` after fix. |
 | `NOT-004` | Pass | Rename flow announces `Renamed.` and updated note list focus. |
@@ -73,9 +73,9 @@
 - Run mode: `--disable-addons --debug-logging`
 - Result: PASS for the manual clean baseline flow (see `NVDA_TEST_DATA.md`).
 - Key confirmations:
-- `Settings. Work in progress...` announced and Back returned to main menu with `Settings` selected.
+- `Settings. Work in progress...` announced and Back returned to home screen with `Settings` selected.
 - `Ctrl+E`, `Ctrl+S`, `Ctrl+F`, and `Ctrl+L` all worked without false `Command not available.`.
-- Unsaved dialog opened; `Discard changes` path worked and returned to main menu.
+- Unsaved dialog opened; `Discard changes` path worked and returned to home screen.
 - `Alt+F4` opened `Exit Access Note` dialog and exit confirmation succeeded.
 - `Saved.` announcement present.
 - Residual noise considered non-blocking:

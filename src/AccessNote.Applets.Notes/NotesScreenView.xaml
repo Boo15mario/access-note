@@ -28,7 +28,7 @@
               Background="{DynamicResource ThemeEditorBackground}"
               BorderBrush="{DynamicResource ThemeStatusBorder}"
               BorderThickness="1"
-              AutomationProperties.Name="Notes List Region">
+              AutomationProperties.Name="Notes Viewer Region">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -60,7 +60,7 @@
                    BorderThickness="1"
                    FocusVisualStyle="{x:Null}"
                    SelectionChanged="OnNotesSelectionChanged"
-                   AutomationProperties.Name="Notes List">
+                   AutomationProperties.Name="Notes Viewer">
             <ListBox.ItemContainerStyle>
               <Style TargetType="ListBoxItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />

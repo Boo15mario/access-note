@@ -5,7 +5,8 @@ namespace AccessNote;
 internal enum GlobalInputCommand
 {
     ShowExitPrompt,
-    AnnounceHelp
+    AnnounceHelp,
+    ShowContextMenu
 }
 
 internal static class GlobalInputMap
@@ -21,6 +22,19 @@ internal static class GlobalInputMap
         if (key == Key.F1)
         {
             command = GlobalInputCommand.AnnounceHelp;
+            return true;
+        }
+
+        // Context menu: Shift+F10 or Applications key (menu key)
+        if (key == Key.F10 && (modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+        {
+            command = GlobalInputCommand.ShowContextMenu;
+            return true;
+        }
+
+        if (key == Key.LWin || key == Key.RWin)
+        {
+            command = GlobalInputCommand.ShowContextMenu;
             return true;
         }
 

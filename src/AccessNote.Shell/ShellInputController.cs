@@ -6,29 +6,32 @@ namespace AccessNote;
 internal sealed class ShellInputController
 {
     private readonly Func<AppletId?> _getActiveAppletId;
-    private readonly Func<Key, bool> _handleMainMenu;
+    private readonly Func<Key, bool> _handleHomeScreen;
     private readonly Func<KeyEventArgs, Key, ModifierKeys, bool> _handleActiveAppletInput;
     private readonly Action _showExitPrompt;
     private readonly Func<string> _getHelpText;
     private readonly Action<string> _announce;
-    private readonly Action _returnToMainMenu;
+    private readonly Action _returnToHomeScreen;
+    private readonly Action _showContextMenu;
 
     public ShellInputController(
         Func<AppletId?> getActiveAppletId,
-        Func<Key, bool> handleMainMenu,
+        Func<Key, bool> handleHomeScreen,
         Func<KeyEventArgs, Key, ModifierKeys, bool> handleActiveAppletInput,
         Action showExitPrompt,
         Func<string> getHelpText,
         Action<string> announce,
-        Action returnToMainMenu)
+        Action returnToHomeScreen,
+        Action showContextMenu)
     {
         _getActiveAppletId = getActiveAppletId ?? throw new ArgumentNullException(nameof(getActiveAppletId));
-        _handleMainMenu = handleMainMenu ?? throw new ArgumentNullException(nameof(handleMainMenu));
+        _handleHomeScreen = handleHomeScreen ?? throw new ArgumentNullException(nameof(handleHomeScreen));
         _handleActiveAppletInput = handleActiveAppletInput ?? throw new ArgumentNullException(nameof(handleActiveAppletInput));
         _showExitPrompt = showExitPrompt ?? throw new ArgumentNullException(nameof(showExitPrompt));
         _getHelpText = getHelpText ?? throw new ArgumentNullException(nameof(getHelpText));
         _announce = announce ?? throw new ArgumentNullException(nameof(announce));
-        _returnToMainMenu = returnToMainMenu ?? throw new ArgumentNullException(nameof(returnToMainMenu));
+        _returnToHomeScreen = returnToHomeScreen ?? throw new ArgumentNullException(nameof(returnToHomeScreen));
+        _showContextMenu = showContextMenu ?? throw new ArgumentNullException(nameof(showContextMenu));
     }
 
     public void HandlePreviewKeyDown(KeyEventArgs e)
@@ -45,7 +48,7 @@ internal sealed class ShellInputController
 
         var activeAppletId = _getActiveAppletId();
         var handledByActiveScreen = !activeAppletId.HasValue
-            ? _handleMainMenu(key)
+            ? _handleHomeScreen(key)
             : _handleActiveAppletInput(e, key, modifiers);
 
         if (handledByActiveScreen)
@@ -57,7 +60,7 @@ internal sealed class ShellInputController
         if (activeAppletId.HasValue && key == Key.Escape)
         {
             e.Handled = true;
-            _returnToMainMenu();
+            _returnToHomeScreen();
             return;
         }
 
@@ -77,6 +80,9 @@ internal sealed class ShellInputController
                 return;
             case GlobalInputCommand.AnnounceHelp:
                 _announce(_getHelpText());
+                return;
+            case GlobalInputCommand.ShowContextMenu:
+                _showContextMenu();
                 return;
         }
     }

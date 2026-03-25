@@ -29,7 +29,7 @@ public class CompositionRootTests
                     },
                     Shell = new MainWindowShellInputs
                     {
-                        MainMenuScreen = new Grid(),
+                        HomeScreenScreen = new Grid(),
                         AppletScreens = new Dictionary<AppletId, FrameworkElement>
                         {
                             { AppletId.Notes, new UserControl() },
@@ -43,7 +43,7 @@ public class CompositionRootTests
                             { AppletId.MidiPlayer, new UserControl() },
                             { AppletId.AppLauncher, new UserControl() },
                         },
-                        MainMenuList = new ListBox(),
+                        HomeScreenList = new ListBox(),
                         StatusRegion = new Border(),
                         StatusText = new TextBlock(),
                         ShouldAnnounceStatusMessages = () => false,
@@ -77,12 +77,12 @@ public class CompositionRootTests
                     },
                     Navigation = new MainWindowNavigationInputs
                     {
-                        ShowMainMenu = (_, _) => { },
-                        ReturnToMainMenuFromSettings = () => { },
+                        ShowHomeScreen = (_, _) => { },
+                        ReturnToHomeScreenFromSettings = () => { },
                     },
                     Startup = new MainWindowStartupInputs
                     {
-                        GetStartScreen = () => StartScreenOption.MainMenu,
+                        GetStartScreen = () => StartScreenOption.HomeScreen,
                         TryLoadPersistedNotes = () => { },
                     },
                     Exit = new MainWindowExitInputs

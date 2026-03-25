@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace AccessNote;
 
-internal enum MainMenuInputCommand
+internal enum HomeScreenInputCommand
 {
     MoveUp,
     MoveDown,
@@ -12,29 +12,29 @@ internal enum MainMenuInputCommand
     ShowExitPrompt
 }
 
-internal static class MainMenuInputMap
+internal static class HomeScreenInputMap
 {
-    public static bool TryGetCommand(Key key, out MainMenuInputCommand command)
+    public static bool TryGetCommand(Key key, out HomeScreenInputCommand command)
     {
         switch (key)
         {
             case Key.Up:
-                command = MainMenuInputCommand.MoveUp;
+                command = HomeScreenInputCommand.MoveUp;
                 return true;
             case Key.Down:
-                command = MainMenuInputCommand.MoveDown;
+                command = HomeScreenInputCommand.MoveDown;
                 return true;
             case Key.Home:
-                command = MainMenuInputCommand.MoveHome;
+                command = HomeScreenInputCommand.MoveHome;
                 return true;
             case Key.End:
-                command = MainMenuInputCommand.MoveEnd;
+                command = HomeScreenInputCommand.MoveEnd;
                 return true;
             case Key.Enter:
-                command = MainMenuInputCommand.ActivateSelection;
+                command = HomeScreenInputCommand.ActivateSelection;
                 return true;
             case Key.Escape:
-                command = MainMenuInputCommand.ShowExitPrompt;
+                command = HomeScreenInputCommand.ShowExitPrompt;
                 return true;
             default:
                 command = default;

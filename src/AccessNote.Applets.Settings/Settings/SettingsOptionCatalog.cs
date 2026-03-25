@@ -58,7 +58,7 @@ internal static class SettingsOptionCatalog
             {
                 Label = "Start screen",
                 Hint = "Left and Right to change startup destination.",
-                GetValue = () => draft.StartScreen == StartScreenOption.Notes ? "Notes" : "Main Menu",
+                GetValue = () => draft.StartScreen == StartScreenOption.Notes ? "Notes" : "Home Screen",
                 ChangeBy = delta => draft.StartScreen = CycleEnum(draft.StartScreen, delta)
             },
             new SettingsOptionEntry

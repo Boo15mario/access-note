@@ -17,7 +17,7 @@ public partial class MainWindow
             },
             Shell = new MainWindowShellInputs
             {
-                MainMenuScreen = MainMenuScreen,
+                HomeScreenScreen = HomeScreenScreen,
                 AppletScreens = new Dictionary<AppletId, FrameworkElement>
                 {
                     { AppletId.Notes, NotesScreen },
@@ -31,7 +31,7 @@ public partial class MainWindow
                     { AppletId.Contacts, ContactsScreen },
                     { AppletId.Calendar, CalendarScreen },
                 },
-                MainMenuList = MainMenuList,
+                HomeScreenList = HomeScreenList,
                 StatusRegion = StatusRegion,
                 StatusText = StatusText,
                 ShouldAnnounceStatusMessages = () => _settingsSession.Current.AnnounceStatusMessages,
@@ -65,8 +65,8 @@ public partial class MainWindow
             },
             Navigation = new MainWindowNavigationInputs
             {
-                ShowMainMenu = (index, announce) => _navigationController.ShowMainMenu(index, announce),
-                ReturnToMainMenuFromSettings = () => _navigationController.ReturnToMainMenuFromSettings(),
+                ShowHomeScreen = (index, announce) => _navigationController.ShowHomeScreen(index, announce),
+                ReturnToHomeScreenFromSettings = () => _navigationController.ReturnToHomeScreenFromSettings(),
             },
             Startup = new MainWindowStartupInputs
             {

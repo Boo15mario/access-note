@@ -5,7 +5,7 @@ namespace AccessNote.Tests;
 public sealed class StartupFlowCoordinatorTests
 {
     [Fact]
-    public void HandleLoaded_WhenStartScreenIsNotes_OpensNotesAndSkipsMainMenuHint()
+    public void HandleLoaded_WhenStartScreenIsNotes_OpensNotesAndSkipsHomeScreenHint()
     {
         var host = new FakeStartupHost(StartScreenOption.Notes);
         var coordinator = new StartupFlowCoordinator(host);
@@ -27,9 +27,9 @@ public sealed class StartupFlowCoordinatorTests
     }
 
     [Fact]
-    public void HandleLoaded_WhenStartScreenIsMainMenu_AnnouncesMainMenuHint()
+    public void HandleLoaded_WhenStartScreenIsHomeScreen_AnnouncesHomeScreenHint()
     {
-        var host = new FakeStartupHost(StartScreenOption.MainMenu);
+        var host = new FakeStartupHost(StartScreenOption.HomeScreen);
         var coordinator = new StartupFlowCoordinator(host);
 
         coordinator.HandleLoaded();
@@ -101,7 +101,7 @@ public sealed class StartupFlowCoordinatorTests
             return false;
         }
 
-        public void ShowMainMenu()
+        public void ShowHomeScreen()
         {
             Calls.Add("show_main_menu");
         }
@@ -111,7 +111,7 @@ public sealed class StartupFlowCoordinatorTests
             Calls.Add($"open_applet_{appletId.ToString().ToLowerInvariant()}");
         }
 
-        public void AnnounceMainMenuHint()
+        public void AnnounceHomeScreenHint()
         {
             Calls.Add("announce_main_menu_hint");
         }

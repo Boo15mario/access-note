@@ -5,12 +5,12 @@ namespace AccessNote;
 internal sealed class DateTimeAppletRegistration : IAppletRegistration
 {
     private readonly DateTimeScreenView _screenView;
-    private readonly Action _showMainMenu;
+    private readonly Action _showHomeScreen;
 
-    public DateTimeAppletRegistration(DateTimeScreenView screenView, Action showMainMenu)
+    public DateTimeAppletRegistration(DateTimeScreenView screenView, Action showHomeScreen)
     {
         _screenView = screenView ?? throw new ArgumentNullException(nameof(screenView));
-        _showMainMenu = showMainMenu ?? throw new ArgumentNullException(nameof(showMainMenu));
+        _showHomeScreen = showHomeScreen ?? throw new ArgumentNullException(nameof(showHomeScreen));
     }
 
     public IApplet Create(AppletRegistrationContext context)
@@ -22,7 +22,7 @@ internal sealed class DateTimeAppletRegistration : IAppletRegistration
             module: new DateTimeModule(),
             screenView: _screenView,
             announceHint: context.AnnounceHint,
-            returnToMainMenu: _showMainMenu,
+            returnToHomeScreen: _showHomeScreen,
             dispatcher: context.Dispatcher);
     }
 }

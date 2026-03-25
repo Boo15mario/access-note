@@ -41,7 +41,7 @@ Each category contains simple controls (toggle/select/input) with explicit label
 ## Finalized v1 Rows (Control + Default + Storage Key)
 | Category | Label | Control Type | Values | Default | Storage Key |
 | --- | --- | --- | --- | --- | --- |
-| General | Start screen | Select | `MainMenu`, `Notes` | `MainMenu` | `start_screen` |
+| General | Start screen | Select | `HomeScreen`, `Notes` | `HomeScreen` | `start_screen` |
 | Notes Applet | Auto focus in Notes | Select | `List`, `Editor` | `List` | `notes_initial_focus` |
 | Notes Applet | Confirm before deleting note | Toggle | `true`, `false` | `true` | `confirm_before_delete_note` |
 | Notes Applet | Notes sort order | Select | `LastModifiedNewest`, `LastModifiedOldest`, `TitleAscending` | `LastModifiedNewest` | `notes_sort_order` |

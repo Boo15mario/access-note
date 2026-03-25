@@ -13,15 +13,15 @@ internal sealed class DateTimeModule
     private TextBlock? _weekText;
     private DispatcherTimer? _timer;
     private Action<string>? _announce;
-    private Action? _returnToMainMenu;
+    private Action? _returnToHomeScreen;
 
-    public void Enter(TextBlock dateText, TextBlock timeText, TextBlock weekText, Action<string> announce, Action returnToMainMenu)
+    public void Enter(TextBlock dateText, TextBlock timeText, TextBlock weekText, Action<string> announce, Action returnToHomeScreen)
     {
         _dateText = dateText;
         _timeText = timeText;
         _weekText = weekText;
         _announce = announce;
-        _returnToMainMenu = returnToMainMenu;
+        _returnToHomeScreen = returnToHomeScreen;
 
         UpdateDisplay();
         AnnounceDateTime();
@@ -37,7 +37,7 @@ internal sealed class DateTimeModule
 
     public bool HandleInput(Key key, ModifierKeys modifiers)
     {
-        _returnToMainMenu?.Invoke();
+        _returnToHomeScreen?.Invoke();
         return true;
     }
 

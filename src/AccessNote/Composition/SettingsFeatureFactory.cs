@@ -24,7 +24,7 @@ internal static class SettingsFeatureFactory
             resetButton: settings.SettingsResetButton,
             backButton: settings.SettingsBackButton,
             dispatcher: core.Dispatcher,
-            returnToMainMenu: navigation.ReturnToMainMenuFromSettings,
+            returnToHomeScreen: navigation.ReturnToHomeScreenFromSettings,
             handleSaveError: errorNotifier.ShowSettingsSaveError,
             announce: statusAnnouncer.Announce,
             applyTheme: applyTheme);

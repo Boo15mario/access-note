@@ -30,7 +30,7 @@ internal sealed class SystemMonitorApplet : IApplet
         id: AppletId.SystemMonitor,
         label: "System Monitor",
         screenHintText: "System Monitor.",
-        helpText: "System Monitor. F5 to refresh, Escape to return to menu.",
+        helpText: "System Monitor. F5 to refresh, Escape to return to home screen.",
         category: AppletCategory.Utility);
 
     public void Enter()

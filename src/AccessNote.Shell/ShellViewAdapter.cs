@@ -8,18 +8,18 @@ namespace AccessNote;
 
 public sealed class ShellViewAdapter
 {
-    private readonly FrameworkElement _mainMenuScreen;
-    private readonly ListBox _mainMenuList;
+    private readonly FrameworkElement _homeScreen;
+    private readonly ListBox _homeScreenList;
     private readonly Dispatcher _dispatcher;
     private readonly Dictionary<AppletId, FrameworkElement> _appletScreens = new();
 
     internal ShellViewAdapter(
-        FrameworkElement mainMenuScreen,
-        ListBox mainMenuList,
+        FrameworkElement homeScreen,
+        ListBox homeScreenList,
         Dispatcher dispatcher)
     {
-        _mainMenuScreen = mainMenuScreen;
-        _mainMenuList = mainMenuList;
+        _homeScreen = homeScreen;
+        _homeScreenList = homeScreenList;
         _dispatcher = dispatcher;
     }
 
@@ -32,22 +32,22 @@ public sealed class ShellViewAdapter
         _appletScreens[appletId] = screen;
     }
 
-    internal int MainMenuSelectedIndex => _mainMenuList.SelectedIndex;
+    internal int HomeScreenSelectedIndex => _homeScreenList.SelectedIndex;
 
-    internal void ShowMainMenuScreen()
+    internal void ShowHomeScreenScreen()
     {
         HideAllAppletScreens();
-        _mainMenuScreen.Visibility = Visibility.Visible;
+        _homeScreen.Visibility = Visibility.Visible;
     }
 
-    internal void UpdateMainMenuItems(IReadOnlyList<MainMenuEntry> entries)
+    internal void UpdateHomeScreenItems(IReadOnlyList<HomeScreenEntry> entries)
     {
-        _mainMenuList.ItemsSource = entries;
+        _homeScreenList.ItemsSource = entries;
     }
 
     public void ShowAppletScreen(AppletId appletId)
     {
-        _mainMenuScreen.Visibility = Visibility.Collapsed;
+        _homeScreen.Visibility = Visibility.Collapsed;
         HideAllAppletScreens();
         if (_appletScreens.TryGetValue(appletId, out var screen))
         {
@@ -60,7 +60,7 @@ public sealed class ShellViewAdapter
 
     public void ShowSettingsScreen() => ShowAppletScreen(AppletId.Settings);
 
-    internal int SetMainMenuSelection(int requestedIndex, IReadOnlyList<MainMenuEntry> entries)
+    internal int SetHomeScreenSelection(int requestedIndex, IReadOnlyList<HomeScreenEntry> entries)
     {
         if (entries.Count == 0)
         {
@@ -68,18 +68,18 @@ public sealed class ShellViewAdapter
         }
 
         var selectedIndex = WrapIndex(requestedIndex, entries.Count);
-        _mainMenuList.SelectedIndex = selectedIndex;
-        _mainMenuList.ScrollIntoView(entries[selectedIndex]);
+        _homeScreenList.SelectedIndex = selectedIndex;
+        _homeScreenList.ScrollIntoView(entries[selectedIndex]);
 
         _dispatcher.BeginInvoke(() =>
         {
-            if (_mainMenuList.ItemContainerGenerator.ContainerFromIndex(selectedIndex) is ListBoxItem item)
+            if (_homeScreenList.ItemContainerGenerator.ContainerFromIndex(selectedIndex) is ListBoxItem item)
             {
                 item.Focus();
             }
             else
             {
-                _mainMenuList.Focus();
+                _homeScreenList.Focus();
             }
         }, DispatcherPriority.Input);
 

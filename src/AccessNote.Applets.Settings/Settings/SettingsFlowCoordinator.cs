@@ -12,7 +12,7 @@ internal sealed class SettingsFlowCoordinator
     private readonly Action<int> _changeOption;
     private readonly Action _focusRegion;
     private readonly Action _moveFocusToOptions;
-    private readonly Action _attemptReturnToMainMenu;
+    private readonly Action _attemptReturnToHomeScreen;
     private readonly Action<bool> _saveSettings;
     private readonly Action<bool> _resetSettings;
 
@@ -24,7 +24,7 @@ internal sealed class SettingsFlowCoordinator
         Action<int> changeOption,
         Action focusRegion,
         Action moveFocusToOptions,
-        Action attemptReturnToMainMenu,
+        Action attemptReturnToHomeScreen,
         Action<bool> saveSettings,
         Action<bool> resetSettings)
     {
@@ -35,7 +35,7 @@ internal sealed class SettingsFlowCoordinator
         _changeOption = changeOption;
         _focusRegion = focusRegion;
         _moveFocusToOptions = moveFocusToOptions;
-        _attemptReturnToMainMenu = attemptReturnToMainMenu;
+        _attemptReturnToHomeScreen = attemptReturnToHomeScreen;
         _saveSettings = saveSettings;
         _resetSettings = resetSettings;
     }
@@ -64,7 +64,7 @@ internal sealed class SettingsFlowCoordinator
         {
             if (_view.IsBackButtonFocused(Keyboard.FocusedElement))
             {
-                _attemptReturnToMainMenu();
+                _attemptReturnToHomeScreen();
                 return true;
             }
 
@@ -86,7 +86,7 @@ internal sealed class SettingsFlowCoordinator
         switch (e.Key)
         {
             case Key.Escape:
-                _attemptReturnToMainMenu();
+                _attemptReturnToHomeScreen();
                 return true;
             case Key.Tab:
                 _controller.CycleFocus(forward: (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None);
@@ -151,7 +151,7 @@ internal sealed class SettingsFlowCoordinator
                 _resetSettings(true);
                 return;
             case 2:
-                _attemptReturnToMainMenu();
+                _attemptReturnToHomeScreen();
                 return;
             default:
                 return;

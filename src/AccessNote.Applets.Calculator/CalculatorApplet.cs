@@ -30,7 +30,7 @@ internal sealed class CalculatorApplet : IApplet
         id: AppletId.Calculator,
         label: "Calculator",
         screenHintText: "Calculator.",
-        helpText: "Calculator. Type numbers and operators, Enter to evaluate, Ctrl+M to toggle mode, Escape to return.",
+        helpText: "Calculator. Type numbers and operators, Enter to evaluate, Ctrl+M to toggle mode, Escape to return to home screen.",
         category: AppletCategory.Utility);
 
     public void Enter()

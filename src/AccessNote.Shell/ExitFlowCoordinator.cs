@@ -9,7 +9,8 @@ internal interface IExitHost
     bool TryPersistNotes();
     void RestoreFocusForActiveScreen();
     void Announce(string message);
-    bool? ShowExitConfirmationDialog();
+    ExitOption? ShowExitOptionsDialog();
+    void ShutDownComputer();
     void CloseWindow();
 }
 
@@ -51,22 +52,30 @@ internal sealed class ExitFlowCoordinator
         _isPromptingForExit = true;
         try
         {
-            var shouldExit = _host.ShowExitConfirmationDialog();
-            if (shouldExit == true)
-            {
-                if (!_host.TryPersistNotes())
-                {
-                    _host.RestoreFocusForActiveScreen();
-                    return;
-                }
+            var option = _host.ShowExitOptionsDialog();
 
-                _allowClose = true;
-                _host.CloseWindow();
+            if (option == ExitOption.Cancel || !option.HasValue)
+            {
+                _host.RestoreFocusForActiveScreen();
+                _host.Announce("Exit canceled.");
                 return;
             }
 
-            _host.RestoreFocusForActiveScreen();
-            _host.Announce("Exit canceled.");
+            if (option == ExitOption.ShutDownComputer)
+            {
+                _host.ShutDownComputer();
+                return;
+            }
+
+            // ExitOption.ExitApplication
+            if (!_host.TryPersistNotes())
+            {
+                _host.RestoreFocusForActiveScreen();
+                return;
+            }
+
+            _allowClose = true;
+            _host.CloseWindow();
         }
         finally
         {

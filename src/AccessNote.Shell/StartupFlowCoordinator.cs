@@ -9,9 +9,9 @@ internal interface IStartupHost
     void PlayStartupSound();
     StartScreenOption GetStartScreen();
     bool TryResolveStartApplet(StartScreenOption startScreen, out AppletId appletId);
-    void ShowMainMenu();
+    void ShowHomeScreen();
     void OpenApplet(AppletId appletId);
-    void AnnounceMainMenuHint();
+    void AnnounceHomeScreenHint();
 }
 
 internal sealed class StartupFlowCoordinator
@@ -31,13 +31,13 @@ internal sealed class StartupFlowCoordinator
         _host.PrepareShellUi();
         _host.PlayStartupSound();
 
-        _host.ShowMainMenu();
+        _host.ShowHomeScreen();
         if (_host.TryResolveStartApplet(_host.GetStartScreen(), out var appletId))
         {
             _host.OpenApplet(appletId);
             return;
         }
 
-        _host.AnnounceMainMenuHint();
+        _host.AnnounceHomeScreenHint();
     }
 }

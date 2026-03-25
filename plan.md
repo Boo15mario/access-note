@@ -26,10 +26,10 @@ Make the codebase as modular as possible so it is easier to maintain, test, and 
 2. Split `InputCommandRouter` into focused maps/policies:
    - Status: Completed
    - Progress notes:
-     - Added `GlobalInputMap`, `MainMenuInputMap`, `NotesInputMap`, and `IgnoredCommandPolicy`.
+     - Added `GlobalInputMap`, `HomeScreenInputMap`, `NotesInputMap`, and `IgnoredCommandPolicy`.
      - Kept `InputCommandRouter` as a small facade to avoid broad call-site churn.
      - Verified with Windows test run (`18/18` passing).
-   - Scope: `GlobalInputMap`, `MainMenuInputMap`, `NotesInputMap`, `IgnoredCommandPolicy`.
+   - Scope: `GlobalInputMap`, `HomeScreenInputMap`, `NotesInputMap`, `IgnoredCommandPolicy`.
    - Estimated effort: 0.5 day.
    - Done when:
      - Command mapping responsibilities are separated by screen/concern.
@@ -51,11 +51,11 @@ Make the codebase as modular as possible so it is easier to maintain, test, and 
 4. Add tests for modular boundaries:
    - Status: Completed
    - Progress notes:
-     - Added `MainMenuModuleTests` for typed action activation paths.
+     - Added `HomeScreenModuleTests` for typed action activation paths.
      - Added `SettingsOptionListBuilderTests`, `SettingsSelectionSynchronizerTests`, and `SettingsOptionAnnouncerTests`.
      - Added STA/WPF test helpers for UI-bound adapters.
      - Verified with Windows test run (`25/25` passing).
-   - Scope: tests for `MainMenuModule` typed action mapping, `SettingsOptionListBuilder`, `SettingsSelectionSynchronizer`, `SettingsOptionAnnouncer`.
+   - Scope: tests for `HomeScreenModule` typed action mapping, `SettingsOptionListBuilder`, `SettingsSelectionSynchronizer`, `SettingsOptionAnnouncer`.
    - Estimated effort: 0.5 day.
    - Done when:
      - New tests cover expected behavior and edge cases for each target.
@@ -135,7 +135,7 @@ Goal: shift from screen-specific wiring to applet-first architecture so future a
 3. Migrate Notes and Settings to registered applets.
    - Status: Completed
    - Progress notes:
-     - Updated main menu actions to activate applets by `AppletId` instead of hardcoded Notes/Settings delegates.
+     - Updated home screen actions to activate applets by `AppletId` instead of hardcoded Notes/Settings delegates.
      - Updated navigation flow to `OpenApplet(AppletId)` and route activation via registry-backed `ScreenRouter`.
      - Updated/kept tests green (`28/28` passing).
    - Scope: route activations through registry-backed applet descriptors.
@@ -146,8 +146,8 @@ Goal: shift from screen-specific wiring to applet-first architecture so future a
      - Moved persistence infrastructure (`NoteStorage`, `SettingsStorage`) into `AccessNote.Core` and relocated SQLite package dependency to core.
      - Created `src/AccessNote.Shell/AccessNote.Shell.csproj` with internals visibility to `AccessNote` and tests.
      - Moved shell contracts/router/input/help-policy types into `AccessNote.Shell`:
-       - `AppletContracts`, `AppletRegistry`, `MainMenuEntry`, `ScreenRouter`
-       - `GlobalInputMap`, `MainMenuInputMap`, `NotesInputMap`, `InputCommandRouter`, `IgnoredCommandPolicy`
+       - `AppletContracts`, `AppletRegistry`, `HomeScreenEntry`, `ScreenRouter`
+       - `GlobalInputMap`, `HomeScreenInputMap`, `NotesInputMap`, `InputCommandRouter`, `IgnoredCommandPolicy`
        - `HelpTextProvider`, `HintAnnouncementPolicy`
      - Updated project references so app and tests compile through the new project boundaries.
      - Verified with Windows test run (`28/28` passing).
@@ -204,7 +204,7 @@ Goal: finish moving shell orchestration out of host project and remove Notes/Set
    - Status: Completed
    - Progress notes:
      - Moved these classes from `src/AccessNote/Shell` to `src/AccessNote.Shell`:
-       - `MainMenuModule`
+       - `HomeScreenModule`
        - `ShellInputController`
        - `ShellNavigationController`
        - `StartupFlowCoordinator`
@@ -254,9 +254,9 @@ Goal: finish moving shell orchestration out of host project and remove Notes/Set
 7. Make main-menu applet activation descriptor-driven.
    - Status: Completed
    - Progress notes:
-     - Refactored `MainMenuEntry` to model applet entries via `AppletDescriptor` (`ForApplet`) instead of Notes/Settings-specific entry ids.
-     - Updated `MainMenuModule` activation flow to open whichever applet id is attached to the selected entry.
-     - Updated host/test menu entry construction to the new `MainMenuEntry` factories (`ForApplet`, `Utilities`, `Exit`).
+     - Refactored `HomeScreenEntry` to model applet entries via `AppletDescriptor` (`ForApplet`) instead of Notes/Settings-specific entry ids.
+     - Updated `HomeScreenModule` activation flow to open whichever applet id is attached to the selected entry.
+     - Updated host/test menu entry construction to the new `HomeScreenEntry` factories (`ForApplet`, `Utilities`, `Exit`).
      - Verified with Windows test run (`33/33` passing).
 
 ## Plugin Discovery Modularity (Current Pass)
@@ -323,11 +323,11 @@ Goal: remove remaining hardcoded applet assumptions so future applets can be add
      - Expanded `AppletDescriptor` to include `ScreenHintText`, `HelpText`, and optional `StartScreenOption`.
      - Updated Notes/Settings applets to provide their own descriptor metadata.
      - Updated `AppletRegistry` with descriptor lookup/order/start-screen resolution APIs.
-     - Added `MainMenuEntryBuilder` so applet menu items are built from registered applet descriptors.
+     - Added `HomeScreenEntryBuilder` so applet menu items are built from registered applet descriptors.
      - Updated startup/help wiring to resolve applet metadata from `AppletRegistry` instead of hardcoded Notes/Settings mapping.
      - Added/updated tests:
        - `AppletRegistryTests` (start-screen and descriptor ordering)
-       - `MainMenuEntryBuilderTests`
+       - `HomeScreenEntryBuilderTests`
      - Verified with Windows test run (`36/36` passing).
 2. Let applets self-register with shell.
    - Status: Completed
@@ -372,7 +372,7 @@ Goal: remove remaining hardcoded applet assumptions so future applets can be add
    - Status: Completed
    - Progress notes:
      - Made applet-facing Shell types public (`AppletId`, `AppletDescriptor`, `IApplet`, `IAppletRegistration`, `AppletRegistrationContext`, `ShellViewAdapter`).
-     - Narrowed `ShellViewAdapter` surface: constructor, `ShowMainMenuScreen`, `MainMenuSelectedIndex`, `SetMainMenuSelection` are `internal`.
+     - Narrowed `ShellViewAdapter` surface: constructor, `ShowHomeScreenScreen`, `HomeScreenSelectedIndex`, `SetHomeScreenSelection` are `internal`.
      - Made `ExitConfirmationDialog` `internal` (added `x:ClassModifier="internal"` to XAML).
      - Removed `InternalsVisibleTo` grants to both applet assemblies from `Shell/AssemblyInfo.cs`.
      - Moved `NotesInputMap.cs` (Notes-specific input types) from Shell into Notes applet; removed dead `InputCommandRouter.TryGetNotesCommand`.

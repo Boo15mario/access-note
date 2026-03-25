@@ -29,7 +29,7 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <Grid x:Name="MainMenuScreen">
+    <Grid x:Name="HomeScreenScreen">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
@@ -43,7 +43,7 @@
                  Margin="0,0,0,20"
                  AutomationProperties.Name="Access Note Header" />
 
-      <ListBox x:Name="MainMenuList"
+      <ListBox x:Name="HomeScreenList"
                Grid.Row="1"
                FontSize="28"
                Foreground="{DynamicResource ThemeForeground}"
@@ -52,7 +52,7 @@
                BorderThickness="2"
                Padding="8"
                FocusVisualStyle="{x:Null}"
-               AutomationProperties.Name="Main Menu">
+               AutomationProperties.Name="Home Screen">
         <ListBox.ItemContainerStyle>
           <Style TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />

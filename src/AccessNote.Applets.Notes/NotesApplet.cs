@@ -30,7 +30,7 @@ internal sealed class NotesApplet : IApplet
         id: AppletId.Notes,
         label: "Notes",
         screenHintText: "Notes.",
-        helpText: "Notes. Control N new note, Control S save, F6 cycle focus, Escape to return to menu.",
+        helpText: "Notes. Control N new note, Control S save, F6 cycle focus, Escape to return to home screen.",
         startScreenOption: StartScreenOption.Notes);
 
     public void Enter()

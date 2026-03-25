@@ -10,7 +10,7 @@ internal sealed class SettingsActionsCoordinator
     private readonly Dispatcher _dispatcher;
     private readonly Action _rebuildOptions;
     private readonly Action _focusSettingsRegion;
-    private readonly Action _returnToMainMenu;
+    private readonly Action _returnToHomeScreen;
     private readonly Action<Exception> _handleSaveError;
     private readonly Action<string> _announce;
     private readonly Action _applyTheme;
@@ -21,7 +21,7 @@ internal sealed class SettingsActionsCoordinator
         Dispatcher dispatcher,
         Action rebuildOptions,
         Action focusSettingsRegion,
-        Action returnToMainMenu,
+        Action returnToHomeScreen,
         Action<Exception> handleSaveError,
         Action<string> announce,
         Action applyTheme)
@@ -31,7 +31,7 @@ internal sealed class SettingsActionsCoordinator
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         _rebuildOptions = rebuildOptions ?? throw new ArgumentNullException(nameof(rebuildOptions));
         _focusSettingsRegion = focusSettingsRegion ?? throw new ArgumentNullException(nameof(focusSettingsRegion));
-        _returnToMainMenu = returnToMainMenu ?? throw new ArgumentNullException(nameof(returnToMainMenu));
+        _returnToHomeScreen = returnToHomeScreen ?? throw new ArgumentNullException(nameof(returnToHomeScreen));
         _handleSaveError = handleSaveError ?? throw new ArgumentNullException(nameof(handleSaveError));
         _announce = announce ?? throw new ArgumentNullException(nameof(announce));
         _applyTheme = applyTheme ?? throw new ArgumentNullException(nameof(applyTheme));
@@ -75,14 +75,14 @@ internal sealed class SettingsActionsCoordinator
         _announce("Settings already match defaults.");
     }
 
-    public void AttemptReturnToMainMenu()
+    public void AttemptReturnToHomeScreen()
     {
         if (!EnsureCanLeaveSettings())
         {
             return;
         }
 
-        _returnToMainMenu();
+        _returnToHomeScreen();
     }
 
     public bool EnsureCanLeaveSettings()

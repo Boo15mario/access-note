@@ -6,21 +6,21 @@ using AccessNote;
 
 namespace AccessNote.Tests;
 
-public sealed class MainMenuModuleTests
+public sealed class HomeScreenModuleTests
 {
     [Fact]
-    public void HandleInput_Enter_ActivatesTypedMainMenuEntries()
+    public void HandleInput_Enter_ActivatesTypedHomeScreenEntries()
     {
         StaTestRunner.Run(
             () =>
             {
-                var utilityChild = MainMenuEntry.ForApplet(new AppletDescriptor(AppletId.Notes, "Placeholder Utility"));
-                var entries = new List<MainMenuEntry>
+                var utilityChild = HomeScreenEntry.ForApplet(new AppletDescriptor(AppletId.Notes, "Placeholder Utility"));
+                var entries = new List<HomeScreenEntry>
                 {
-                    MainMenuEntry.ForApplet(new AppletDescriptor(AppletId.Notes, "Notes")),
-                    MainMenuEntry.ForApplet(new AppletDescriptor(AppletId.Settings, "Settings")),
-                    MainMenuEntry.Submenu("Utilities", new[] { utilityChild }),
-                    MainMenuEntry.Exit(),
+                    HomeScreenEntry.ForApplet(new AppletDescriptor(AppletId.Notes, "Notes")),
+                    HomeScreenEntry.ForApplet(new AppletDescriptor(AppletId.Settings, "Settings")),
+                    HomeScreenEntry.Submenu("Utilities", new[] { utilityChild }),
+                    HomeScreenEntry.Exit(),
                 };
 
                 var shellView = CreateShellView(entries, out var mainMenuList);
@@ -29,7 +29,7 @@ public sealed class MainMenuModuleTests
                 var exitPromptCount = 0;
                 var announcements = new List<string>();
 
-                var module = new MainMenuModule(
+                var module = new HomeScreenModule(
                     shellView: shellView,
                     entries: entries,
                     openApplet: appletId =>
@@ -47,19 +47,19 @@ public sealed class MainMenuModuleTests
                     announce: announcements.Add);
 
                 // Activate Notes
-                module.ShowMainMenu(0, shouldAnnounce: false);
+                module.ShowHomeScreen(0, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
                 // Activate Settings
-                module.ShowMainMenu(1, shouldAnnounce: false);
+                module.ShowHomeScreen(1, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
                 // Activate Utilities submenu (enters submenu)
-                module.ShowMainMenu(2, shouldAnnounce: false);
+                module.ShowHomeScreen(2, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
                 // Activate Exit
-                module.ShowMainMenu(3, shouldAnnounce: false);
+                module.ShowHomeScreen(3, shouldAnnounce: false);
                 Assert.True(module.HandleInput(Key.Enter));
 
                 Assert.Equal(1, notesOpenCount);
@@ -70,7 +70,7 @@ public sealed class MainMenuModuleTests
     }
 
     private static ShellViewAdapter CreateShellView(
-        IReadOnlyList<MainMenuEntry> entries,
+        IReadOnlyList<HomeScreenEntry> entries,
         out ListBox mainMenuList)
     {
         var mainMenuScreen = new Grid();

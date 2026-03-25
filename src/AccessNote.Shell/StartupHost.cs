@@ -11,9 +11,9 @@ internal sealed class StartupHost : IStartupHost
     private readonly Action _playStartupSound;
     private readonly Func<StartScreenOption> _getStartScreen;
     private readonly Func<StartScreenOption, AppletId?> _resolveStartApplet;
-    private readonly Action _showMainMenu;
+    private readonly Action _showHomeScreen;
     private readonly Action<AppletId> _openApplet;
-    private readonly Action _announceMainMenuHint;
+    private readonly Action _announceHomeScreenHint;
 
     public StartupHost(
         Action loadSettings,
@@ -23,9 +23,9 @@ internal sealed class StartupHost : IStartupHost
         Action playStartupSound,
         Func<StartScreenOption> getStartScreen,
         Func<StartScreenOption, AppletId?> resolveStartApplet,
-        Action showMainMenu,
+        Action showHomeScreen,
         Action<AppletId> openApplet,
-        Action announceMainMenuHint)
+        Action announceHomeScreenHint)
     {
         _loadSettings = loadSettings;
         _applyTheme = applyTheme;
@@ -34,9 +34,9 @@ internal sealed class StartupHost : IStartupHost
         _playStartupSound = playStartupSound;
         _getStartScreen = getStartScreen;
         _resolveStartApplet = resolveStartApplet;
-        _showMainMenu = showMainMenu;
+        _showHomeScreen = showHomeScreen;
         _openApplet = openApplet;
-        _announceMainMenuHint = announceMainMenuHint;
+        _announceHomeScreenHint = announceHomeScreenHint;
     }
 
     public void LoadSettings() => _loadSettings();
@@ -64,9 +64,9 @@ internal sealed class StartupHost : IStartupHost
         return false;
     }
 
-    public void ShowMainMenu() => _showMainMenu();
+    public void ShowHomeScreen() => _showHomeScreen();
 
     public void OpenApplet(AppletId appletId) => _openApplet(appletId);
 
-    public void AnnounceMainMenuHint() => _announceMainMenuHint();
+    public void AnnounceHomeScreenHint() => _announceHomeScreenHint();
 }

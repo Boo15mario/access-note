@@ -5,13 +5,13 @@ namespace AccessNote;
 internal static class FlowFeatureFactory
 {
     public static ScreenRouter CreateScreenRouter(
-        MainMenuModule mainMenuModule,
+        HomeScreenModule mainMenuModule,
         AppletRegistry appletRegistry)
     {
         return new ScreenRouter(
             appletRegistry: appletRegistry,
-            showMainMenu: mainMenuModule.ShowMainMenu,
-            restoreMainMenuFocus: mainMenuModule.RestoreFocus);
+            showHomeScreen: mainMenuModule.ShowHomeScreen,
+            restoreHomeScreenFocus: mainMenuModule.RestoreFocus);
     }
 
     public static StartupFlowCoordinator CreateStartupFlowCoordinator(
@@ -19,7 +19,7 @@ internal static class FlowFeatureFactory
         MainWindowShellInputs shell,
         MainWindowNotesInputs notes,
         MainWindowSettingsInputs settings,
-        IReadOnlyList<MainMenuEntry> mainMenuEntries,
+        IReadOnlyList<HomeScreenEntry> mainMenuEntries,
         SettingsStateCoordinator settingsState,
         AppletRegistry appletRegistry,
         ScreenRouter screenRouter,
@@ -28,7 +28,7 @@ internal static class FlowFeatureFactory
         Action applyTheme)
     {
         var shellStartupBinder = new ShellStartupBinder(
-            mainMenuList: shell.MainMenuList,
+            mainMenuList: shell.HomeScreenList,
             notesList: notes.NotesList,
             settingsCategoryList: settings.SettingsCategoryList,
             settingsOptionsList: settings.SettingsOptionsList,
@@ -45,9 +45,9 @@ internal static class FlowFeatureFactory
             playStartupSound: soundService.PlayStartup,
             getStartScreen: startup.GetStartScreen,
             resolveStartApplet: appletRegistry.ResolveStartAppletId,
-            showMainMenu: () => screenRouter.ShowMainMenu(0, shouldAnnounce: false),
+            showHomeScreen: () => screenRouter.ShowHomeScreen(0, shouldAnnounce: false),
             openApplet: screenRouter.OpenApplet,
-            announceMainMenuHint: () => settingsState.AnnounceHint(GetMainMenuDefaultHint(mainMenuEntries)));
+            announceHomeScreenHint: () => settingsState.AnnounceHint(GetHomeScreenDefaultHint(mainMenuEntries)));
         return new StartupFlowCoordinator(host);
     }
 
@@ -62,21 +62,22 @@ internal static class FlowFeatureFactory
             tryPersistNotes: exit.TryPersistNotes,
             restoreFocusForActiveScreen: exit.RestoreFocusForActiveScreen,
             announce: statusAnnouncer.Announce,
-            showExitConfirmationDialog: shellDialogs.ShowExitConfirmationDialog,
+            showExitOptionsDialog: shellDialogs.ShowExitOptionsDialog,
+            shutDownComputer: shellDialogs.ShutDownComputer,
             closeWindow: exit.CloseWindow);
         return new ExitFlowCoordinator(host);
     }
 
-    private static string GetMainMenuDefaultHint(IReadOnlyList<MainMenuEntry> mainMenuEntries)
+    private static string GetHomeScreenDefaultHint(IReadOnlyList<HomeScreenEntry> mainMenuEntries)
     {
         foreach (var entry in mainMenuEntries)
         {
             if (entry.AppletId.HasValue)
             {
-                return $"Main menu. {entry.Label} selected.";
+                return $"Home screen. {entry.Label} selected.";
             }
         }
 
-        return "Main menu.";
+        return "Home screen.";
     }
 }

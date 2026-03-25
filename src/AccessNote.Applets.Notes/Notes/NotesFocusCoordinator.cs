@@ -15,7 +15,7 @@ internal sealed class NotesFocusCoordinator
     private readonly NotesViewStateCoordinator _state;
     private readonly Action _refreshVisibleNotes;
     private readonly Func<bool> _ensureCanLeaveActiveNote;
-    private readonly Action _showMainMenu;
+    private readonly Action _showHomeScreen;
     private readonly Func<string> _getStatusText;
     private readonly Action<string> _announce;
 
@@ -26,7 +26,7 @@ internal sealed class NotesFocusCoordinator
         NotesViewStateCoordinator state,
         Action refreshVisibleNotes,
         Func<bool> ensureCanLeaveActiveNote,
-        Action showMainMenu,
+        Action showHomeScreen,
         Func<string> getStatusText,
         Action<string> announce)
     {
@@ -34,7 +34,7 @@ internal sealed class NotesFocusCoordinator
         _state = state ?? throw new ArgumentNullException(nameof(state));
         _refreshVisibleNotes = refreshVisibleNotes ?? throw new ArgumentNullException(nameof(refreshVisibleNotes));
         _ensureCanLeaveActiveNote = ensureCanLeaveActiveNote ?? throw new ArgumentNullException(nameof(ensureCanLeaveActiveNote));
-        _showMainMenu = showMainMenu ?? throw new ArgumentNullException(nameof(showMainMenu));
+        _showHomeScreen = showHomeScreen ?? throw new ArgumentNullException(nameof(showHomeScreen));
         _getStatusText = getStatusText ?? throw new ArgumentNullException(nameof(getStatusText));
         _announce = announce ?? throw new ArgumentNullException(nameof(announce));
     }
@@ -106,7 +106,7 @@ internal sealed class NotesFocusCoordinator
             return;
         }
 
-        _showMainMenu();
+        _showHomeScreen();
     }
 
     private FocusRegion GetCurrentFocusRegion()

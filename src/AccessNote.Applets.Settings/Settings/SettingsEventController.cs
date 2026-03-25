@@ -37,7 +37,7 @@ internal sealed class SettingsEventController
 
     public void HandleBackClick()
     {
-        _settingsModule.AttemptReturnToMainMenu();
+        _settingsModule.AttemptReturnToHomeScreen();
     }
 
     private bool IsSettingsScreen()

@@ -14,9 +14,9 @@ internal static class InputCommandRouter
         return GlobalInputMap.TryGetCommand(key, modifiers, out command);
     }
 
-    public static bool TryGetMainMenuCommand(Key key, out MainMenuInputCommand command)
+    public static bool TryGetHomeScreenCommand(Key key, out HomeScreenInputCommand command)
     {
-        return MainMenuInputMap.TryGetCommand(key, out command);
+        return HomeScreenInputMap.TryGetCommand(key, out command);
     }
 
     public static bool ShouldAnnounceIgnoredCommand(Key key, ModifierKeys modifiers)

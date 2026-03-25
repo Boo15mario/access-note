@@ -42,7 +42,7 @@ Validate that Access Note is fully usable with NVDA and keyboard-only input for 
 | ID | Severity | Scenario | Steps | Expected Result |
 | --- | --- | --- | --- | --- |
 | `NAV-001` | Critical | Startup focus | Launch app | NVDA announces main screen and focused menu item |
-| `NAV-002` | Critical | Main menu navigation | Press `Up/Down`, `Home/End` | Selection changes and NVDA announces current item each time |
+| `NAV-002` | Critical | Home screen navigation | Press `Up/Down`, `Home/End` | Selection changes and NVDA announces current item each time |
 | `NAV-003` | Critical | Menu activation | Press `Enter` on `Notes` | Notes Workspace opens; NVDA announces `Notes` |
 | `SET-001` | Critical | Settings screen opens | Open `Settings` from Main Menu | Settings categories/options are visible; NVDA announces settings guidance |
 | `SET-002` | Critical | Settings return by Esc | Press `Esc` in Settings | Returns to Main Menu; focus restored to `Settings` |

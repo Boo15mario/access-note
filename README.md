@@ -6,7 +6,7 @@ Access Note is a keyboard-driven, accessibility-first Windows desktop applicatio
 
 - **Fully keyboard-driven** — no mouse required
 - **Screen reader optimized** — tested with NVDA, uses UIA LiveRegion announcements
-- **Fullscreen shell** with a navigable main menu
+- **Fullscreen shell** with a navigable home screen
 - **9 built-in applets** covering notes, media, utilities, and more
 - **Theming support** with configurable settings
 - **SQLite-backed storage** for notes, contacts, calendar events, and settings
@@ -17,11 +17,11 @@ Access Note is a keyboard-driven, accessibility-first Windows desktop applicatio
 |--------|-------------|
 | **Notes** | Create, edit, search, and manage text notes with a multi-line editor |
 | **Settings** | Configure application options across General, Notes, Accessibility, and Advanced categories |
-| **Media Player** | Play audio files and streams with playlist management |
-| **MIDI Player** | Play MIDI files with tempo control and optional SoundFont support |
-| **App Launcher** | Launch favorite applications or browse the filesystem |
-| **Calendar** | Navigate a monthly calendar and manage events |
-| **Contacts** | Store and manage contacts with vCard import/export |
+| **Media Center > Media Player** | Play audio files and streams with playlist management |
+| **Media Center > MIDI Player** | Play MIDI files with tempo control and optional SoundFont support |
+| **Utilities > App Launcher** | Launch favorite applications or browse the filesystem |
+| **Utilities > Calendar** | Navigate a monthly calendar and manage events |
+| **Utilities > Contacts** | Store and manage contacts with vCard import/export |
 | **Utilities > Date & Time** | View the current date and time |
 | **Utilities > Calculator** | Basic and scientific calculator with expression history |
 | **Utilities > System Monitor** | View CPU, memory, and disk usage |
@@ -55,11 +55,11 @@ dotnet test tests/AccessNote.Tests/AccessNote.Tests.csproj
 
 | Key | Action |
 |-----|--------|
-| Escape | Return to main menu (from any applet) |
+| Escape | Return to home screen (from any applet) |
 | F1 | Announce help text for current screen |
 | Alt+F4 | Exit application |
 
-### Main Menu
+### Home Screen
 
 | Key | Action |
 |-----|--------|
@@ -168,7 +168,7 @@ Scientific mode adds: S (sin), C (cos), T (tan), L (log), N (ln), P (pow).
 
 | Key | Action |
 |-----|--------|
-| Any key | Return to main menu |
+| Any key | Return to home screen |
 
 ### System Monitor
 

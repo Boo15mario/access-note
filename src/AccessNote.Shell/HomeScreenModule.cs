@@ -4,20 +4,21 @@ using System.Windows.Input;
 
 namespace AccessNote;
 
-internal sealed class MainMenuModule
+internal sealed class HomeScreenModule
 {
     private readonly ShellViewAdapter _shellView;
-    private readonly IReadOnlyList<MainMenuEntry> _rootEntries;
+    private readonly IReadOnlyList<HomeScreenEntry> _rootEntries;
     private readonly Action<AppletId> _openApplet;
     private readonly Action _showExitPrompt;
     private readonly Action<string> _announce;
 
-    private IReadOnlyList<MainMenuEntry> _activeEntries;
+    private IReadOnlyList<HomeScreenEntry> _activeEntries;
     private bool _inSubmenu;
+    private int _activeRootIndex;
 
-    public MainMenuModule(
+    public HomeScreenModule(
         ShellViewAdapter shellView,
-        IReadOnlyList<MainMenuEntry> entries,
+        IReadOnlyList<HomeScreenEntry> entries,
         Action<AppletId> openApplet,
         Action showExitPrompt,
         Action<string> announce)
@@ -30,56 +31,57 @@ internal sealed class MainMenuModule
         _activeEntries = _rootEntries;
     }
 
-    public void ShowMainMenu(int focusIndex, bool shouldAnnounce)
+    public void ShowHomeScreen(int focusIndex, bool shouldAnnounce)
     {
         _activeEntries = _rootEntries;
         _inSubmenu = false;
-        _shellView.UpdateMainMenuItems(_activeEntries);
-        _shellView.ShowMainMenuScreen();
+        _activeRootIndex = focusIndex;
+        _shellView.UpdateHomeScreenItems(_activeEntries);
+        _shellView.ShowHomeScreenScreen();
         SetSelection(focusIndex, shouldAnnounce: false);
 
-        if (shouldAnnounce && _shellView.MainMenuSelectedIndex >= 0)
+        if (shouldAnnounce && _shellView.HomeScreenSelectedIndex >= 0)
         {
-            _announce($"Main menu. {_activeEntries[_shellView.MainMenuSelectedIndex].Label} selected.");
+            _announce($"Home screen. {_activeEntries[_shellView.HomeScreenSelectedIndex].Label} selected.");
         }
     }
 
     public void RestoreFocus()
     {
-        var index = _shellView.MainMenuSelectedIndex < 0 ? 0 : _shellView.MainMenuSelectedIndex;
+        var index = _shellView.HomeScreenSelectedIndex < 0 ? 0 : _shellView.HomeScreenSelectedIndex;
         SetSelection(index, shouldAnnounce: false);
     }
 
     public bool HandleInput(Key key)
     {
-        if (_shellView.MainMenuSelectedIndex < 0)
+        if (_shellView.HomeScreenSelectedIndex < 0)
         {
             SetSelection(0, shouldAnnounce: false);
         }
 
-        if (!InputCommandRouter.TryGetMainMenuCommand(key, out var command))
+        if (!InputCommandRouter.TryGetHomeScreenCommand(key, out var command))
         {
             return false;
         }
 
         switch (command)
         {
-            case MainMenuInputCommand.MoveUp:
-                SetSelection(_shellView.MainMenuSelectedIndex - 1);
+            case HomeScreenInputCommand.MoveUp:
+                SetSelection(_shellView.HomeScreenSelectedIndex - 1);
                 return true;
-            case MainMenuInputCommand.MoveDown:
-                SetSelection(_shellView.MainMenuSelectedIndex + 1);
+            case HomeScreenInputCommand.MoveDown:
+                SetSelection(_shellView.HomeScreenSelectedIndex + 1);
                 return true;
-            case MainMenuInputCommand.MoveHome:
+            case HomeScreenInputCommand.MoveHome:
                 SetSelection(0);
                 return true;
-            case MainMenuInputCommand.MoveEnd:
+            case HomeScreenInputCommand.MoveEnd:
                 SetSelection(_activeEntries.Count - 1);
                 return true;
-            case MainMenuInputCommand.ActivateSelection:
+            case HomeScreenInputCommand.ActivateSelection:
                 ActivateSelection();
                 return true;
-            case MainMenuInputCommand.ShowExitPrompt:
+            case HomeScreenInputCommand.ShowExitPrompt:
                 if (_inSubmenu)
                 {
                     ReturnToRootMenu();
@@ -94,7 +96,7 @@ internal sealed class MainMenuModule
 
     private void SetSelection(int index, bool shouldAnnounce = true)
     {
-        var selectedIndex = _shellView.SetMainMenuSelection(index, _activeEntries);
+        var selectedIndex = _shellView.SetHomeScreenSelection(index, _activeEntries);
         if (selectedIndex < 0)
         {
             return;
@@ -108,10 +110,10 @@ internal sealed class MainMenuModule
 
     private void ActivateSelection()
     {
-        var selectedIndex = _shellView.MainMenuSelectedIndex < 0 ? 0 : _shellView.MainMenuSelectedIndex;
+        var selectedIndex = _shellView.HomeScreenSelectedIndex < 0 ? 0 : _shellView.HomeScreenSelectedIndex;
         var selectedEntry = _activeEntries[selectedIndex];
 
-        if (selectedEntry.Id == MainMenuEntryId.Applet && selectedEntry.AppletId.HasValue)
+        if (selectedEntry.Id == HomeScreenEntryId.Applet && selectedEntry.AppletId.HasValue)
         {
             _openApplet(selectedEntry.AppletId.Value);
             return;
@@ -119,13 +121,13 @@ internal sealed class MainMenuModule
 
         switch (selectedEntry.Id)
         {
-            case MainMenuEntryId.Submenu:
+            case HomeScreenEntryId.Submenu:
                 EnterSubmenu(selectedEntry);
                 return;
-            case MainMenuEntryId.Exit:
+            case HomeScreenEntryId.Exit:
                 _showExitPrompt();
                 return;
-            case MainMenuEntryId.Utilities:
+            case HomeScreenEntryId.Utilities:
                 _announce("Utilities is not implemented yet.");
                 return;
             default:
@@ -134,12 +136,18 @@ internal sealed class MainMenuModule
         }
     }
 
-    private void EnterSubmenu(MainMenuEntry submenuEntry)
+    private void EnterSubmenu(HomeScreenEntry submenuEntry)
     {
+        var selectedIndex = _shellView.HomeScreenSelectedIndex;
+        if (selectedIndex >= 0)
+        {
+            _activeRootIndex = selectedIndex;
+        }
+
         _activeEntries = submenuEntry.Children;
         _inSubmenu = true;
-        _shellView.UpdateMainMenuItems(_activeEntries);
-        _shellView.ShowMainMenuScreen();
+        _shellView.UpdateHomeScreenItems(_activeEntries);
+        _shellView.ShowHomeScreenScreen();
         SetSelection(0, shouldAnnounce: false);
         _announce($"{submenuEntry.Label}. {_activeEntries[0].Label} selected.");
     }
@@ -148,21 +156,16 @@ internal sealed class MainMenuModule
     {
         _activeEntries = _rootEntries;
         _inSubmenu = false;
-        _shellView.UpdateMainMenuItems(_activeEntries);
-        _shellView.ShowMainMenuScreen();
+        _shellView.UpdateHomeScreenItems(_activeEntries);
+        _shellView.ShowHomeScreenScreen();
 
-        // Try to focus the Utilities submenu entry
-        int utilitiesIndex = 0;
-        for (int i = 0; i < _rootEntries.Count; i++)
+        var rootIndex = _activeRootIndex;
+        if (rootIndex < 0 || rootIndex >= _rootEntries.Count)
         {
-            if (_rootEntries[i].Id == MainMenuEntryId.Submenu)
-            {
-                utilitiesIndex = i;
-                break;
-            }
+            rootIndex = 0;
         }
 
-        SetSelection(utilitiesIndex, shouldAnnounce: false);
-        _announce($"Main menu. {_rootEntries[utilitiesIndex].Label} selected.");
+        SetSelection(rootIndex, shouldAnnounce: false);
+        _announce($"Home screen. {_rootEntries[rootIndex].Label} selected.");
     }
 }

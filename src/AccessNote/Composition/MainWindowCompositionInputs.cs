@@ -37,9 +37,9 @@ internal sealed class MainWindowCoreInputs
 
 internal sealed class MainWindowShellInputs
 {
-    public required FrameworkElement MainMenuScreen { get; init; }
+    public required FrameworkElement HomeScreenScreen { get; init; }
     public required Dictionary<AppletId, FrameworkElement> AppletScreens { get; init; }
-    public required ListBox MainMenuList { get; init; }
+    public required ListBox HomeScreenList { get; init; }
     public required FrameworkElement StatusRegion { get; init; }
     public required TextBlock StatusText { get; init; }
     public required Func<bool> ShouldAnnounceStatusMessages { get; init; }
@@ -77,8 +77,8 @@ internal sealed class MainWindowMenuActionsInputs
 
 internal sealed class MainWindowNavigationInputs
 {
-    public required Action<int, bool> ShowMainMenu { get; init; }
-    public required Action ReturnToMainMenuFromSettings { get; init; }
+    public required Action<int, bool> ShowHomeScreen { get; init; }
+    public required Action ReturnToHomeScreenFromSettings { get; init; }
 }
 
 internal sealed class MainWindowStartupInputs

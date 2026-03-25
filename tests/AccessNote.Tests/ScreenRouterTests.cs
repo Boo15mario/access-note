@@ -20,8 +20,8 @@ public sealed class ScreenRouterTests
                 enter: () => { },
                 restoreFocus: () => { },
                 canLeave: () => true),
-            showMainMenu: (_, _) => { },
-            restoreMainMenuFocus: () => { });
+            showHomeScreen: (_, _) => { },
+            restoreHomeScreenFocus: () => { });
 
         router.OpenApplet(AppletId.Notes);
 
@@ -30,7 +30,7 @@ public sealed class ScreenRouterTests
     }
 
     [Fact]
-    public void ShowMainMenu_ClearsActiveApplet_AndPassesArguments()
+    public void ShowHomeScreen_ClearsActiveApplet_AndPassesArguments()
     {
         var focusIndex = -1;
         var shouldAnnounce = false;
@@ -45,15 +45,15 @@ public sealed class ScreenRouterTests
                 enter: () => { },
                 restoreFocus: () => { },
                 canLeave: () => true),
-            showMainMenu: (index, announce) =>
+            showHomeScreen: (index, announce) =>
             {
                 focusIndex = index;
                 shouldAnnounce = announce;
             },
-            restoreMainMenuFocus: () => { });
+            restoreHomeScreenFocus: () => { });
 
         router.OpenApplet(AppletId.Notes);
-        router.ShowMainMenu(2, shouldAnnounce: true);
+        router.ShowHomeScreen(2, shouldAnnounce: true);
 
         Assert.Null(router.ActiveAppletId);
         Assert.Equal(2, focusIndex);
@@ -84,8 +84,8 @@ public sealed class ScreenRouterTests
                     settingsChecks++;
                     return true;
                 }),
-            showMainMenu: (_, _) => { },
-            restoreMainMenuFocus: () => { });
+            showHomeScreen: (_, _) => { },
+            restoreHomeScreenFocus: () => { });
 
         router.OpenApplet(AppletId.Notes);
         var canLeaveNotes = router.CanLeaveActiveScreen();
@@ -93,12 +93,12 @@ public sealed class ScreenRouterTests
         router.OpenApplet(AppletId.Settings);
         var canLeaveSettings = router.CanLeaveActiveScreen();
 
-        router.ShowMainMenu(0, shouldAnnounce: false);
-        var canLeaveMainMenu = router.CanLeaveActiveScreen();
+        router.ShowHomeScreen(0, shouldAnnounce: false);
+        var canLeaveHomeScreen = router.CanLeaveActiveScreen();
 
         Assert.False(canLeaveNotes);
         Assert.True(canLeaveSettings);
-        Assert.True(canLeaveMainMenu);
+        Assert.True(canLeaveHomeScreen);
         Assert.Equal(1, notesChecks);
         Assert.Equal(1, settingsChecks);
     }
@@ -118,10 +118,10 @@ public sealed class ScreenRouterTests
                 enter: () => { },
                 restoreFocus: () => restored = "settings",
                 canLeave: () => true),
-            showMainMenu: (_, _) => { },
-            restoreMainMenuFocus: () => restored = "main");
+            showHomeScreen: (_, _) => { },
+            restoreHomeScreenFocus: () => restored = "main");
 
-        router.ShowMainMenu(0, shouldAnnounce: false);
+        router.ShowHomeScreen(0, shouldAnnounce: false);
         router.RestoreFocusForActiveScreen();
         Assert.Equal("main", restored);
 
@@ -150,8 +150,8 @@ public sealed class ScreenRouterTests
                 restoreFocus: () => { },
                 canLeave: () => true,
                 handleInput: (_, _, _) => false),
-            showMainMenu: (_, _) => { },
-            restoreMainMenuFocus: () => { });
+            showHomeScreen: (_, _) => { },
+            restoreHomeScreenFocus: () => { });
 
         router.OpenApplet(AppletId.Notes);
         var handledFromNotes = router.HandleInputForActiveApplet(
@@ -172,14 +172,14 @@ public sealed class ScreenRouterTests
     private static ScreenRouter CreateRouter(
         IApplet notesApplet,
         IApplet settingsApplet,
-        Action<int, bool> showMainMenu,
-        Action restoreMainMenuFocus)
+        Action<int, bool> showHomeScreen,
+        Action restoreHomeScreenFocus)
     {
         var registry = new AppletRegistry(new[] { notesApplet, settingsApplet });
         return new ScreenRouter(
             registry,
-            showMainMenu,
-            restoreMainMenuFocus);
+            showHomeScreen,
+            restoreHomeScreenFocus);
     }
 
     private static IApplet CreateApplet(

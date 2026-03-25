@@ -8,7 +8,8 @@ internal sealed class ExitHost : IExitHost
     private readonly Func<bool> _tryPersistNotes;
     private readonly Action _restoreFocusForActiveScreen;
     private readonly Action<string> _announce;
-    private readonly Func<bool?> _showExitConfirmationDialog;
+    private readonly Func<ExitOption?> _showExitOptionsDialog;
+    private readonly Action _shutDownComputer;
     private readonly Action _closeWindow;
 
     public ExitHost(
@@ -16,14 +17,16 @@ internal sealed class ExitHost : IExitHost
         Func<bool> tryPersistNotes,
         Action restoreFocusForActiveScreen,
         Action<string> announce,
-        Func<bool?> showExitConfirmationDialog,
+        Func<ExitOption?> showExitOptionsDialog,
+        Action shutDownComputer,
         Action closeWindow)
     {
         _canLeaveActiveScreen = canLeaveActiveScreen;
         _tryPersistNotes = tryPersistNotes;
         _restoreFocusForActiveScreen = restoreFocusForActiveScreen;
         _announce = announce;
-        _showExitConfirmationDialog = showExitConfirmationDialog;
+        _showExitOptionsDialog = showExitOptionsDialog;
+        _shutDownComputer = shutDownComputer;
         _closeWindow = closeWindow;
     }
 
@@ -35,7 +38,9 @@ internal sealed class ExitHost : IExitHost
 
     public void Announce(string message) => _announce(message);
 
-    public bool? ShowExitConfirmationDialog() => _showExitConfirmationDialog();
+    public ExitOption? ShowExitOptionsDialog() => _showExitOptionsDialog();
+
+    public void ShutDownComputer() => _shutDownComputer();
 
     public void CloseWindow() => _closeWindow();
 }

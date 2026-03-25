@@ -35,7 +35,7 @@ internal sealed class NotesModule
         FrameworkElement statusText,
         Dispatcher dispatcher,
         Func<string> getStatusText,
-        Action showMainMenu,
+        Action showHomeScreen,
         Action<Exception> handlePersistError,
         Action<string> announce)
     {
@@ -63,7 +63,7 @@ internal sealed class NotesModule
             _state,
             refreshVisibleNotes: () => _state.RefreshVisibleNotes(announceCount: false),
             ensureCanLeaveActiveNote: () => _actions!.EnsureCanLeaveActiveNote(),
-            showMainMenu: showMainMenu,
+            showHomeScreen: showHomeScreen,
             getStatusText: getStatusText,
             announce: announce);
         _actions = new NotesActionsCoordinator(

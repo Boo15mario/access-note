@@ -6,18 +6,18 @@ namespace AccessNote;
 internal sealed class ScreenRouter
 {
     private readonly AppletRegistry _appletRegistry;
-    private readonly Action<int, bool> _showMainMenu;
-    private readonly Action _restoreMainMenuFocus;
+    private readonly Action<int, bool> _showHomeScreen;
+    private readonly Action _restoreHomeScreenFocus;
     private IApplet? _activeApplet;
 
     public ScreenRouter(
         AppletRegistry appletRegistry,
-        Action<int, bool> showMainMenu,
-        Action restoreMainMenuFocus)
+        Action<int, bool> showHomeScreen,
+        Action restoreHomeScreenFocus)
     {
         _appletRegistry = appletRegistry ?? throw new ArgumentNullException(nameof(appletRegistry));
-        _showMainMenu = showMainMenu ?? throw new ArgumentNullException(nameof(showMainMenu));
-        _restoreMainMenuFocus = restoreMainMenuFocus ?? throw new ArgumentNullException(nameof(restoreMainMenuFocus));
+        _showHomeScreen = showHomeScreen ?? throw new ArgumentNullException(nameof(showHomeScreen));
+        _restoreHomeScreenFocus = restoreHomeScreenFocus ?? throw new ArgumentNullException(nameof(restoreHomeScreenFocus));
     }
 
     public AppletId? ActiveAppletId { get; private set; }
@@ -27,11 +27,11 @@ internal sealed class ScreenRouter
         ActivateApplet(appletId);
     }
 
-    public void ShowMainMenu(int focusIndex, bool shouldAnnounce)
+    public void ShowHomeScreen(int focusIndex, bool shouldAnnounce)
     {
         ActiveAppletId = null;
         _activeApplet = null;
-        _showMainMenu(focusIndex, shouldAnnounce);
+        _showHomeScreen(focusIndex, shouldAnnounce);
     }
 
     public bool CanLeaveActiveScreen()
@@ -43,7 +43,7 @@ internal sealed class ScreenRouter
     {
         if (!ActiveAppletId.HasValue)
         {
-            _restoreMainMenuFocus();
+            _restoreHomeScreenFocus();
             return;
         }
 

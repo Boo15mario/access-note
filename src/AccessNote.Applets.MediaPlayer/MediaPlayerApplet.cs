@@ -30,7 +30,7 @@ internal sealed class MediaPlayerApplet : IApplet
         id: AppletId.MediaPlayer,
         label: "Media Player",
         screenHintText: "Media Player.",
-        helpText: "Media Player. Space play or pause, S stop, N next, P previous, T track info, Plus volume up, Minus volume down, M mute, O open file, U add stream URL, Left seek back, Right seek forward, Escape to return.",
+        helpText: "Media Player. Space play or pause, S stop, N next, P previous, T track info, Plus volume up, Minus volume down, M mute, O open file, U add stream URL, Left seek back, Right seek forward, Escape to return to home screen.",
         category: AppletCategory.TopLevel);
 
     public void Enter()

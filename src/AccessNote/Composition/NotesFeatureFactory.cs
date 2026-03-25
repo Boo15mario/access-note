@@ -27,7 +27,7 @@ internal static class NotesFeatureFactory
             statusText: shell.StatusText,
             dispatcher: core.Dispatcher,
             getStatusText: notes.GetStatusText,
-            showMainMenu: () => navigation.ShowMainMenu(0, true),
+            showHomeScreen: () => navigation.ShowHomeScreen(0, true),
             handlePersistError: errorNotifier.ShowNotesSaveError,
             announce: statusAnnouncer.Announce);
     }

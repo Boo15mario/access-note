@@ -16,8 +16,8 @@ internal static class ShellFeatureFactory
         MainWindowShellInputs shell)
     {
         var adapter = new ShellViewAdapter(
-            shell.MainMenuScreen,
-            shell.MainMenuList,
+            shell.HomeScreenScreen,
+            shell.HomeScreenList,
             core.Dispatcher);
         // Register the existing applet screens
         foreach (var (appletId, screen) in shell.AppletScreens)
@@ -27,13 +27,13 @@ internal static class ShellFeatureFactory
         return adapter;
     }
 
-    public static MainMenuModule CreateMainMenuModule(
+    public static HomeScreenModule CreateHomeScreenModule(
         ShellViewAdapter shellView,
-        IReadOnlyList<MainMenuEntry> mainMenuEntries,
+        IReadOnlyList<HomeScreenEntry> mainMenuEntries,
         MainWindowMenuActionsInputs menuActions,
         StatusAnnouncer statusAnnouncer)
     {
-        return new MainMenuModule(
+        return new HomeScreenModule(
             shellView,
             mainMenuEntries,
             openApplet: menuActions.OpenApplet,

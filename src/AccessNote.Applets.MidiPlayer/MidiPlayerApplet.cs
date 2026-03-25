@@ -30,7 +30,7 @@ internal sealed class MidiPlayerApplet : IApplet
         id: AppletId.MidiPlayer,
         label: "MIDI Player",
         screenHintText: "MIDI Player.",
-        helpText: "MIDI Player. O to open file, Space to play or pause, S to stop, Plus/Minus to adjust tempo, F3 to load SoundFont, Escape to return.",
+        helpText: "MIDI Player. O to open file, Space to play or pause, S to stop, Plus/Minus to adjust tempo, F3 to load SoundFont, Escape to return to home screen.",
         category: AppletCategory.TopLevel);
 
     public void Enter()

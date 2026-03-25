@@ -27,7 +27,7 @@ internal sealed class SettingsApplet : IApplet
         id: AppletId.Settings,
         label: "Settings",
         screenHintText: "Settings. Use category list, options list, and actions.",
-        helpText: "Settings. Up and Down navigate, Left and Right change options, Tab changes region, Control S saves, Escape returns.");
+        helpText: "Settings. Up and Down navigate, Left and Right change options, Tab changes region, Control S saves, Escape returns to home screen.");
 
     public void Enter()
     {

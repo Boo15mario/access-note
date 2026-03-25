@@ -30,8 +30,8 @@ internal sealed class AppLauncherApplet : IApplet
         id: AppletId.AppLauncher,
         label: "App Launcher",
         screenHintText: "App Launcher.",
-        helpText: "App Launcher. Enter to launch, Tab to switch modes, type to filter in browse mode, Insert to favorite current browse item, Ctrl+N to add favorite, Delete to remove, Escape to return.",
-        category: AppletCategory.TopLevel);
+        helpText: "App Launcher. Enter to launch, Tab to switch modes, type to filter in browse mode, Insert to favorite current browse item, Ctrl+N to add favorite, Delete to remove, Escape to return to home screen.",
+        category: AppletCategory.Utility);
 
     public void Enter()
     {

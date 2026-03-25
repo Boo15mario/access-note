@@ -4,7 +4,7 @@ namespace AccessNote;
 
 public enum StartScreenOption
 {
-    MainMenu,
+    HomeScreen,
     Notes
 }
 
@@ -71,7 +71,7 @@ public sealed class AppSettings
     {
         return new AppSettings
         {
-            StartScreen = StartScreenOption.MainMenu,
+            StartScreen = StartScreenOption.HomeScreen,
             NotesInitialFocus = NotesInitialFocusOption.List,
             ConfirmBeforeDeleteNote = true,
             NotesSortOrder = NotesSortOrderOption.LastModifiedNewest,

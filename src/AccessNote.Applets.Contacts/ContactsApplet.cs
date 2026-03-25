@@ -30,8 +30,8 @@ internal sealed class ContactsApplet : IApplet
         id: AppletId.Contacts,
         label: "Contacts",
         screenHintText: "Contacts.",
-        helpText: "Contacts. Control N new contact, Control S save, Control I import, Control E export, Delete remove, Escape to return to menu.",
-        category: AppletCategory.TopLevel);
+        helpText: "Contacts. Control N new contact, Control S save, Control I import, Control E export, Delete remove, Escape to return to home screen.",
+        category: AppletCategory.Utility);
 
     public void Enter()
     {

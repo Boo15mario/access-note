@@ -10,7 +10,7 @@ internal sealed class DateTimeApplet : IApplet
     private readonly DateTimeModule _module;
     private readonly DateTimeScreenView _screenView;
     private readonly Action<string> _announceHint;
-    private readonly Action _returnToMainMenu;
+    private readonly Action _returnToHomeScreen;
     private readonly Dispatcher _dispatcher;
 
     public DateTimeApplet(
@@ -18,14 +18,14 @@ internal sealed class DateTimeApplet : IApplet
         DateTimeModule module,
         DateTimeScreenView screenView,
         Action<string> announceHint,
-        Action returnToMainMenu,
+        Action returnToHomeScreen,
         Dispatcher dispatcher)
     {
         _shellView = shellView ?? throw new ArgumentNullException(nameof(shellView));
         _module = module ?? throw new ArgumentNullException(nameof(module));
         _screenView = screenView ?? throw new ArgumentNullException(nameof(screenView));
         _announceHint = announceHint ?? throw new ArgumentNullException(nameof(announceHint));
-        _returnToMainMenu = returnToMainMenu ?? throw new ArgumentNullException(nameof(returnToMainMenu));
+        _returnToHomeScreen = returnToHomeScreen ?? throw new ArgumentNullException(nameof(returnToHomeScreen));
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
     }
 
@@ -33,7 +33,7 @@ internal sealed class DateTimeApplet : IApplet
         id: AppletId.DateTime,
         label: "Date & Time",
         screenHintText: "Date and Time.",
-        helpText: "Date and Time. Enter to speak current time, Escape to return to menu.",
+        helpText: "Date and Time. Enter to speak current time, Escape to return to home screen.",
         category: AppletCategory.Utility);
 
     public void Enter()
@@ -44,7 +44,7 @@ internal sealed class DateTimeApplet : IApplet
             _screenView.TimeTextControl,
             _screenView.WeekTextControl,
             _announceHint,
-            _returnToMainMenu);
+            _returnToHomeScreen);
     }
 
     public void RestoreFocus()
