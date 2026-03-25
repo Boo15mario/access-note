@@ -49,7 +49,7 @@ internal sealed class SaveNoteAction
 
         if (announce)
         {
-            _announce("Saved.");
+            _announce(NotesAnnouncementText.NoteSaved(_session.ActiveNote?.Title ?? ""));
         }
 
         return true;

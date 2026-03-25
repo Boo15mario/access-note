@@ -55,7 +55,7 @@ internal sealed class DeleteNoteAction
         if (!shouldDelete)
         {
             _restoreNotesFocus();
-            _announce("Delete canceled.");
+            _announce(NotesAnnouncementText.DeleteCanceled());
             return;
         }
 
@@ -73,7 +73,7 @@ internal sealed class DeleteNoteAction
             _state.LoadEditorFromActiveNote();
             _focusEditor();
             _tryPersistNotes();
-            _announce($"{outcome.DeletedNote.Title} deleted.");
+            _announce(NotesAnnouncementText.NoteDeleted(outcome.DeletedNote.Title));
             return;
         }
 
@@ -82,6 +82,6 @@ internal sealed class DeleteNoteAction
         _state.LoadEditorFromActiveNote();
         _focusNotesList();
         _tryPersistNotes();
-        _announce($"{outcome.DeletedNote.Title} deleted.");
+        _announce(NotesAnnouncementText.NoteDeleted(outcome.DeletedNote.Title));
     }
 }

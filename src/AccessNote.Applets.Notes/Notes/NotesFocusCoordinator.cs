@@ -56,6 +56,20 @@ internal sealed class NotesFocusCoordinator
         _view.FocusEditorToEnd();
     }
 
+    public void FocusEditorWithAnnouncement()
+    {
+        _lastFocusRegion = FocusRegion.Editor;
+        _view.FocusEditorToEnd();
+        _announce(NotesAnnouncementText.FocusEditor());
+    }
+
+    public void FocusEditorWithNote(string noteTitle)
+    {
+        _lastFocusRegion = FocusRegion.Editor;
+        _view.FocusEditorToEnd();
+        _announce(NotesAnnouncementText.FocusEditorWithNote(noteTitle));
+    }
+
     public void FocusSearchBox()
     {
         _lastFocusRegion = FocusRegion.List;
@@ -97,7 +111,7 @@ internal sealed class NotesFocusCoordinator
             _state.SetSearchText(string.Empty);
             _refreshVisibleNotes();
             FocusNotesList();
-            _announce("Search cleared.");
+            _announce(NotesAnnouncementText.SearchCleared());
             return;
         }
 

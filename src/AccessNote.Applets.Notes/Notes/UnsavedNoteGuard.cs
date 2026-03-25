@@ -52,12 +52,12 @@ internal sealed class UnsavedNoteGuard
                 activeNote.DiscardChanges();
                 _state.LoadEditorFromActiveNote();
                 _refreshVisibleNotes();
-                _announce("Changes discarded.");
+                _announce(NotesAnnouncementText.ChangesDiscarded());
                 return true;
             case UnsavedChangesChoice.Cancel:
             default:
                 _restoreNotesFocus();
-                _announce("Navigation canceled.");
+                _announce(NotesAnnouncementText.NavigationCanceled());
                 return false;
         }
     }

@@ -44,6 +44,6 @@ internal sealed class CreateNoteAction
         _state.LoadEditorFromActiveNote();
         _focusEditor();
         _tryPersistNotes();
-        _announce("New note created.");
+        _announce(NotesAnnouncementText.NoteCreated(_session.ActiveNote?.Title ?? ""));
     }
 }

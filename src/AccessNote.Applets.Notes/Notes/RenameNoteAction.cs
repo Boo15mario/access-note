@@ -37,7 +37,7 @@ internal sealed class RenameNoteAction
         if (!_dialogs.TryPromptRename(_session.ActiveNote.Title, out var renamedTitle))
         {
             _restoreNotesFocus();
-            _announce("Rename canceled.");
+            _announce(NotesAnnouncementText.RenameCanceled());
             return;
         }
 
@@ -46,6 +46,6 @@ internal sealed class RenameNoteAction
         _state.SelectActiveNoteInList();
         _state.LoadEditorFromActiveNote();
         _restoreNotesFocus();
-        _announce("Renamed.");
+        _announce(NotesAnnouncementText.NoteRenamed(renamedTitle));
     }
 }

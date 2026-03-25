@@ -108,7 +108,8 @@ internal sealed class NotesModule
             _state.SetSearchText(string.Empty);
             _state.RefreshVisibleNotes(announceCount: false);
             _state.LoadEditorFromActiveNote();
-            _dispatcher.BeginInvoke(_focus.FocusEditor, DispatcherPriority.Input);
+            var noteTitle = _session.ActiveNote?.Title ?? "";
+            _dispatcher.BeginInvoke(() => _focus.FocusEditorWithNote(noteTitle), DispatcherPriority.Input);
             return;
         }
 
@@ -122,7 +123,8 @@ internal sealed class NotesModule
             {
                 if (initialFocus == NotesInitialFocusOption.Editor)
                 {
-                    _focus.FocusEditor();
+                    var noteTitle = _session.ActiveNote?.Title ?? "";
+                    _focus.FocusEditorWithNote(noteTitle);
                     return;
                 }
 
@@ -162,7 +164,7 @@ internal sealed class NotesModule
 
         _session.SetActiveNote(selected);
         _state.LoadEditorFromActiveNote();
-        _announce($"{selected.Title} selected.");
+        _announce(NotesAnnouncementText.NoteSelected(selected.Title));
     }
 
     public void HandleEditorTextChanged(bool isNotesScreen)
