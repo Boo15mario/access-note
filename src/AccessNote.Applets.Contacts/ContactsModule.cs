@@ -278,6 +278,9 @@ internal sealed class ContactsModule
     {
         if (_suppressSearchChanged) return;
         RefreshContacts();
+        var searchText = _screenView.ContactSearchBoxControl.Text;
+        var count = _screenView.VisibleContacts.Count;
+        _announce?.Invoke(ContactsAnnouncementText.SearchApplied(searchText, count));
     }
 
     private void OnContactsSelectionChanged()
@@ -296,6 +299,9 @@ internal sealed class ContactsModule
     {
         if (_suppressGroupFilterChanged) return;
         RefreshContacts();
+        var groupFilter = _screenView.GroupFilterComboControl.SelectedItem as string ?? "(All)";
+        var count = _screenView.VisibleContacts.Count;
+        _announce?.Invoke(ContactsAnnouncementText.FilterApplied(groupFilter, count));
     }
 
     private void RefreshContacts()
@@ -333,6 +339,7 @@ internal sealed class ContactsModule
         }
         _screenView.ContactsListControl.ItemsSource = _screenView.VisibleContacts;
         _suppressSelectionChanged = false;
+        _announce?.Invoke(ContactsAnnouncementText.ContactsShown(contacts.Count));
 
         if (_selectedContact != null)
         {

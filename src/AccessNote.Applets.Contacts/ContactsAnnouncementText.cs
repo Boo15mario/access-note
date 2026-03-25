@@ -16,4 +16,34 @@ internal static class ContactsAnnouncementText
     {
         return "Contact actions.";
     }
+
+    public static string ContactsShown(int count)
+    {
+        if (count == 0)
+        {
+            return "No contacts match your search.";
+        }
+
+        return $"{count} contact{(count == 1 ? "" : "s")} shown.";
+    }
+
+    public static string SearchApplied(string query, int count)
+    {
+        if (count == 0)
+        {
+            return $"Search {query}. No contacts match your search.";
+        }
+
+        return $"Search {query}. {count} contact{(count == 1 ? "" : "s")} shown.";
+    }
+
+    public static string FilterApplied(string filter, int count)
+    {
+        if (count == 0)
+        {
+            return $"Group {filter}. No contacts in this group.";
+        }
+
+        return $"Group {filter}. {count} contact{(count == 1 ? "" : "s")} shown.";
+    }
 }
