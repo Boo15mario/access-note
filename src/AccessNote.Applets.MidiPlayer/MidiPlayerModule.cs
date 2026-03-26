@@ -152,6 +152,7 @@ internal sealed class MidiPlayerModule
         }
 
         UpdateDisplay();
+        AnnouncePlaybackState();
     }
 
     private bool StartPlayback()
